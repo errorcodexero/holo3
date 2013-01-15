@@ -4,12 +4,14 @@
 #include "Robot.h"
 
 DriveBase* Robot::driveBase = NULL;
+BlinkyLight* Robot::blinkyLight = NULL;
 OI* Robot::oi = NULL;
 
 void Robot::RobotInit()
 {
     RobotMap::init();
     driveBase = new DriveBase();
+    blinkyLight = new BlinkyLight( RobotMap::blinkyPWM );
 
     // This MUST be here. If the OI creates Commands (which it very likely
     // will), constructing it during the construction of CommandBase (from
@@ -32,6 +34,7 @@ void Robot::Cancel()
     if (teleopCommand && teleopCommand->IsRunning()) {
 	teleopCommand->Cancel();
     }
+    blinkyLight->Set(0.0);
 }
 	
 void Robot::DisabledInit()

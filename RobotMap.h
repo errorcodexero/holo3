@@ -18,6 +18,7 @@ public:
 	static Jaguar* driveBaseLeft;
 	static Jaguar* driveBaseRight;
 	static RobotDrive3* driveBaseDrive3;
+	static Victor* blinkyPWM;
 
 	static void init();
 };

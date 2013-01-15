@@ -9,9 +9,13 @@
 
 #include "RobotMap.h"
 #include "DriveBase.h"
+#include "BlinkyLight.h"
 #include "AutoCommand.h"
 #include "TeleCommand.h"
 #include "DriveCommand.h"
+#include "BlinkyBreathe.h"
+#include "BlinkyOff.h"
+#include "BlinkyOn.h"
 
 #include "OI.h"
 
@@ -19,6 +23,7 @@ class Robot : public IterativeRobot {
 public:
 	static OI *oi;
 	static DriveBase* driveBase;
+	static BlinkyLight* blinkyLight;
 	LiveWindow *lw;
 	Command *autonomousCommand;
 	Command *teleopCommand;

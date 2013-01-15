@@ -11,6 +11,7 @@
 class AutoCommand: public CommandGroup {
 public:	
 	AutoCommand();
+	virtual void Interrupted();
 };
 
 #endif
