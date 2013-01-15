@@ -249,12 +249,12 @@
         </mapAttribute>
     </attributes>
     <buildtargets>
-        <buildtarget buildtool="Linker" name="CommandBasedRobotTemplate" passed="false" targetname="CommandBasedRobotTemplate">
+        <buildtarget buildtool="Linker" name="Holo3" passed="false" targetname="Holo3">
             <contents>
                 <folder name="/holo3" recursive="true"/>
             </contents>
         </buildtarget>
-        <buildtarget buildtool="Partial Image Linker" name="CommandBassedRobotTemplate_partialImage" passed="true" targetname="CommandBassedRobotTemplate_partialImage">
+        <buildtarget buildtool="Partial Image Linker" name="Holo3_partialImage" passed="true" targetname="Holo3_partialImage">
             <contents>
                 <folder name="/holo3" recursive="true"/>
             </contents>

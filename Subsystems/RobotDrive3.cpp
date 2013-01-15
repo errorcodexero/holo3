@@ -1,5 +1,6 @@
+// First Team 1425 "Error Code Xero"
+// for FRC 2013 game "Ultimate Ascent"
 
-#include "RobotDrive3.h"
 #include "RobotDrive.h"
 #include "CANJaguar.h"
 #include "GenericHID.h"
@@ -9,18 +10,19 @@
 #include "Utility.h"
 #include "WPIErrors.h"
 
-/*
- * Constructor for RobotDrive3 with 3 motors specified by channel numbers.
- * This assumes Jaguar motor controllers in PWM mode.
- * Hack: use the RobotDrive constructor for a 2-wheel drive system, then
- * add the third motor and set all the outputs to zero again.  This is
- * inelegant because the rear wheels get set twice, but it allows us to
- * implement RobotDrive3 as a derived class rather than doing a
- * copy-and-paste of RobotDrive.
- * @param frontMotorChannel The front PWM channel used to drive the robot.
- * @param leftMotorChannel The rear left PWM channel used to drive the robot.
- * @param rightMotorChannel the rear right PWM channel used to drive the robot.
- */
+#include "RobotDrive3.h"
+
+// Constructor for RobotDrive3 with 3 motors specified by channel numbers.
+// This assumes Jaguar motor controllers in PWM mode.
+// Hack: use the RobotDrive constructor for a 2-wheel drive system, then
+// add the third motor and set all the outputs to zero again.  This is
+// inelegant because the rear wheels get set twice, but it allows us to
+// implement RobotDrive3 as a derived class rather than doing a
+// copy-and-paste of RobotDrive.
+// @param frontMotorChannel The front PWM channel used to drive the robot.
+// @param leftMotorChannel The rear left PWM channel used to drive the robot.
+// @param rightMotorChannel the rear right PWM channel used to drive the robot.
+
 RobotDrive3::RobotDrive3(UINT32 frontMotorChannel,
 			 UINT32 rearLeftMotorChannel,
 			 UINT32 rearRightMotorChannel)
@@ -30,15 +32,14 @@ RobotDrive3::RobotDrive3(UINT32 frontMotorChannel,
     SetLeftRightMotorOutputs(0.0, 0.0);
 }
 
-/*
- * Constructor for RobotDrive3 with 3 motors specified as SpeedController
- * objects.  The SpeedController version of the constructor enables programs
- * to use the RobotDrive3 classes with subclasses of the SpeedController
- * objects, for example, versions with ramping or reshaping of the curve
- * to suit motor bias or deadband elimination.
- * @param leftMotor The left SpeedController object used to drive the robot.
- * @param rightMotor the right SpeedController object used to drive the robot.
- */
+// Constructor for RobotDrive3 with 3 motors specified as SpeedController
+// objects.  The SpeedController version of the constructor enables programs
+// to use the RobotDrive3 classes with subclasses of the SpeedController
+// objects, for example, versions with ramping or reshaping of the curve
+// to suit motor bias or deadband elimination.
+// @param leftMotor The left SpeedController object used to drive the robot.
+// @param rightMotor the right SpeedController object used to drive the robot.
+
 RobotDrive3::RobotDrive3(SpeedController *frontMotor,
 			 SpeedController *rearLeftMotor,
 			 SpeedController *rearRightMotor)
@@ -63,20 +64,18 @@ RobotDrive3::RobotDrive3(SpeedController &frontMotor,
     SetLeftRightMotorOutputs(0.0, 0.0);
 }
 
-/*
- * Holonomic Drive method for 3-wheel Omni-wheeled robots.
- *
- * @param x   The speed that the robot should drive in the X direction.
- * [-1.0..1.0], positive X is to the right.
- * @param y   The speed that the robot should drive in the Y direction.
- * [-1.0..1.0], negative Y is forward (to match the values provided by
- * standard flight sticks.)
- * @param rotation The rate of rotation for the robot, completely independent
- * of the translation. [-1.0..1.0]
- * @param gyroAngle The measured rate of rotation for the robot [-1.0..1.0],
- * will be subtracted from rotation to compensate for drift and mechanical
- * errors in the drive train.
- */
+// Holonomic Drive method for 3-wheel Omni-wheeled robots.
+// @param x   The speed that the robot should drive in the X direction.
+// [-1.0..1.0], positive X is to the right.
+// @param y   The speed that the robot should drive in the Y direction.
+// [-1.0..1.0], negative Y is forward (to match the values provided by
+// standard flight sticks.)
+// @param rotation The rate of rotation for the robot, completely independent
+// of the translation. [-1.0..1.0]
+// @param gyroAngle The measured rate of rotation for the robot [-1.0..1.0],
+// will be subtracted from rotation to compensate for drift and mechanical
+// errors in the drive train.
+
 void RobotDrive3::HolonomicDrive_Cartesian( float x, float y, float rotation,
 					    float gyroAngle )
 {

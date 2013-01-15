@@ -1,3 +1,6 @@
+// First Team 1425 "Error Code Xero"
+// for FRC 2013 game "Ultimate Ascent"
+
 #ifndef ROBOTDRIVE3_H_
 #define ROBOTDRIVE3_H_
 
@@ -8,7 +11,7 @@
 
 class SpeedController;
 
-// RobotDrive extensions for 3-wheel holonomic drive
+// RobotDrive extension for 3-wheel holonomic drive
 
 class RobotDrive3 : public RobotDrive
 {
