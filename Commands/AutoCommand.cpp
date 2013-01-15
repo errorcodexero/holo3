@@ -25,6 +25,6 @@ AutoCommand::AutoCommand()
 
 void AutoCommand::Interrupted()
 {
-    Robot::blinkyLight->Set(0.0);
+    Robot::blinkyLight()->Set(0.0);
 }
 

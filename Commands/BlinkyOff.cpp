@@ -5,13 +5,14 @@ BlinkyOff::BlinkyOff()
 {
     // Use Requires() here to declare subsystem dependencies
     // eg. Requires(chassis);
-    Requires(Robot::blinkyLight);
+    Requires(Robot::blinkyLight());
 }
 
 // Called just before this Command runs the first time
 void BlinkyOff::Initialize()
 {
-    Robot::blinkyLight->Set(0.0);
+    printf("Bobot: Turn blinky light off NOW!\n");
+    Robot::blinkyLight()->Set(0.0);
 }
 
 // Called repeatedly when this Command is scheduled to run

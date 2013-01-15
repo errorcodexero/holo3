@@ -4,6 +4,9 @@
 #include "Robot.h"
 
 class BlinkyOn: public Command {
+private:
+    Timer m_onTimer;
+
 public:
     BlinkyOn();
     virtual void Initialize();

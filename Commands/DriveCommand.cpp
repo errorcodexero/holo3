@@ -8,7 +8,7 @@
 // when this command is Started.
 DriveCommand::DriveCommand()
 {
-	Requires(Robot::driveBase);
+	Requires(Robot::driveBase());
 }
 
 // Called just before this Command runs the first time
@@ -20,8 +20,8 @@ void DriveCommand::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void DriveCommand::Execute()
 {
-	Joystick *joy = Robot::oi->getStick();
-	Robot::driveBase->Drive3(joy->GetX(), joy->GetY(), joy->GetTwist());
+	Joystick *joy = Robot::oi()->getStick();
+	Robot::driveBase()->Drive3(joy->GetX(), joy->GetY(), joy->GetTwist());
 }
 
 // Make this return true when this Command no longer needs to run execute()

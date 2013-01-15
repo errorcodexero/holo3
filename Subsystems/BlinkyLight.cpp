@@ -2,7 +2,8 @@
 #include "BlinkyLight.h"
 
 BlinkyLight::BlinkyLight( SpeedController* pwm )
-    : Subsystem("BlinkyLight"), m_pwm(pwm)
+    : Subsystem("BlinkyLight"),
+    m_pwm(pwm)
 {
     m_pwm->Set(0.0);
 }

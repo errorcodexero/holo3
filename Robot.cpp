@@ -3,38 +3,54 @@
 
 #include "Robot.h"
 
-DriveBase* Robot::driveBase = NULL;
-BlinkyLight* Robot::blinkyLight = NULL;
-OI* Robot::oi = NULL;
+Robot::Robot() :
+    // instantiate sensors and actuators first,
+    m_driveBaseFront( new Jaguar(1, 1) ),
+    m_driveBaseLeft(  new Jaguar(1, 2) ),
+    m_driveBaseRight( new Jaguar(1, 3) ),
+    m_blinkyPWM( new Victor(1, 4) ),
+    // then subsystems based on those sensors and actuators,
+    m_driveBase( new DriveBase( m_driveBaseFront, m_driveBaseLeft,
+    				m_driveBaseRight ) ),
+    m_blinkyLight( new BlinkyLight( m_blinkyPWM ) ),
+    // then the OI,
+    m_oi( new OI() ),
+    // then commands
+    m_autonomousCommand( new AutoCommand() ),
+    m_teleopCommand( new TeleCommand() )
+{
+    // connect sensors and actuators to LiveWindow
+    LiveWindow* lw = LiveWindow::GetInstance();
+    lw->AddActuator("DriveBase", "Front", m_driveBaseFront);
+    lw->AddActuator("DriveBase", "Left",  m_driveBaseLeft);
+    lw->AddActuator("DriveBase", "Right", m_driveBaseRight);
+    lw->AddActuator("BlinkyLight", "PWM", m_blinkyPWM);
+
+    // blinky lights don't need watchdogs
+    m_blinkyPWM->SetSafetyEnabled(false);
+}
+
+Robot::~Robot()
+{
+    printf("BWA HA HA HA HA!  The Robot cannot be destroyed!\n");
+    // this should throw a "can't happen" exception
+}
 
 void Robot::RobotInit()
 {
-    RobotMap::init();
-    driveBase = new DriveBase();
-    blinkyLight = new BlinkyLight( RobotMap::blinkyPWM );
-
-    // This MUST be here. If the OI creates Commands (which it very likely
-    // will), constructing it during the construction of CommandBase (from
-    // which commands extend) will refer to subsystems are not guaranteed
-    // to be instantiated yet. Thus, their requires() statements may grab
-    // null pointers. Bad news. Don't move it.
-    oi = new OI();
-    lw = LiveWindow::GetInstance();
-
-    // Instantiate top-level commands
-    autonomousCommand = new AutoCommand();
-    teleopCommand = new TeleCommand();
+    // initialization done in constructor
 }
 
 void Robot::Cancel()
 {
-    if (autonomousCommand && autonomousCommand->IsRunning()) {
-	autonomousCommand->Cancel();
+    if (m_autonomousCommand->IsRunning()) {
+	m_autonomousCommand->Cancel();
     }
-    if (teleopCommand && teleopCommand->IsRunning()) {
-	teleopCommand->Cancel();
+    if (m_teleopCommand->IsRunning()) {
+	m_teleopCommand->Cancel();
     }
-    blinkyLight->Set(0.0);
+    m_driveBase->Stop();
+    m_blinkyLight->Set(0.0);
 }
 	
 void Robot::DisabledInit()
@@ -50,10 +66,7 @@ void Robot::DisabledPeriodic()
 void Robot::AutonomousInit()
 {
     Cancel();
-    if (autonomousCommand) {
-	autonomousCommand->Start();
-	RobotMap::driveBaseDrive3->SetSafetyEnabled(true);
-    }
+    m_autonomousCommand->Start();
 }
     
 void Robot::AutonomousPeriodic()
@@ -64,10 +77,7 @@ void Robot::AutonomousPeriodic()
 void Robot::TeleopInit()
 {
     Cancel();
-    if (teleopCommand) {
-	teleopCommand->Start();
-	RobotMap::driveBaseDrive3->SetSafetyEnabled(true);
-    }
+    m_teleopCommand->Start();
 }
     
 void Robot::TeleopPeriodic()
@@ -78,11 +88,11 @@ void Robot::TeleopPeriodic()
 void Robot::TestInit()
 {
     Cancel();
-    RobotMap::driveBaseDrive3->SetSafetyEnabled(false);
 }
 
-void Robot::TestPeriodic() {
-    lw->Run();
+void Robot::TestPeriodic()
+{
+    LiveWindow::GetInstance()->Run();
 }
 
 START_ROBOT_CLASS(Robot);

@@ -9,18 +9,27 @@
 
 // robot drive base with three-wheeled holonomic drive
 
-class DriveBase: public Subsystem {
+class DriveBase : public Subsystem {
 private:
-	SpeedController* right;
-	SpeedController* front;
-	SpeedController* left;
+	SpeedController* m_front;
+	SpeedController* m_left;
+	SpeedController* m_right;
 	// TBD: add a turn-rate gyro as part of the drive base,
 	// with output incorporated into the Drive3 directive.
-	RobotDrive3* drive3;
+	RobotDrive3* m_drive3;
+	bool m_started;
 
 public:
-	DriveBase();
+	DriveBase( SpeedController* front,
+		   SpeedController* left,
+		   SpeedController* right );
+
+	~DriveBase();
+
 	void InitDefaultCommand();
+
+	void Stop();
+	void Start();
 	void Drive3( float x, float y, float twist );
 };
 
