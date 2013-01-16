@@ -3,31 +3,9 @@
 
 #include "Robot.h"
 
-Robot::Robot() :
-    // instantiate sensors and actuators first,
-    m_driveBaseFront( new Jaguar(1, 1) ),
-    m_driveBaseLeft(  new Jaguar(1, 2) ),
-    m_driveBaseRight( new Jaguar(1, 3) ),
-    m_blinkyPWM( new Victor(1, 4) ),
-    // then subsystems based on those sensors and actuators,
-    m_driveBase( new DriveBase( m_driveBaseFront, m_driveBaseLeft,
-    				m_driveBaseRight ) ),
-    m_blinkyLight( new BlinkyLight( m_blinkyPWM ) ),
-    // then the OI,
-    m_oi( new OI() ),
-    // then commands
-    m_autonomousCommand( new AutoCommand() ),
-    m_teleopCommand( new TeleCommand() )
+Robot::Robot()
 {
-    // connect sensors and actuators to LiveWindow
-    LiveWindow* lw = LiveWindow::GetInstance();
-    lw->AddActuator("DriveBase", "Front", m_driveBaseFront);
-    lw->AddActuator("DriveBase", "Left",  m_driveBaseLeft);
-    lw->AddActuator("DriveBase", "Right", m_driveBaseRight);
-    lw->AddActuator("BlinkyLight", "PWM", m_blinkyPWM);
-
-    // blinky lights don't need watchdogs
-    m_blinkyPWM->SetSafetyEnabled(false);
+    printf("Robot::Robot() has been called!\n");
 }
 
 Robot::~Robot()
@@ -38,7 +16,52 @@ Robot::~Robot()
 
 void Robot::RobotInit()
 {
-    // initialization done in constructor
+    printf("Robot::RobotInit()\n");
+
+    // connect sensors and actuators to LiveWindow
+    LiveWindow* lw = LiveWindow::GetInstance();
+    printf("LiveWindow has been instantiated\n");
+
+    // instantiate sensors and actuators first,
+    m_driveBaseFront = new Jaguar(1, 6);
+    printf("m_driveBaseFront has been instantiated\n");
+    lw->AddActuator("DriveBase", "Front", m_driveBaseFront);
+
+    m_driveBaseLeft  = new Jaguar(1, 5);
+    printf("m_driveBaseLeft has been instantiated\n");
+    lw->AddActuator("DriveBase", "Left",  m_driveBaseLeft);
+
+    m_driveBaseRight = new Jaguar(1, 4);
+    printf("m_driveBaseRight has been instantiated\n");
+    lw->AddActuator("DriveBase", "Right", m_driveBaseRight);
+
+    m_blinkyPWM = new Victor(1, 1);
+    printf("m_blinkyPWM has been instantiated\n");
+    lw->AddActuator("BlinkyLight", "PWM", m_blinkyPWM);
+
+    // m_unused = new Victor(1, 2);
+
+    // then subsystems based on those sensors and actuators,
+    m_driveBase = new DriveBase( m_driveBaseFront, m_driveBaseLeft,
+    				 m_driveBaseRight );
+    printf("m_driveBase has been instantiated\n");
+
+    m_blinkyLight = new BlinkyLight( m_blinkyPWM );
+    printf("m_blinkyLight has been instantiated\n");
+
+    // then the OI,
+    m_oi = new OI();
+    printf("m_oi has been instantiated\n");
+
+    // then commands
+    m_autonomousCommand = new AutoCommand();
+    printf("m_autonomousCommand has been instantiated\n");
+
+    m_teleopCommand = new TeleCommand();
+    printf("m_teleopCommand has been instantiated\n");
+
+    // blinky lights don't need watchdogs
+    m_blinkyPWM->SetSafetyEnabled(false);
 }
 
 void Robot::Cancel()

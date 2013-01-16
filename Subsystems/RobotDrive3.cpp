@@ -80,10 +80,10 @@ void RobotDrive3::HolonomicDrive_Cartesian( float x, float y, float rotation,
 					    float gyroAngle )
 {
     double wheelSpeeds[kMaxNumberOfMotors];
-    wheelSpeeds[kFrontLeftMotor] = -0.500*x + rotation - gyroAngle;
+    wheelSpeeds[kFrontLeftMotor] = -x - rotation + gyroAngle;
     wheelSpeeds[kFrontRightMotor] = 0.0;
-    wheelSpeeds[kRearLeftMotor]  = -0.500*x + 0.866*y + rotation - gyroAngle;
-    wheelSpeeds[kRearRightMotor] = -0.500*x - 0.866*y + rotation - gyroAngle;
+    wheelSpeeds[kRearLeftMotor]  = 0.500*x + 0.866*y - rotation + gyroAngle;
+    wheelSpeeds[kRearRightMotor] = 0.500*x - 0.866*y - rotation + gyroAngle;
 
     Normalize(wheelSpeeds);
 

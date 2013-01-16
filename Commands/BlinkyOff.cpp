@@ -11,7 +11,7 @@ BlinkyOff::BlinkyOff()
 // Called just before this Command runs the first time
 void BlinkyOff::Initialize()
 {
-    printf("Bobot: Turn blinky light off NOW!\n");
+    printf("Robot: Turn blinky light off NOW!\n");
     Robot::blinkyLight()->Set(0.0);
 }
 

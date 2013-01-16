@@ -10,7 +10,7 @@ BlinkyLight::BlinkyLight( SpeedController* pwm )
     
 void BlinkyLight::InitDefaultCommand()
 {
-    SetDefaultCommand(new BlinkyOff());
+    // SetDefaultCommand(new BlinkyOff());
 }
 
 // Put methods for controlling this subsystem

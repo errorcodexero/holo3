@@ -62,6 +62,12 @@ void DriveBase::Drive3( float x, float y, float twist )
     // TBD: add turn-rate gyro output as the fourth argument
     // to HolonomicDrive_Cartesian
     if (!m_started) Start();
+    // "front" and "right" for our platform are opposite the way
+    // the drive framework is set up.
+    x = -x;
+    y = -y;
+    // reduce the sensitivity to the "twist" control
+    twist /= 4.;
     m_drive3->HolonomicDrive_Cartesian( x, y, twist );
 }
 

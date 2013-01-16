@@ -21,7 +21,11 @@ void DriveCommand::Initialize()
 void DriveCommand::Execute()
 {
 	Joystick *joy = Robot::oi()->getStick();
-	Robot::driveBase()->Drive3(joy->GetX(), joy->GetY(), joy->GetTwist());
+	float x = joy->GetX();
+	float y = joy->GetY();
+	float t = joy->GetTwist();
+	// printf("%g %g %g\n", x, y, t);
+	Robot::driveBase()->Drive3(x, y, t);
 }
 
 // Make this return true when this Command no longer needs to run execute()
