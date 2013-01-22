@@ -87,6 +87,12 @@ void DriveBase::Drive3( float x, float y, float twist )
     y = -y;
     // reduce the sensitivity to the "twist" control
     twist /= 4.;
+
+    // -500 ... +500 for 250 deg/sec rotation
+    INT32 turnrate = m_gyro->GetAverageValue() - m_gyroZero;
+    twist -= (turnrate / 250.0);
+    if (twist < -0.5) twist = -0.5;
+    if (twist > 0.5) twist = 0.5;
     m_drive3->HolonomicDrive_Cartesian( x, y, twist );
 }
 
