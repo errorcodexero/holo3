@@ -44,6 +44,7 @@ private:
     Jaguar* m_driveBaseFront;
     Jaguar* m_driveBaseLeft;
     Jaguar* m_driveBaseRight;
+    AnalogChannel *m_gyro;
     Victor* m_blinkyPWM;
 
 public:

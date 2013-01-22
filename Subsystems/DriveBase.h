@@ -14,15 +14,16 @@ private:
 	SpeedController* m_front;
 	SpeedController* m_left;
 	SpeedController* m_right;
-	// TBD: add a turn-rate gyro as part of the drive base,
-	// with output incorporated into the Drive3 directive.
 	RobotDrive3* m_drive3;
+	AnalogChannel* m_gyro;
+	INT32 m_gyroZero;
 	bool m_started;
 
 public:
 	DriveBase( SpeedController* front,
 		   SpeedController* left,
-		   SpeedController* right );
+		   SpeedController* right,
+		   AnalogChannel* gyro );
 
 	~DriveBase();
 

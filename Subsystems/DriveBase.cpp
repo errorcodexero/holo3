@@ -5,16 +5,35 @@
 
 DriveBase::DriveBase( SpeedController* front,
 		      SpeedController* left,
-		      SpeedController* right )
+		      SpeedController* right,
+		      AnalogChannel* gyro )
     : Subsystem("DriveBase"),
     m_front(front),
     m_left(left),
     m_right(right),
     m_drive3(new RobotDrive3(front, left, right)),
-    // TBD: add a turn-rate gyro
+    m_gyro(gyro),
     m_started(false)
 {
     Stop();
+
+    const int kAverageBits = 10;
+    const int kOversampleBits = 0;
+    const int kSamplesPerSecond = 50;
+
+    // configure the A/D hardware sample rate and
+    // the oversampling/averaging engine
+    m_gyro->SetAverageBits(kAverageBits);
+    m_gyro->SetOversampleBits(kOversampleBits);
+    float sampleRate = kSamplesPerSecond * 
+	    (1 << (kAverageBits + kOversampleBits));
+    m_gyro->GetModule()->SetSampleRate(sampleRate);
+    // wait at least two sample intervals
+    Wait(2.0/sampleRate);
+    // read the average value
+    m_gyroZero = m_gyro->GetAverageValue();
+
+    printf("DriveBase: gyro zero value %d\n", m_gyroZero);
 }
 
 DriveBase::~DriveBase()

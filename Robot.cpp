@@ -35,6 +35,10 @@ void Robot::RobotInit()
     printf("m_driveBaseRight has been instantiated\n");
     lw->AddActuator("DriveBase", "Right", m_driveBaseRight);
 
+    m_gyro = new AnalogChannel(1, 1);
+    printf("m_gyro has been instantiated\n");
+    lw->AddSensor("DriveBase", "Gyro", m_gyro);
+
     m_blinkyPWM = new Victor(1, 1);
     printf("m_blinkyPWM has been instantiated\n");
     lw->AddActuator("BlinkyLight", "PWM", m_blinkyPWM);
@@ -43,7 +47,7 @@ void Robot::RobotInit()
 
     // then subsystems based on those sensors and actuators,
     m_driveBase = new DriveBase( m_driveBaseFront, m_driveBaseLeft,
-    				 m_driveBaseRight );
+    				 m_driveBaseRight, m_gyro );
     printf("m_driveBase has been instantiated\n");
 
     m_blinkyLight = new BlinkyLight( m_blinkyPWM );
