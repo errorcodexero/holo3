@@ -13,21 +13,21 @@
 
 class DriveBase : public Subsystem {
 private:
-	SpeedController& m_front;
-	SpeedController& m_left;
-	SpeedController& m_right;
-	RobotDrive3 m_drive3;
-	RateGyro& m_gyro;
+	SpeedController * m_front;
+	SpeedController * m_left;
+	SpeedController * m_right;
+	RobotDrive3 * m_drive3;
+	RateGyro * m_gyro;
 	INT32 m_gyroZero;
-	DriveCommand m_defaultCommand;
+	Command * m_defaultCommand;
 	bool m_started;
 
 
 public:
-	DriveBase( SpeedController& front,
-		   SpeedController& left,
-		   SpeedController& right,
-		   RateGyro& gyro );
+	DriveBase( SpeedController * front,
+		   SpeedController * left,
+		   SpeedController * right,
+		   RateGyro * gyro );
 
 	~DriveBase();
 

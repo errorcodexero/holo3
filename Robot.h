@@ -41,32 +41,32 @@ private:
     //   then any other commands
 
     // sensors and actuators
-    Jaguar m_driveBaseFront;
-    Jaguar m_driveBaseLeft;
-    Jaguar m_driveBaseRight;
-    RateGyro m_gyro;
-    Victor m_blinkyPWM;
+    Jaguar* m_driveBaseFront;
+    Jaguar* m_driveBaseLeft;
+    Jaguar* m_driveBaseRight;
+    RateGyro* m_gyro;
+    Victor* m_blinkyPWM;
 
 public:
     // subsystems
-    DriveBase m_driveBase;
-    BlinkyLight m_blinkyLight;
+    DriveBase* m_driveBase;
+    BlinkyLight* m_blinkyLight;
 
     // OI
     OI* m_oi;
 
     // commands
-    AutoCommand m_autonomousCommand;
-    TeleCommand m_teleopCommand;
+    AutoCommand* m_autonomousCommand;
+    TeleCommand* m_teleopCommand;
 
 public:
     // singleton accessor
     static Robot& theRobot() { return (Robot&) RobotBase::getInstance(); };
 
     // convenience accessors
-    static DriveBase& driveBase() { return theRobot().m_driveBase; };
-    static BlinkyLight& blinkyLight() { return theRobot().m_blinkyLight; };
-    static OI& oi() { return *theRobot().m_oi; };
+    static DriveBase* driveBase() { return theRobot().m_driveBase; };
+    static BlinkyLight* blinkyLight() { return theRobot().m_blinkyLight; };
+    static OI* oi() { return theRobot().m_oi; };
 
     void Cancel();
     virtual void RobotInit();

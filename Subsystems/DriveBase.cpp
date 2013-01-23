@@ -3,42 +3,50 @@
 
 #include "DriveBase.h"
 
-DriveBase::DriveBase( SpeedController& front,
-		      SpeedController& left,
-		      SpeedController& right,
-		      RateGyro& gyro )
+DriveBase::DriveBase( SpeedController * front,
+		      SpeedController * left,
+		      SpeedController * right,
+		      RateGyro * gyro )
     : Subsystem("DriveBase"),
     m_front(front),
     m_left(left),
     m_right(right),
-    m_drive3(front, left, right),
+    m_drive3(NULL),
     m_gyro(gyro),
-    m_defaultCommand(),
+    m_defaultCommand(NULL),
     m_started(false)
 {
+    m_drive3 = new RobotDrive3(front, left, right);
     Stop();
 }
 
 DriveBase::~DriveBase()
 {
+    // This is dangerous because the default command
+    // may still be (probably still is) registered within the
+    // Command/Scheduler subsystem
+    delete m_defaultCommand;
+    delete m_drive3;
     Stop();
 }
     
 void DriveBase::InitDefaultCommand()
 {
-    SetDefaultCommand(&m_defaultCommand);
+    if (!m_defaultCommand) {
+	m_defaultCommand = new DriveCommand();
+	SetDefaultCommand(m_defaultCommand);
+    }
 }
-
 
 void DriveBase::Stop()
 {
     // stop and disable all motors
-    m_drive3.StopMotor();
+    m_drive3->StopMotor();
     // watchdogs not needed while stopped
-    m_drive3.SetSafetyEnabled(false);
-    dynamic_cast<MotorSafety*>(&m_front)->SetSafetyEnabled(false);
-    dynamic_cast<MotorSafety*>(&m_left)->SetSafetyEnabled(false);
-    dynamic_cast<MotorSafety*>(&m_right)->SetSafetyEnabled(false);
+    m_drive3->SetSafetyEnabled(false);
+    dynamic_cast<MotorSafety*>(m_front)->SetSafetyEnabled(false);
+    dynamic_cast<MotorSafety*>(m_left)->SetSafetyEnabled(false);
+    dynamic_cast<MotorSafety*>(m_right)->SetSafetyEnabled(false);
     // remember that we're stopped
     m_started = false;
 }
@@ -47,12 +55,12 @@ void DriveBase::Start()
 {
     if (!m_started) {
 	// set all motors to 0.0 in order to feed their watchdogs
-	m_drive3.SetLeftRightMotorOutputs(0.0, 0.0);
+	m_drive3->SetLeftRightMotorOutputs(0.0, 0.0);
 	// now enable the watchdogs
-	m_drive3.SetSafetyEnabled(true);
-	dynamic_cast<MotorSafety*>(&m_front)->SetSafetyEnabled(true);
-	dynamic_cast<MotorSafety*>(&m_left)->SetSafetyEnabled(true);
-	dynamic_cast<MotorSafety*>(&m_right)->SetSafetyEnabled(true);
+	m_drive3->SetSafetyEnabled(true);
+	dynamic_cast<MotorSafety*>(m_front)->SetSafetyEnabled(true);
+	dynamic_cast<MotorSafety*>(m_left)->SetSafetyEnabled(true);
+	dynamic_cast<MotorSafety*>(m_right)->SetSafetyEnabled(true);
 	// remember that we're started
 	m_started = true;
     }
@@ -70,12 +78,12 @@ void DriveBase::Drive3( float x, float y, float twist )
     twist /= 2.;
 
     // add gyro compensation (adjust the "500" for best PID response)
-    twist -= m_gyro.GetRate() / 500.;
+    twist -= m_gyro->GetRate() / 500.;
 
     // limit the twist range to avoid normalization problems
     if (twist < -1.0) twist = -1.0;
     if (twist > 1.0) twist = 1.0;
 
-    m_drive3.HolonomicDrive_Cartesian( x, y, twist );
+    m_drive3->HolonomicDrive_Cartesian( x, y, twist );
 }
 

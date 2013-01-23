@@ -15,7 +15,6 @@ private:
 public:
 	RateGyro(UINT8 moduleNumber, UINT32 channel);
 	explicit RateGyro(UINT32 channel);
-	virtual ~RateGyro();
 
 	void Zero();
 	float GetRate();	// in degrees per second

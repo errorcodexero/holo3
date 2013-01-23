@@ -3,25 +3,9 @@
 
 #include "Robot.h"
 
-
-Robot::Robot() :
-    m_driveBaseFront(1, 6),
-    m_driveBaseLeft(1, 5),
-    m_driveBaseRight(1, 4),
-    m_gyro(1, 1),
-    m_blinkyPWM(1, 1),
-    // m_unused(1, 2),
-    m_driveBase( m_driveBaseFront, m_driveBaseLeft,
-		 m_driveBaseRight, m_gyro ),
-    m_blinkyLight( &m_blinkyPWM ),
-    m_oi(new OI()),
-    m_autonomousCommand(),
-    m_teleopCommand()
+Robot::Robot()
 {
     printf("Robot::Robot() has been called!\n");
-
-    // blinky lights don't need watchdogs
-    m_blinkyPWM.SetSafetyEnabled(false);
 }
 
 Robot::~Robot()
@@ -36,23 +20,47 @@ void Robot::RobotInit()
     // connect sensors and actuators to LiveWindow
     LiveWindow* lw = LiveWindow::GetInstance();
 
-    lw->AddActuator("DriveBase", "Front", &m_driveBaseFront);
-    lw->AddActuator("DriveBase", "Left",  &m_driveBaseLeft);
-    lw->AddActuator("DriveBase", "Right", &m_driveBaseRight);
-    lw->AddSensor("DriveBase", "Gyro", &m_gyro);
-    lw->AddActuator("BlinkyLight", "PWM", &m_blinkyPWM);
+    m_driveBaseFront = new Jaguar(1, 6);
+    lw->AddActuator("DriveBase", "Front", m_driveBaseFront);
+
+    m_driveBaseLeft  = new Jaguar(1, 5);
+    lw->AddActuator("DriveBase", "Left",  m_driveBaseLeft);
+
+    m_driveBaseRight = new Jaguar(1, 4);
+    lw->AddActuator("DriveBase", "Right", m_driveBaseRight);
+
+    m_gyro = new RateGyro(1, 1);
+    lw->AddSensor("DriveBase", "Gyro", m_gyro);
+
+    m_blinkyPWM = new Victor(1, 1);
+    // blinky lights don't need watchdogs
+    m_blinkyPWM->SetSafetyEnabled(false);
+    lw->AddActuator("BlinkyLight", "PWM", m_blinkyPWM);
+
+    // m_unused = new Victor(1, 2);
+
+    m_driveBase = new DriveBase( m_driveBaseFront, m_driveBaseLeft,
+				 m_driveBaseRight, m_gyro ),
+
+    m_blinkyLight = new BlinkyLight( m_blinkyPWM );
+
+    m_oi = new OI();
+
+    m_autonomousCommand = new AutoCommand();
+
+    m_teleopCommand = new TeleCommand();
 }
 
 void Robot::Cancel()
 {
-    if (m_autonomousCommand.IsRunning()) {
-	m_autonomousCommand.Cancel();
+    if (m_autonomousCommand->IsRunning()) {
+	m_autonomousCommand->Cancel();
     }
-    if (m_teleopCommand.IsRunning()) {
-	m_teleopCommand.Cancel();
+    if (m_teleopCommand->IsRunning()) {
+	m_teleopCommand->Cancel();
     }
-    m_driveBase.Stop();
-    m_blinkyLight.Set(0.0);
+    m_driveBase->Stop();
+    m_blinkyLight->Set(0.0);
 }
 	
 void Robot::DisabledInit()
@@ -68,7 +76,7 @@ void Robot::DisabledPeriodic()
 void Robot::AutonomousInit()
 {
     Cancel();
-    m_autonomousCommand.Start();
+    m_autonomousCommand->Start();
 }
     
 void Robot::AutonomousPeriodic()
@@ -79,7 +87,7 @@ void Robot::AutonomousPeriodic()
 void Robot::TeleopInit()
 {
     Cancel();
-    m_teleopCommand.Start();
+    m_teleopCommand->Start();
 }
     
 void Robot::TeleopPeriodic()

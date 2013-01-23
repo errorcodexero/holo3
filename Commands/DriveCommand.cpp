@@ -8,41 +8,41 @@
 // when this command is Started.
 DriveCommand::DriveCommand()
 {
-	Requires(&Robot::driveBase());
+    Requires(Robot::driveBase());
 }
 
 // Called just before this Command runs the first time
 void DriveCommand::Initialize()
 {
-	;
+    ;
 }
 
 // Called repeatedly when this Command is scheduled to run
 void DriveCommand::Execute()
 {
-	Joystick *joy = Robot::oi().getStick();
-	float x = joy->GetX();
-	float y = joy->GetY();
-	float t = joy->GetTwist();
-	// printf("%g %g %g\n", x, y, t);
-	Robot::driveBase().Drive3(x, y, t);
+    Joystick *joy = Robot::oi()->getStick();
+    float x = joy->GetX();
+    float y = joy->GetY();
+    float t = joy->GetTwist();
+    // printf("%g %g %g\n", x, y, t);
+    Robot::driveBase()->Drive3(x, y, t);
 }
 
 // Make this return true when this Command no longer needs to run execute()
 bool DriveCommand::IsFinished()
 {
-	return false;
+    return false;
 }
 
 // Called once after isFinished returns true
 void DriveCommand::End()
 {
-	;
+    ;
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void DriveCommand::Interrupted()
 {
-	;
+    ;
 }
