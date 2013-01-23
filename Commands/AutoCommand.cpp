@@ -1,7 +1,7 @@
 // First Team 1425 "Error Code Xero"
 // for FRC 2013 game "Ultimate Ascent"
 
-#include "AutoCommand.h"
+#include "Robot.h"
 
 AutoCommand::AutoCommand()
 {
@@ -25,6 +25,6 @@ AutoCommand::AutoCommand()
 
 void AutoCommand::Interrupted()
 {
-    Robot::blinkyLight()->Set(0.0);
+    Robot::blinkyLight().Set(0.0);
 }
 

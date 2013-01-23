@@ -1,18 +1,20 @@
+// First Team 1425 "Error Code Xero"
+// for FRC 2013 game "Ultimate Ascent"
+
 #include "Robot.h"
-#include "BlinkyOn.h"
 
 BlinkyOn::BlinkyOn()
 {
     // Use Requires() here to declare subsystem dependencies
     // eg. Requires(chassis);
-    Requires(Robot::blinkyLight());
+    Requires(&Robot::blinkyLight());
     m_onTimer.Start();
 }
 
 // Called just before this Command runs the first time
 void BlinkyOn::Initialize()
 {
-    Robot::blinkyLight()->Set(1.0);
+    Robot::blinkyLight().Set(1.0);
     m_onTimer.Reset();
 }
 

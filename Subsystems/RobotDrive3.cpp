@@ -72,18 +72,14 @@ RobotDrive3::RobotDrive3(SpeedController &frontMotor,
 // standard flight sticks.)
 // @param rotation The rate of rotation for the robot, completely independent
 // of the translation. [-1.0..1.0]
-// @param gyroAngle The measured rate of rotation for the robot [-1.0..1.0],
-// will be subtracted from rotation to compensate for drift and mechanical
-// errors in the drive train.
 
-void RobotDrive3::HolonomicDrive_Cartesian( float x, float y, float rotation,
-					    float gyroAngle )
+void RobotDrive3::HolonomicDrive_Cartesian( float x, float y, float rotation )
 {
     double wheelSpeeds[kMaxNumberOfMotors];
-    wheelSpeeds[kFrontLeftMotor] = -x - rotation + gyroAngle;
+    wheelSpeeds[kFrontLeftMotor] = -x - rotation;
     wheelSpeeds[kFrontRightMotor] = 0.0;
-    wheelSpeeds[kRearLeftMotor]  = 0.500*x + 0.866*y - rotation + gyroAngle;
-    wheelSpeeds[kRearRightMotor] = 0.500*x - 0.866*y - rotation + gyroAngle;
+    wheelSpeeds[kRearLeftMotor]  = 0.500*x + 0.866*y - rotation;
+    wheelSpeeds[kRearRightMotor] = 0.500*x - 0.866*y - rotation;
 
     Normalize(wheelSpeeds);
 

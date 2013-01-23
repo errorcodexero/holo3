@@ -4,7 +4,8 @@
 #ifndef AUTOCOMMAND_H
 #define AUTOCOMMAND_H
 
-#include "Robot.h"
+#include "Commands/Command.h"
+#include "Commands/CommandGroup.h"
 
 // This command group is started whenever the robot enters autonomous mode
 // and canceled when the robot enters any other mode.

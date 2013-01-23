@@ -23,8 +23,7 @@ public:
     RobotDrive3(SpeedController &frontMotor, SpeedController &rearLeftMotor,
 		SpeedController &rearRightMotor);
 
-    void HolonomicDrive_Cartesian(float x, float y, float rotation,
-    				  float gyroAngle = 0.0);
+    void HolonomicDrive_Cartesian(float x, float y, float rotation );
 
 private:
     DISALLOW_COPY_AND_ASSIGN(RobotDrive3);
