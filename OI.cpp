@@ -6,7 +6,9 @@
 #include "DriveCommand.h"
 #include "TeleCommand.h"
 
-OI::OI()
+OI::OI() 
+
+	//button2(&stick, 2),
 {
     // Process operator interface input here.
     stick = new Joystick(1);

@@ -18,11 +18,11 @@ void DriveCommand::Initialize()
 }
 
 // Called repeatedly when this Command is scheduled to run
-void DriveCommand::Execute()
+void DriveCommand::Execute( )//float speed)
 {
     Joystick *joy = Robot::oi()->getStick();
-    float x = joy->GetX();
-    float y = joy->GetY();
+    float x = joy->GetX() ;//* speed;
+    float y = joy->GetY() ;//* speed;
     float t = joy->GetTwist();
     // printf("%g %g %g\n", x, y, t);
     Robot::driveBase()->Drive3(x, y, t);
