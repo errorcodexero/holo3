@@ -49,6 +49,11 @@ void Robot::RobotInit()
     m_autonomousCommand = new AutoCommand();
 
     m_teleopCommand = new TeleCommand();
+
+    m_targetCommand = new TargetCommand();
+//    m_targetButton = new NetworkButton("SmartDashboard", "makeItSo");
+//    m_targetButton->WhenPressed(m_targetCommand);
+    SmartDashboard::PutData("makeItSo", m_targetCommand);
 }
 
 void Robot::Cancel()

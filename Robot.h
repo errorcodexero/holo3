@@ -12,6 +12,7 @@
 #include "AutoCommand.h"
 #include "TeleCommand.h"
 #include "DriveCommand.h"
+#include "TargetCommand.h"
 #include "BlinkyBreathe.h"
 #include "BlinkyOff.h"
 #include "BlinkyOn.h"
@@ -58,6 +59,10 @@ public:
     // commands
     AutoCommand* m_autonomousCommand;
     TeleCommand* m_teleopCommand;
+
+    // targeting
+    TargetCommand* m_targetCommand;
+//    NetworkButton* m_targetButton;
 
 public:
     // singleton accessor
