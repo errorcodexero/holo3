@@ -4,25 +4,24 @@
 #ifndef TARGETCOMMAND_H
 #define TARGETCOMMAND_H
 
-#include "Commands/Command.h"
+#include "TimedDrive.h"
 
-// This is the default command for the drive base:
-// drive under joystick control.
+// TargetCommand extends TimedDrive to add new behavior
 
-class TargetCommand: public Command {
+class TargetCommand: public TimedDrive {
 private:
+    double m_kP, m_kT;
     int m_tgtHeight;
     int m_tgtWidth;
     int m_tgtOffset;
-    bool m_done;
 
 public:
     TargetCommand();
     virtual void Initialize();
     virtual void Execute();
-    virtual bool IsFinished();
-    virtual void End();
-    virtual void Interrupted();
+    // virtual bool IsFinished();
+    // virtual void End();
+    // virtual void Interrupted();
 };
 
 #endif

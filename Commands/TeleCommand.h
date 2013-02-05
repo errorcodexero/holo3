@@ -4,8 +4,8 @@
 #ifndef TELECOMMAND_H
 #define TELECOMMAND_H
 
-#include "Commands/Command.h"
-#include "Commands/CommandGroup.h"
+#include <Commands/Command.h>
+#include <Commands/CommandGroup.h>
 
 // This command group is started whenever the robot enters teleoperated mode
 // and canceled when the robot enters any other mode.

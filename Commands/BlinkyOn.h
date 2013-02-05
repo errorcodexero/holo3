@@ -4,7 +4,7 @@
 #ifndef BLINKY_ON_H
 #define BLINKY_ON_H
 
-#include "Commands/Command.h"
+#include <Commands/Command.h>
 
 class BlinkyOn: public Command {
 private:

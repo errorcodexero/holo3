@@ -4,7 +4,7 @@
 #ifndef DRIVECOMMAND_H
 #define DRIVECOMMAND_H
 
-#include "Commands/Command.h"
+#include <Commands/Command.h>
 
 // This is the default command for the drive base:
 // drive under joystick control.
