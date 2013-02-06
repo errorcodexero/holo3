@@ -14,12 +14,13 @@ private:
     int m_tgtHeight;
     int m_tgtWidth;
     int m_tgtOffset;
+    int m_done;
 
 public:
     TargetCommand();
     virtual void Initialize();
     virtual void Execute();
-    // virtual bool IsFinished();
+    virtual bool IsFinished();
     // virtual void End();
     // virtual void Interrupted();
 };
