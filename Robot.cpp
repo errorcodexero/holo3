@@ -20,14 +20,14 @@ void Robot::RobotInit()
     // connect sensors and actuators to LiveWindow
     LiveWindow* lw = LiveWindow::GetInstance();
 
-    m_driveBaseFront = new Jaguar(1, 6);
-    lw->AddActuator("DriveBase", "Front", m_driveBaseFront);
+    m_driveBaseLeft = new Talon(1, 4);
+    lw->AddActuator("DriveBase", "Left", m_driveBaseLeft);
 
-    m_driveBaseLeft  = new Jaguar(1, 5);
-    lw->AddActuator("DriveBase", "Left",  m_driveBaseLeft);
+    m_driveBaseRight  = new Talon(1, 5);
+    lw->AddActuator("DriveBase", "Right",  m_driveBaseRight);
 
-    m_driveBaseRight = new Jaguar(1, 4);
-    lw->AddActuator("DriveBase", "Right", m_driveBaseRight);
+    m_driveBaseRear = new Talon(1, 6);
+    lw->AddActuator("DriveBase", "Rear", m_driveBaseRear);
 
     m_gyro = new RateGyro(1, 1);
     lw->AddSensor("DriveBase", "Gyro", m_gyro);
@@ -39,8 +39,12 @@ void Robot::RobotInit()
 
     // m_unused = new Victor(1, 2);
 
-    m_driveBase = new DriveBase( m_driveBaseFront, m_driveBaseLeft,
-				 m_driveBaseRight, m_gyro ),
+    // Our drive base is rotated 180 degrees from the way the
+    // DriveBase and RobotDrive3 (and RobotDrive) class expect,
+    // so the motor channels have different names than the class
+    // prototype.
+    m_driveBase = new DriveBase( m_driveBaseRear, m_driveBaseRight,
+				 m_driveBaseLeft, m_gyro ),
 
     m_blinkyLight = new BlinkyLight( m_blinkyPWM );
 
@@ -58,7 +62,6 @@ void Robot::RobotInit()
     
     m_nudgeRight = new TimedDrive( 0.0, 0.0, .35, 0.15);
     SmartDashboard::PutData ("Lean to da Right Ya!", m_nudgeRight);
-    
 }
 
 void Robot::Cancel()

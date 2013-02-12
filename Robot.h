@@ -43,9 +43,9 @@ private:
     //   then any other commands
 
     // sensors and actuators
-    Jaguar* m_driveBaseFront;
-    Jaguar* m_driveBaseLeft;
-    Jaguar* m_driveBaseRight;
+    Talon* m_driveBaseLeft;
+    Talon* m_driveBaseRight;
+    Talon* m_driveBaseRear;
     RateGyro* m_gyro;
     Victor* m_blinkyPWM;
 
