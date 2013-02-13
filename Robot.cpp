@@ -19,7 +19,7 @@ void Robot::RobotInit()
 
     // connect sensors and actuators to LiveWindow
     LiveWindow* lw = LiveWindow::GetInstance();
-
+        
     m_driveBaseFront = new Jaguar(1, 6);
     lw->AddActuator("DriveBase", "Front", m_driveBaseFront);
 
@@ -37,13 +37,17 @@ void Robot::RobotInit()
     m_blinkyPWM->SetSafetyEnabled(false);
     lw->AddActuator("BlinkyLight", "PWM", m_blinkyPWM);
 
+    m_shooterMotor = new CANJaguar(6);
+    
     // m_unused = new Victor(1, 2);
-
+    
     m_driveBase = new DriveBase( m_driveBaseFront, m_driveBaseLeft,
 				 m_driveBaseRight, m_gyro ),
 
     m_blinkyLight = new BlinkyLight( m_blinkyPWM );
 
+    m_shooter = new Shooter( m_shooterMotor );
+    
     m_oi = new OI();
 
     m_autonomousCommand = new AutoCommand();

@@ -9,6 +9,7 @@
 #include "RateGyro.h"
 #include "DriveBase.h"
 #include "BlinkyLight.h"
+#include "Shooter.h"
 #include "AutoCommand.h"
 #include "TeleCommand.h"
 #include "DriveCommand.h"
@@ -17,6 +18,7 @@
 #include "BlinkyBreathe.h"
 #include "BlinkyOff.h"
 #include "BlinkyOn.h"
+#include "GoSpin.h"
 
 #include "OI.h"
 
@@ -48,12 +50,14 @@ private:
     Jaguar* m_driveBaseRight;
     RateGyro* m_gyro;
     Victor* m_blinkyPWM;
+    CANJaguar* m_shooterMotor;
 
 public:
     // subsystems
     DriveBase* m_driveBase;
     BlinkyLight* m_blinkyLight;
-
+    Shooter* m_shooter;
+    
     // OI
     OI* m_oi;
 
@@ -75,6 +79,7 @@ public:
     // convenience accessors
     static DriveBase* driveBase() { return theRobot().m_driveBase; };
     static BlinkyLight* blinkyLight() { return theRobot().m_blinkyLight; };
+    static Shooter* shooter() { return theRobot().m_shooter; };
     static OI* oi() { return theRobot().m_oi; };
 
     void Cancel();
