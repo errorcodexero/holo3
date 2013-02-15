@@ -10,7 +10,7 @@
 TargetCommand::TargetCommand() : TimedDrive( 0.0, 0.0, 0.0, 0.0 )
 {
     SmartDashboard::PutNumber("kP", 0.350);
-    SmartDashboard::PutNumber("kT", 0.250);
+    SmartDashboard::PutNumber("kT", 0.200);
     SmartDashboard::PutNumber("height", 0.0);
     SmartDashboard::PutNumber("width",  0.0);
     SmartDashboard::PutNumber("offset", 0.0);
@@ -55,17 +55,20 @@ void TargetCommand::Execute()
     }
 
     if (moveIt) {
-	if (abs(m_tgtOffset) < 10) {
-	    printf("+++ done!\n");
-	    Set(0.0, 0.0, 0.0, 0.0);
-	    ++m_done;
-	} else if (m_tgtWidth > 10) {
-	    float error = (float)m_tgtOffset / (float)m_tgtWidth;
+	if (m_tgtHeight <= 1.0 || m_tgtWidth <= 1.0) {
+	    // no target in view - give up!
+	    m_done = 10;
+	} else {
+	    double error = (double)m_tgtOffset / (double)m_tgtWidth;
 	    float twist = (error < 0) ? -m_kP : m_kP;
 	    float secs  = fabs(error) * m_kT;
 	    printf("+++ error %g twist %g time %g\n", error, twist, secs);
 	    Set(0.0, 0.0, twist, secs);
-	    m_done = 0;
+	    if (fabs(error) < 0.050) {
+		++m_done;
+	    } else {
+		m_done = 0;
+	    }
 	}
     }
 

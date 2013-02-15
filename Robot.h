@@ -13,6 +13,7 @@
 #include "TeleCommand.h"
 #include "DriveCommand.h"
 #include "TargetCommand.h"
+#include "TimedDrive.h"
 #include "BlinkyBreathe.h"
 #include "BlinkyOff.h"
 #include "BlinkyOn.h"
@@ -62,7 +63,10 @@ public:
 
     // targeting
     TargetCommand* m_targetCommand;
-//    NetworkButton* m_targetButton;
+    
+    //nudge
+    TimedDrive* m_nudgeLeft;
+    TimedDrive* m_nudgeRight;
 
 public:
     // singleton accessor
