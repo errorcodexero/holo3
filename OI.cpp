@@ -8,11 +8,11 @@
 
 OI::OI() 
 
-	//button2(&stick, 2),
+
 {
     // Process operator interface input here.
     stick = new Joystick(1);
-
+    button2 = new JoystickButton(stick, 2);
     // SmartDashboard Buttons
 }
 
