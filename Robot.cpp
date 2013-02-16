@@ -37,6 +37,8 @@ void Robot::RobotInit()
     m_blinkyPWM->SetSafetyEnabled(false);
     lw->AddActuator("BlinkyLight", "PWM", m_blinkyPWM);
 
+    m_shooterMotor = new CANJaguar(6);
+    
     // m_unused = new Victor(1, 2);
 
     // Our drive base is rotated 180 degrees from the way the
@@ -48,6 +50,8 @@ void Robot::RobotInit()
 
     m_blinkyLight = new BlinkyLight( m_blinkyPWM );
 
+    m_shooter = new Shooter( m_shooterMotor );
+    
     m_oi = new OI();
 
     m_autonomousCommand = new AutoCommand();
