@@ -65,10 +65,15 @@ void Robot::RobotInit()
     SmartDashboard::PutData("Lean to da Left!", m_nudgeLeft);
     
     m_nudgeRight = new TimedDrive( 0.0, 0.0, .35, 0.15);
+
     SmartDashboard::PutData("Lean to da Right Ya!", m_nudgeRight);
 
     m_shootCommand = new ShootCommand();
     SmartDashboard::PutData("Shoot", m_shootCommand);
+    
+    //compressor
+    m_compressor = new Compressor(1, 2);  //TODO: Need actual channel values
+    
 }
 
 void Robot::Cancel()
