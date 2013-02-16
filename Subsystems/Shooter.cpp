@@ -74,6 +74,10 @@ void Shooter::Start()
     }
     m_report = 0;
     p_notifier->StartPeriodic(0.10);
+    
+    // Initialize pneumatics
+    m_doubleSolenoid = new DoubleSolenoid(2, 3); //TODO: Need channel values
+    
 }
 
 void Shooter::Stop()
@@ -133,5 +137,14 @@ void Shooter::ReportStatus()
 bool Shooter::IsUpToSpeed()
 {
     return (m_upToSpeed > 3);
+}
+
+
+/*
+ * Should handle moving the shooter to the deployed position
+ */
+void Shooter::deploy()
+{
+	
 }
 

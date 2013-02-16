@@ -58,8 +58,8 @@ void Robot::RobotInit()
 
     m_teleopCommand = new TeleCommand();
 
-    //m_targetCommand = new TargetCommand();
-    //SmartDashboard::PutData("makeItSo", m_targetCommand);
+    m_targetCommand = new TargetCommand();
+    SmartDashboard::PutData("makeItSo", m_targetCommand);
     
     m_nudgeLeft = new TimedDrive( 0.0, 0.0, -.35, 0.15 );
     SmartDashboard::PutData("Lean to da Left!", m_nudgeLeft);
