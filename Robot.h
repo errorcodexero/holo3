@@ -15,7 +15,7 @@
 #include "DriveCommand.h"
 #include "TargetCommand.h"
 #include "TimedDrive.h"
-#include "Shoot.h"
+#include "ShootCommand.h"
 #include "BlinkyBreathe.h"
 #include "BlinkyOff.h"
 #include "BlinkyOn.h"
@@ -68,9 +68,12 @@ public:
     // targeting
     TargetCommand* m_targetCommand;
     
-    //nudge
+    // nudge
     TimedDrive* m_nudgeLeft;
     TimedDrive* m_nudgeRight;
+
+    // shooting
+    ShootCommand* m_shootCommand;
 
 public:
     // singleton accessor

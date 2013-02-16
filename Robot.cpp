@@ -62,10 +62,13 @@ void Robot::RobotInit()
     SmartDashboard::PutData("makeItSo", m_targetCommand);
     
     m_nudgeLeft = new TimedDrive( 0.0, 0.0, -.35, 0.15 );
-    SmartDashboard::PutData ("Lean to da Left!", m_nudgeLeft);
+    SmartDashboard::PutData("Lean to da Left!", m_nudgeLeft);
     
     m_nudgeRight = new TimedDrive( 0.0, 0.0, .35, 0.15);
-    SmartDashboard::PutData ("Lean to da Right Ya!", m_nudgeRight);
+    SmartDashboard::PutData("Lean to da Right Ya!", m_nudgeRight);
+
+    m_shootCommand = new ShootCommand();
+    SmartDashboard::PutData("Shoot", m_shootCommand);
 }
 
 void Robot::Cancel()

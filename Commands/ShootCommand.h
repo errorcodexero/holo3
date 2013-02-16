@@ -1,14 +1,14 @@
 // First Team 1425 "Error Code Xero"
 // for FRC 2013 game "Ultimate Ascent"
 
-#ifndef SHOOT_H
-#define SHOOT_H
+#ifndef SHOOT_COMMAND_H
+#define SHOOT_COMMAND_H
 
 #include <Commands/Command.h>
 
-class Shoot: public Command {
+class ShootCommand: public Command {
 public:
-	Shoot();
+	ShootCommand();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

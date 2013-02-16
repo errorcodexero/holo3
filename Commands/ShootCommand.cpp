@@ -3,34 +3,34 @@
 
 #include "Robot.h"
 
-Shoot::Shoot()
+ShootCommand::ShootCommand()
 {
     Requires(Robot::shooter());
 }
 
-void Shoot::Initialize()
+void ShootCommand::Initialize()
 {
     Robot::shooter()->Set(3000.0);
     Robot::shooter()->Start();
 }
 
-void Shoot::Execute()
+void ShootCommand::Execute()
 {
     ;
 }
 
-bool Shoot::IsFinished()
+bool ShootCommand::IsFinished()
 {
     // return Robot::shooter()->IsUpToSpeed();
     return false;
 }
 
-void Shoot::End()
+void ShootCommand::End()
 {
     ;
 }
 
-void Shoot::Interrupted()
+void ShootCommand::Interrupted()
 {
     Robot::shooter()->Stop();
 }
