@@ -6,24 +6,31 @@
 
 #include <WPILib.h>
 
-
 class Shooter : public Subsystem {
-public:
-	
-	// Class member data section:
-	static const UINT8 syncGroup = 0; // create synchronization group in case of more motors.
-	static const double autonomousSpeed = 2700.;
-	static const UINT8 shooterMotorDeviceNumber = 6;
-	static const CANJaguar::ControlMode shooterMotorControlMode = CANJaguar::kSpeed;
-
-	CANJaguar* p_shooterMotor;
-	
-	Shooter( CANJaguar* motor );
-	
-	void Initialize();
-	void Run(double wheelSpeed);
-	void Stop();
 private:
-	void ReportStatus(void);
+    CANJaguar* p_shooterMotor;
+    Notifier* p_notifier;
+    double m_rampRate, m_P, m_I, m_D;
+    double m_speed;
+    // additional tuning parameters:
+    // drive polling interval (must be faster than MotorSafety timeout)
+    // status polling interval
+    // motor "up to speed" threshold
+    // motor "up to speed" time
+    int m_report;
+    int m_upToSpeed;
+
+public:
+    Shooter( CANJaguar* motor );
+    ~Shooter();
+    void Set(double speed);
+    void Start(void);
+    void Stop(void);
+    bool IsUpToSpeed(void);
+	
+private:
+    static void Shooter::TimerEvent( void *param );
+    void Run(void);
+    void ReportStatus(void);
 };
 #endif

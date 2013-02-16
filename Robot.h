@@ -15,10 +15,10 @@
 #include "DriveCommand.h"
 #include "TargetCommand.h"
 #include "TimedDrive.h"
+#include "Shoot.h"
 #include "BlinkyBreathe.h"
 #include "BlinkyOff.h"
 #include "BlinkyOn.h"
-#include "GoSpin.h"
 
 #include "OI.h"
 
@@ -49,14 +49,14 @@ private:
     Talon* m_driveBaseRight;
     Talon* m_driveBaseRear;
     RateGyro* m_gyro;
-    Victor* m_blinkyPWM;
     CANJaguar* m_shooterMotor;
+    Victor* m_blinkyPWM;
 
 public:
     // subsystems
     DriveBase* m_driveBase;
-    BlinkyLight* m_blinkyLight;
     Shooter* m_shooter;
+    BlinkyLight* m_blinkyLight;
     
     // OI
     OI* m_oi;
