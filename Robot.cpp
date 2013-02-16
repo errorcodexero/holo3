@@ -20,18 +20,20 @@ void Robot::RobotInit()
     // connect sensors and actuators to LiveWindow
     LiveWindow* lw = LiveWindow::GetInstance();
 
-    m_driveBaseFront = new Jaguar(1, 6);
-    lw->AddActuator("DriveBase", "Front", m_driveBaseFront);
+    m_driveBaseLeft = new Talon(1, 4);
+    lw->AddActuator("DriveBase", "Left", m_driveBaseLeft);
 
-    m_driveBaseLeft  = new Jaguar(1, 5);
-    lw->AddActuator("DriveBase", "Left",  m_driveBaseLeft);
+    m_driveBaseRight  = new Talon(1, 5);
+    lw->AddActuator("DriveBase", "Right",  m_driveBaseRight);
 
-    m_driveBaseRight = new Jaguar(1, 4);
-    lw->AddActuator("DriveBase", "Right", m_driveBaseRight);
+    m_driveBaseRear = new Talon(1, 6);
+    lw->AddActuator("DriveBase", "Rear", m_driveBaseRear);
 
     m_gyro = new RateGyro(1, 1);
     lw->AddSensor("DriveBase", "Gyro", m_gyro);
 
+    m_shooterMotor = new CANJaguar(6);
+    
     m_blinkyPWM = new Victor(1, 1);
     // blinky lights don't need watchdogs
     m_blinkyPWM->SetSafetyEnabled(false);
@@ -39,9 +41,15 @@ void Robot::RobotInit()
 
     // m_unused = new Victor(1, 2);
 
-    m_driveBase = new DriveBase( m_driveBaseFront, m_driveBaseLeft,
-				 m_driveBaseRight, m_gyro ),
+    // Our drive base is rotated 180 degrees from the way the
+    // DriveBase and RobotDrive3 (and RobotDrive) class expect,
+    // so the motor channels have different names than the class
+    // prototype.
+    m_driveBase = new DriveBase( m_driveBaseRear, m_driveBaseRight,
+				 m_driveBaseLeft, m_gyro ),
 
+    m_shooter = new Shooter( m_shooterMotor );
+    
     m_blinkyLight = new BlinkyLight( m_blinkyPWM );
 
     m_oi = new OI();
@@ -54,11 +62,13 @@ void Robot::RobotInit()
     //SmartDashboard::PutData("makeItSo", m_targetCommand);
     
     m_nudgeLeft = new TimedDrive( 0.0, 0.0, -.35, 0.15 );
-    SmartDashboard::PutData ("Lean to da Left!", m_nudgeLeft);
+    SmartDashboard::PutData("Lean to da Left!", m_nudgeLeft);
     
     m_nudgeRight = new TimedDrive( 0.0, 0.0, .35, 0.15);
-    SmartDashboard::PutData ("Lean to da Right Ya!", m_nudgeRight);
-    
+    SmartDashboard::PutData("Lean to da Right Ya!", m_nudgeRight);
+
+    m_shootCommand = new ShootCommand();
+    SmartDashboard::PutData("Shoot", m_shootCommand);
 }
 
 void Robot::Cancel()
