@@ -251,12 +251,7 @@
     <buildtargets>
         <buildtarget buildtool="Linker" name="holo3" passed="false" targetname="holo3">
             <contents>
-                <buildtargetreference name="/holo3/holo3_partialimage"/>
-            </contents>
-        </buildtarget>
-        <buildtarget buildtool="Partial Image Linker" name="holo3_partialimage" passed="true" targetname="holo3_partialimage">
-            <contents>
-                <folder name="/holo3" recursive="true"/>
+                <folder name="/Holo3" recursive="true"/>
             </contents>
         </buildtarget>
     </buildtargets>

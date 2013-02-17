@@ -20,7 +20,8 @@ private:
     int m_report;
     int m_upToSpeed;
     
-    DoubleSolenoid* m_doubleSolenoid;
+    DoubleSolenoid* m_deploySolenoid;
+    DoubleSolenoid* m_positionSolenoid;
 
 public:
     Shooter( CANJaguar* motor );
@@ -30,6 +31,7 @@ public:
     void Stop(void);
     bool IsUpToSpeed(void);
     void deploy(void);
+    void position(int);
 	
 private:
     static void Shooter::TimerEvent( void *param );

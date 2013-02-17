@@ -83,8 +83,8 @@ void Shooter::Start()
     p_notifier->StartPeriodic(0.10);
     
     // Initialize pneumatics
-    m_doubleSolenoid = new DoubleSolenoid(2, 3); //TODO: Need channel values
-    
+    m_deploySolenoid = new DoubleSolenoid(2, 3); //TODO: Need channel values
+    m_positionSolenoid = new DoubleSolenoid(4, 5); //TODO: Need channel values
 }
 
 void Shooter::Stop()
@@ -156,3 +156,10 @@ void Shooter::deploy()
 	
 }
 
+/*
+ * Should handle position the shooter between its two deployed positions
+ */
+void Shooter::position(int newPosition)
+{
+	// Use m_positionSolenoid to position the shooter
+}

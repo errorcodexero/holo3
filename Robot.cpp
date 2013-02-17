@@ -42,6 +42,9 @@ void Robot::RobotInit()
     m_blinkyPWM->SetSafetyEnabled(false);
     lw->AddActuator("BlinkyLight", "PWM", m_blinkyPWM);
 
+    //compressor
+    m_compressor = new Compressor(1, 2);  //TODO: Need actual channel values
+
     // m_unused = new Victor(1, 2);
 
     // Our drive base is rotated 180 degrees from the way the
@@ -94,6 +97,7 @@ void Robot::Cancel()
     }
     m_driveBase->Stop();
     m_blinkyLight->Set(0.0);
+    m_compressor->Stop();
 }
 	
 void Robot::DisabledInit()
