@@ -2,6 +2,8 @@
 // for FRC 2013 game "Ultimate Ascent"
 
 #include "Robot.h"
+#include "OI.h"
+#include "AimTrim.h"
 
 Robot::Robot()
 {
@@ -56,9 +58,14 @@ void Robot::RobotInit()
     m_nudgeLeft = new TimedDrive( 0.0, 0.0, -.35, 0.15 );
     SmartDashboard::PutData ("Lean to da Left!", m_nudgeLeft);
     
+    
     m_nudgeRight = new TimedDrive( 0.0, 0.0, .35, 0.15);
     SmartDashboard::PutData ("Lean to da Right Ya!", m_nudgeRight);
     
+    m_oi->button5->WhenPressed(m_nudgeLeft);
+    m_oi->button6->WhenPressed(m_nudgeRight);
+    m_oi->button7->WhenPressed(new AimTrim (true));
+    m_oi->button8->WhenPressed(new AimTrim (false));
 }
 
 void Robot::Cancel()
