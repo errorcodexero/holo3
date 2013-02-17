@@ -8,6 +8,7 @@
 Shooter::Shooter(CANJaguar* motor):Subsystem("Shooter")
 {			
     p_shooterMotor = motor;
+    p_shooterMotor->SetSafetyEnabled(false);
     p_notifier = NULL;
 
     m_rampRate = 0.0; // 0.0 disables rate limiting
@@ -68,6 +69,12 @@ void Shooter::Start()
     // Enable Jaguar control:
     p_shooterMotor->EnableControl();
 
+    // Poke the motor speed to reset the watchdog, then enable the watchdog
+    m_speed = SmartDashboard::GetNumber("Shooter Speed");
+    p_shooterMotor->Set(m_speed);
+
+    p_shooterMotor->SetSafetyEnabled(true);
+
     // Start run timer
     if (!p_notifier) {
 	p_notifier = new Notifier( Shooter::TimerEvent, this );
@@ -84,7 +91,8 @@ void Shooter::Stop()
     }
 
     // stop motor
-    p_shooterMotor->Set(0.0);
+    p_shooterMotor->StopMotor();
+    p_shooterMotor->SetSafetyEnabled(false);
 
     // not running any more!
     m_upToSpeed = 0;

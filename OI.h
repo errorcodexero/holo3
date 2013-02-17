@@ -14,7 +14,7 @@ private:
 public:
 	OI();
 	Joystick* getStick();
-	float GetDriverThrottle()	{ return stick->GetThrottle(); }
+	float GetDriverThrottle() { return stick->GetThrottle(); }
 	bool GetDriverButton2() {return button2->Get();}
 };
 

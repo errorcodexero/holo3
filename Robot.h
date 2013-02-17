@@ -45,22 +45,22 @@ private:
     //   then any other commands
 
     // sensors and actuators
-    Talon* m_driveBaseLeft;
-    Talon* m_driveBaseRight;
+    Victor* m_driveBaseLeft;
+    Victor* m_driveBaseRight;
     Talon* m_driveBaseRear;
     RateGyro* m_gyro;
     CANJaguar* m_shooterMotor;
     Victor* m_blinkyPWM;
 
 public:
+    // OI
+    OI* m_oi;
+
     // subsystems
     DriveBase* m_driveBase;
     Shooter* m_shooter;
     BlinkyLight* m_blinkyLight;
     
-    // OI
-    OI* m_oi;
-
     // commands
     AutoCommand* m_autonomousCommand;
     TeleCommand* m_teleopCommand;
