@@ -62,7 +62,7 @@ public:
     TeleCommand* m_teleopCommand;
 
     // targeting
-    //TargetCommand* m_targetCommand;
+    TargetCommand* m_targetCommand;
     
     //nudge
     TimedDrive* m_nudgeLeft;
