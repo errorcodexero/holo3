@@ -71,6 +71,9 @@ public:
     // nudge
     TimedDrive* m_nudgeLeft;
     TimedDrive* m_nudgeRight;
+    
+    //compressor
+    Compressor* m_compressor;
 
     // shooting
     ShootCommand* m_shootCommand;

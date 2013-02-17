@@ -1,0 +1,46 @@
+Sequence of steps to start Autonomous mode
+
+How does single pneumatic piston have 3 stops? Hall Effect sensor can detect when the piston is fully extended, but not halfway (according to Steve).
+
+
+
+Start at a roughly determined position on the field
+Robot must locate target(s) and adjust position to lock in on intended target
+
+
+
+Trigger Autonomous Mode - from driver station
+	PARALELL TASKS:
+	Start Blinky Lights
+	Confirm pneumatic pressure at correct level
+	
+	Unfold shooter - pneumatics (1)
+	
+	Confirm pneumatic pressure at correct level
+	
+	PARALELL TASKS:
+	Position shooter - pneumatics (2)
+	Do something with under-light??
+	
+	PARALELL TASKS:
+	Position robot to target
+	shooter motor spins up to speed - Sensor
+	Do something with under-light??
+	
+	PARALELL TASKS:
+	verify robot on target
+	Do something with under-light??
+	
+	Loop through 3 frisbees:
+		Confirm pneumatic pressure at correct level
+		Feed frisbee - pneumatics (3)
+
+		Verify shooter motor back to speed - Sensor
+
+		Verify still on target
+		Do something with under-light???
+	
+	Do something with under-light?
+	
+
+Need to consider alternate approaches; the above assumes we are positioned in the cen ter back of the pyramid
