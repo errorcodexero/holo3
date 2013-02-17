@@ -45,6 +45,7 @@ private:
     //   then any other commands
 
     // sensors and actuators
+    Compressor* m_compressor;
     Victor* m_driveBaseLeft;
     Victor* m_driveBaseRight;
     Talon* m_driveBaseRear;
@@ -72,9 +73,6 @@ public:
     TimedDrive* m_nudgeLeft;
     TimedDrive* m_nudgeRight;
     
-    //compressor
-    Compressor* m_compressor;
-
     // shooting
     ShootCommand* m_shootCommand;
 

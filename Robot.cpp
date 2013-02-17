@@ -19,7 +19,10 @@ void Robot::RobotInit()
 
     m_oi = new OI();
 
-    // connect sensors and actuators to LiveWindow
+    //compressor
+    m_compressor = new Compressor(1, 1);
+
+    // connect remaining sensors and actuators to LiveWindow
     LiveWindow* lw = LiveWindow::GetInstance();
 
     m_driveBaseLeft = new Victor(1, 4);
@@ -34,16 +37,14 @@ void Robot::RobotInit()
     m_gyro = new RateGyro(1, 1);
     lw->AddSensor("DriveBase", "Gyro", m_gyro);
 
-    m_shooterMotor = new CANJaguar(5);
-    lw->AddSensor("Shooter", "Motor", m_shooterMotor);
+    m_shooterMotor = new CANJaguar(5, CANJaguar::kSpeed);
+    // CANJaguar adds itself to LiveWindow
+    // lw->AddSensor("Shooter", "Motor", m_shooterMotor);
     
     m_blinkyPWM = new Victor(1, 1);
     // blinky lights don't need watchdogs
     m_blinkyPWM->SetSafetyEnabled(false);
     lw->AddActuator("BlinkyLight", "PWM", m_blinkyPWM);
-
-    //compressor
-    m_compressor = new Compressor(1, 2);  //TODO: Need actual channel values
 
     // m_unused = new Victor(1, 2);
 
@@ -82,9 +83,9 @@ void Robot::RobotInit()
     m_shootCommand = new ShootCommand();
     // printf("m_shootCommand = %p\n", m_shootCommand);
     SmartDashboard::PutData("Shoot", m_shootCommand);
-    
-    //compressor
-    m_compressor = new Compressor(1, 1);  //TODO: Need actual channel values
+
+    // Now that everything else is set up, start the compressor
+    m_compressor->Start();
 }
 
 void Robot::Cancel()
@@ -97,7 +98,6 @@ void Robot::Cancel()
     }
     m_driveBase->Stop();
     m_blinkyLight->Set(0.0);
-    m_compressor->Stop();
 }
 	
 void Robot::DisabledInit()

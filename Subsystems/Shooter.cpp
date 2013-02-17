@@ -26,6 +26,13 @@ Shooter::Shooter(CANJaguar* motor):Subsystem("Shooter")
     m_speed = 2800.0;
     SmartDashboard::PutNumber("Shooter Speed", m_speed);
 
+    // Initialize pneumatics
+    LiveWindow* lw = LiveWindow::GetInstance();
+    m_deploySolenoid = new DoubleSolenoid(1, 2); //TODO: Need channel values
+    lw->AddActuator("Shooter", "Deploy", m_deploySolenoid);
+    m_positionSolenoid = new DoubleSolenoid(3, 4); //TODO: Need channel values
+    lw->AddActuator("Shooter", "Position", m_positionSolenoid);
+
     m_report = 0;
 }
 
@@ -81,10 +88,8 @@ void Shooter::Start()
     }
     m_report = 0;
     p_notifier->StartPeriodic(0.10);
-    
-    // Initialize pneumatics
-    m_deploySolenoid = new DoubleSolenoid(2, 3); //TODO: Need channel values
-    m_positionSolenoid = new DoubleSolenoid(4, 5); //TODO: Need channel values
+
+    m_deploySolenoid->Set(DoubleSolenoid::kForward);
 }
 
 void Shooter::Stop()
@@ -101,6 +106,8 @@ void Shooter::Stop()
     // not running any more!
     m_upToSpeed = 0;
     SmartDashboard::PutNumber("Shooter UpToSpeed", (double) m_upToSpeed);
+
+    m_deploySolenoid->Set(DoubleSolenoid::kReverse);
 }
 
 void Shooter::TimerEvent( void *param )
@@ -161,5 +168,5 @@ void Shooter::deploy()
  */
 void Shooter::position(int newPosition)
 {
-	// Use m_positionSolenoid to position the shooter
+    // Use m_positionSolenoid to position the shooter
 }
