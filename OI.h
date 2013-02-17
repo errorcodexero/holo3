@@ -8,7 +8,8 @@
 
 
 class OI {
-private:
+
+public:
 	Joystick* stick;
 	JoystickButton* button1; //On Gamepad, is mapped to "A"
 	JoystickButton* button2; //On Gamepad, is mapped to "B"
@@ -18,7 +19,7 @@ private:
 	JoystickButton* button6; //On Gamepad, is mapped to "RightBumper"
 	JoystickButton* button7; //On Gamepad, is mapped to "Back"
 	JoystickButton* button8; //On Gamepad, is mapped to "Start"
-public:
+	
 	OI();
 	Joystick* getStick();
 	float GetDriverThrottle()	{ return stick->GetThrottle(); }
