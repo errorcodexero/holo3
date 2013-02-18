@@ -55,11 +55,10 @@ void Robot::RobotInit()
     m_targetCommand = new TargetCommand();
     SmartDashboard::PutData("makeItSo", m_targetCommand);
     
-    m_nudgeLeft = new TimedDrive( 0.0, 0.0, -.35, 0.15 );
+    m_nudgeLeft = new TimedDrive( 0.0, 0.0, -.35, 0.02 );
     SmartDashboard::PutData ("Lean to da Left!", m_nudgeLeft);
     
-    
-    m_nudgeRight = new TimedDrive( 0.0, 0.0, .35, 0.15);
+    m_nudgeRight = new TimedDrive( 0.0, 0.0, .35, 0.02);
     SmartDashboard::PutData ("Lean to da Right Ya!", m_nudgeRight);
     
     m_oi->button5->WhenPressed(m_nudgeLeft);

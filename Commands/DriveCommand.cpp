@@ -25,7 +25,9 @@ void DriveCommand::Execute()
     float x = joy->GetX() * throttle;
     float y = joy->GetY() * throttle;
     float t = joy->GetTwist();
-    // printf("%g %g %g\n", x, y, t);
+
+    printf("%g %g %g\n", x, y, t);
+
     Robot::driveBase()->Drive3(x, y, t);
 }
 
