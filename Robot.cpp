@@ -149,5 +149,5 @@ void Robot::TestPeriodic()
     LiveWindow::GetInstance()->Run();
 }
 
-//START_ROBOT_CLASS(Robot);
+START_ROBOT_CLASS(Robot);
 
