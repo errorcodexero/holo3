@@ -8,6 +8,29 @@
 #include "ThreePositionSolenoid.h"
 
 class Shooter : public Subsystem {
+public:
+    Shooter( int motorChannel, int positionerChannel, int switchChannel,
+    		int injectorChannel );
+    ~Shooter();
+
+    enum TargetDistance {
+	kUnknown,
+	kShort,
+	kMid,
+	kLong,
+    };
+
+    void SetAngle(TargetDistance);
+    TargetDistance GetAngle();
+
+    void SetSpeed(double speed);
+    void Start(void);
+    void Stop(void);
+    bool IsUpToSpeed(void);
+    bool IsReadyToShoot(void);
+
+    void Inject();
+	
 private:
     CANJaguar* m_motor;
     double m_rampRate, m_P, m_I, m_D;
@@ -21,6 +44,8 @@ private:
     
     ThreePositionSolenoid *m_positioner;
     SendableChooser *m_positionChooser;
+    TargetDistance m_distance;
+
     Solenoid *m_injector;
 
     Notifier* m_notifier;
@@ -28,28 +53,6 @@ private:
     static const double kPollInterval;	// not changeable at runtime
     static const int kReportInterval;
 
-public:
-    Shooter( int motorChannel, int positionerChannel, int switchChannel,
-    		int injectorChannel );
-    ~Shooter();
-    void Set(double speed);
-    void Start(void);
-    void Stop(void);
-    bool IsUpToSpeed(void);
-
-    enum ShooterPosition {
-	kUnknown,
-	kHome,
-	kShort,
-	kLong,
-    };
-
-    void SetPosition(ShooterPosition);
-    ShooterPosition GetPosition(ShooterPosition);
-
-    void Inject();
-	
-private:
     static void TimerEvent( void *param );
     void Run(void);
     void ReportStatus(void);

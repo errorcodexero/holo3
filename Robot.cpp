@@ -87,9 +87,17 @@ void Robot::RobotInit()
     m_teleopCommand = new TeleCommand();
     // printf("m_teleopCommand = %p\n", m_teleopCommand);
 
-    m_shootCommand = new ShootCommand();
-    // printf("m_shootCommand = %p\n", m_shootCommand);
-    SmartDashboard::PutData("Shoot", m_shootCommand);
+    m_shootShort = new ShootCommand( Shooter::kShort );
+    // printf("m_shootShort = %p\n", m_shootShort);
+    SmartDashboard::PutData("Shoot Short", m_shootShort);
+
+    m_shootMid = new ShootCommand( Shooter::kMid );
+    // printf("m_shootMid = %p\n", m_shootMid);
+    SmartDashboard::PutData("Shoot Mid", m_shootMid);
+
+    m_shootLong = new ShootCommand( Shooter::kLong );
+    // printf("m_shootLong = %p\n", m_shootLong);
+    SmartDashboard::PutData("Shoot Long", m_shootLong);
 
     // Now that everything else is set up, start the compressor
     m_compressor->Start();

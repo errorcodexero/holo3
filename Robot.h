@@ -63,7 +63,9 @@ public:
     TeleCommand* m_teleopCommand;
 
     // shooting
-    ShootCommand* m_shootCommand;
+    ShootCommand* m_shootShort;
+    ShootCommand* m_shootMid;
+    ShootCommand* m_shootLong;
 
 public:
     // singleton accessor

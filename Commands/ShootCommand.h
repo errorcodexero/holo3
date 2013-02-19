@@ -4,11 +4,17 @@
 #ifndef SHOOT_COMMAND_H
 #define SHOOT_COMMAND_H
 
+#include "Robot.h"
 #include <Commands/Command.h>
 
 class ShootCommand: public Command {
+private:
+	Shooter::TargetDistance m_targetDistance;
+	int m_launched;
+
 public:
-	ShootCommand();
+	ShootCommand( Shooter::TargetDistance targetDistance );
+	int GetLaunched();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();
