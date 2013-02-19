@@ -13,9 +13,9 @@
 
 class DriveBase : public Subsystem {
 private:
-	SpeedController * m_rear;
-	SpeedController * m_right;
 	SpeedController * m_left;
+	SpeedController * m_right;
+	SpeedController * m_rear;
 	RobotDrive3 * m_drive3;
 	RateGyro * m_gyro;
 	INT32 m_gyroZero;
@@ -24,10 +24,10 @@ private:
 
 
 public:
-	DriveBase( SpeedController * rear,
-		   SpeedController * right,
-		   SpeedController * left,
-		   RateGyro * gyro );
+	DriveBase( int leftMotorChannel,
+		   int rightMotorChannel,
+		   int rearMotorChannel,
+		   int gyroMotorChannel );
 
 	~DriveBase();
 

@@ -3,20 +3,40 @@
 
 #include "DriveBase.h"
 
-DriveBase::DriveBase( SpeedController * rear,
-		      SpeedController * right,
-		      SpeedController * left,
-		      RateGyro * gyro )
+DriveBase::DriveBase( int leftMotorChannel,
+		      int rightMotorChannel,
+		      int rearMotorChannel,
+		      int gyroAnalogChannel )
     : Subsystem("DriveBase"),
-    m_rear(rear),
-    m_right(right),
-    m_left(left),
+    m_left(NULL),
+    m_right(NULL),
+    m_rear(NULL),
     m_drive3(NULL),
-    m_gyro(gyro),
+    m_gyro(NULL),
     m_defaultCommand(NULL),
     m_started(false)
 {
-    m_drive3 = new RobotDrive3(rear, right, left);
+    LiveWindow *lw = LiveWindow::GetInstance();
+
+    // Just to make things interesting (and because we
+    // didn't have enough motor controllers of either type),
+    // the left and right motors are controlled by Victor 888s
+    // and the rear motors are controlled by Talons.
+    m_left  = new Victor(leftMotorChannel);
+    lw->AddActuator("DriveBase", "Left", dynamic_cast<Victor*>(m_left));
+    m_right = new Victor(rightMotorChannel);
+    lw->AddActuator("DriveBase", "Right", dynamic_cast<Victor*>(m_right));
+    m_rear  = new Talon(rearMotorChannel);
+    lw->AddActuator("DriveBase", "Rear", dynamic_cast<Talon*>(m_rear));
+
+    // Our drive base has front-left, front-right and rear wheels
+    // but RobotDrive3 (and RobotDrive, from which it is derived)
+    // expect (left-)front, left-rear and right-rear motors.
+    m_drive3 = new RobotDrive3(m_rear, m_right, m_left);
+
+    m_gyro = new RateGyro(1, gyroAnalogChannel);
+    lw->AddSensor("DriveBase", "Gyro", m_gyro);
+
     Stop();
 }
 
@@ -26,8 +46,15 @@ DriveBase::~DriveBase()
     // may still be (probably still is) registered within the
     // Command/Scheduler subsystem
     delete m_defaultCommand;
-    delete m_drive3;
+    m_defaultCommand = NULL;
+
     Stop();
+
+    delete m_gyro;
+    delete m_drive3;
+    delete m_rear;
+    delete m_right;
+    delete m_left;
 }
     
 void DriveBase::InitDefaultCommand()

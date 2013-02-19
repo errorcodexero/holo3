@@ -25,38 +25,18 @@ void Robot::RobotInit()
     // connect remaining sensors and actuators to LiveWindow
     LiveWindow* lw = LiveWindow::GetInstance();
 
-    m_driveBaseLeft = new Victor(1, 4);
-    lw->AddActuator("DriveBase", "Left", m_driveBaseLeft);
-
-    m_driveBaseRight  = new Victor(1, 5);
-    lw->AddActuator("DriveBase", "Right",  m_driveBaseRight);
-
-    m_driveBaseRear = new Talon(1, 6);
-    lw->AddActuator("DriveBase", "Rear", m_driveBaseRear);
-
-    m_gyro = new RateGyro(1, 1);
-    lw->AddSensor("DriveBase", "Gyro", m_gyro);
-
-    m_shooterMotor = new CANJaguar(6, CANJaguar::kSpeed);
-    // CANJaguar adds itself to LiveWindow
-    // lw->AddSensor("Shooter", "Motor", m_shooterMotor);
-    
     m_blinkyPWM = new Victor(1, 1);
     // blinky lights don't need watchdogs
     m_blinkyPWM->SetSafetyEnabled(false);
     lw->AddActuator("BlinkyLight", "PWM", m_blinkyPWM);
 
-    // m_unused = new Victor(1, 2);
-
-    // Our drive base is rotated 180 degrees from the way the
-    // DriveBase and RobotDrive3 (and RobotDrive) class expect,
-    // so the motor channels have different names than the class
-    // prototype.
-    m_driveBase = new DriveBase( m_driveBaseRear, m_driveBaseRight,
-				 m_driveBaseLeft, m_gyro ),
+    // DriveBase( leftMotorChannel, rightMotorChannel, rearMotorChannel,
+    //		  gyroAnalogChannel );
+    m_driveBase = new DriveBase( 4, 5, 6, 1 ),
     // printf("m_driveBase = %p\n", m_driveBase);
 
-    m_shooter = new Shooter( m_shooterMotor );
+    // Shooter( motorChannel, solenoidChannel );
+    m_shooter = new Shooter( 6, 1 );
     // printf("m_shooter = %p\n", m_shooter);
     
     m_blinkyLight = new BlinkyLight( m_blinkyPWM );

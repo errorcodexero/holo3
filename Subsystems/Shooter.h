@@ -8,7 +8,7 @@
 
 class Shooter : public Subsystem {
 private:
-    CANJaguar* m_shooterMotor;
+    CANJaguar* m_motor;
     Notifier* m_notifier;
     double m_rampRate, m_P, m_I, m_D;
     double m_speed;
@@ -24,7 +24,7 @@ private:
     Solenoid *m_positioner;
 
 public:
-    Shooter( CANJaguar* motor );
+    Shooter( int motorChannel, int solenoidChannel );
     ~Shooter();
     void Set(double speed);
     void Start(void);

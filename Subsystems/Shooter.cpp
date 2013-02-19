@@ -8,10 +8,11 @@ const double Shooter::kPollInterval = 0.100;
 const int Shooter::kReportInterval = 5;
 
 // Constructor
-Shooter::Shooter(CANJaguar* motor):Subsystem("Shooter")
-{			
-    m_shooterMotor = motor;
-    m_shooterMotor->SetSafetyEnabled(false);
+Shooter::Shooter( int motorChannel, int solenoidChannel )
+    : Subsystem("Shooter")
+{
+    m_motor = new CANJaguar( motorChannel );
+    m_motor->SetSafetyEnabled(false);
     m_notifier = NULL;
 
     m_rampRate = 0.5; // 0.0 disables rate limiting
@@ -36,7 +37,7 @@ Shooter::Shooter(CANJaguar* motor):Subsystem("Shooter")
     SmartDashboard::PutNumber("Shooter Stable Time (ticks)", m_speedStable);
 
     // Initialize pneumatics
-    m_positioner = new Solenoid(1);
+    m_positioner = new Solenoid( solenoidChannel );
     SmartDashboard::PutBoolean("Shooter Position", false);
 
     m_report = 0;
@@ -48,6 +49,8 @@ Shooter::~Shooter()
 {
     Stop();
     delete m_notifier;
+    delete m_positioner;
+    delete m_motor;
 }
 
 void Shooter::Set( double speed )
@@ -63,32 +66,32 @@ void Shooter::Start()
     Stop();
 
     // Set control mode
-    m_shooterMotor->ChangeControlMode( CANJaguar::kSpeed );
+    m_motor->ChangeControlMode( CANJaguar::kSpeed );
 
     // Set encoder as reference device for speed controller mode:
-    m_shooterMotor->SetSpeedReference( CANJaguar::kSpeedRef_Encoder );
+    m_motor->SetSpeedReference( CANJaguar::kSpeedRef_Encoder );
 
     // Set codes per revolution parameter:
-    m_shooterMotor->ConfigEncoderCodesPerRev( 1 );
+    m_motor->ConfigEncoderCodesPerRev( 1 );
 
     // Set voltage ramp rate:
     m_rampRate = SmartDashboard::GetNumber("Shooter RampRate");
-    m_shooterMotor->SetVoltageRampRate( m_rampRate );
+    m_motor->SetVoltageRampRate( m_rampRate );
 
     // Set Jaguar PID parameters:
     m_P = SmartDashboard::GetNumber("Shooter P");
     m_I = SmartDashboard::GetNumber("Shooter I");
     m_D = SmartDashboard::GetNumber("Shooter D");
-    m_shooterMotor->SetPID( m_P, m_I, m_D );
+    m_motor->SetPID( m_P, m_I, m_D );
 
     // Enable Jaguar control:
-    m_shooterMotor->EnableControl();
+    m_motor->EnableControl();
 
     // Poke the motor speed to reset the watchdog, then enable the watchdog
     m_speed = SmartDashboard::GetNumber("Shooter Speed");
-    m_shooterMotor->Set(m_speed);
+    m_motor->Set(m_speed);
 
-    m_shooterMotor->SetSafetyEnabled(true);
+    m_motor->SetSafetyEnabled(true);
 
     // If we haven't already been deployed, deploy now
     if (!m_deployed) {
@@ -112,8 +115,8 @@ void Shooter::Stop()
     }
 
     // stop motor
-    m_shooterMotor->StopMotor();
-    m_shooterMotor->SetSafetyEnabled(false);
+    m_motor->StopMotor();
+    m_motor->SetSafetyEnabled(false);
 
     // not running any more!
     m_upToSpeed = 0;
@@ -130,7 +133,7 @@ void Shooter::Run()
     SetPosition(position);
 
     m_speed = SmartDashboard::GetNumber("Shooter Speed");
-    m_shooterMotor->Set(m_speed, 0);
+    m_motor->Set(m_speed, 0);
     if (++m_report >= kReportInterval) {
 	ReportStatus();
     }
@@ -138,11 +141,11 @@ void Shooter::Run()
 
 void Shooter::ReportStatus()
 {
-    // UINT8 jagHWVersion = m_shooterMotor->GetHardwareVersion();
-    // UINT32 jagFWVersion = m_shooterMotor->GetFirmwareVersion();
-    // double jagTemp  = m_shooterMotor->GetTemperature();
-    double jagOutV = m_shooterMotor->GetOutputVoltage();
-    double jagSpeed = m_shooterMotor->GetSpeed(); 
+    // UINT8 jagHWVersion = m_motor->GetHardwareVersion();
+    // UINT32 jagFWVersion = m_motor->GetFirmwareVersion();
+    // double jagTemp  = m_motor->GetTemperature();
+    double jagOutV = m_motor->GetOutputVoltage();
+    double jagSpeed = m_motor->GetSpeed(); 
 
     // Send values to SmartDashboard
     // SmartDashboard::PutNumber("Jaguar Hardware Version", double(jagHWVersion));

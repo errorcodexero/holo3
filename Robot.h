@@ -44,16 +44,10 @@ private:
     //   then the OI,
     //   then any other commands
 
-    // sensors and actuators
+    // global sensors
     Compressor* m_compressor;
-    Victor* m_driveBaseLeft;
-    Victor* m_driveBaseRight;
-    Talon* m_driveBaseRear;
-    RateGyro* m_gyro;
-    CANJaguar* m_shooterMotor;
     Victor* m_blinkyPWM;
 
-public:
     // OI
     OI* m_oi;
 
@@ -62,6 +56,7 @@ public:
     Shooter* m_shooter;
     BlinkyLight* m_blinkyLight;
     
+public:
     // commands
     AutoCommand* m_autonomousCommand;
     TeleCommand* m_teleopCommand;
