@@ -37,7 +37,7 @@ void Robot::RobotInit()
     m_gyro = new RateGyro(1, 1);
     lw->AddSensor("DriveBase", "Gyro", m_gyro);
 
-    m_shooterMotor = new CANJaguar(5, CANJaguar::kSpeed);
+    m_shooterMotor = new CANJaguar(6, CANJaguar::kSpeed);
     // CANJaguar adds itself to LiveWindow
     // lw->AddSensor("Shooter", "Motor", m_shooterMotor);
     

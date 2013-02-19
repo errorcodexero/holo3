@@ -10,7 +10,7 @@ ShootCommand::ShootCommand()
 
 void ShootCommand::Initialize()
 {
-    Robot::shooter()->Set(3000.0);
+    // Robot::shooter()->Set(3000.0);
     Robot::shooter()->Start();
 }
 

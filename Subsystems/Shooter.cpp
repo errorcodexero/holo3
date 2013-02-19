@@ -4,42 +4,50 @@
 #include "Shooter.h"
 #include <math.h>
 
+const double Shooter::kPollInterval = 0.100;
+const int Shooter::kReportInterval = 5;
+
 // Constructor
 Shooter::Shooter(CANJaguar* motor):Subsystem("Shooter")
 {			
-    p_shooterMotor = motor;
-    p_shooterMotor->SetSafetyEnabled(false);
-    p_notifier = NULL;
+    m_shooterMotor = motor;
+    m_shooterMotor->SetSafetyEnabled(false);
+    m_notifier = NULL;
 
-    m_rampRate = 0.0; // 0.0 disables rate limiting
+    m_rampRate = 0.5; // 0.0 disables rate limiting
     SmartDashboard::PutNumber("Shooter RampRate", m_rampRate);
 
-    m_P = 0.250;
+    m_P = 1.000;
     SmartDashboard::PutNumber("Shooter P", m_P);
 
-    m_I = 0.010;
-    SmartDashboard::PutNumber("Shooter I", m_P);
+    m_I = 0.003;
+    SmartDashboard::PutNumber("Shooter I", m_I);
 
     m_D = 0.000;
-    SmartDashboard::PutNumber("Shooter D", m_P);
+    SmartDashboard::PutNumber("Shooter D", m_D);
 
-    m_speed = 2800.0;
+    m_speed = 3200.0;
     SmartDashboard::PutNumber("Shooter Speed", m_speed);
 
+    m_speedTolerance = 10.0;  // +/- 10% speed tolerance
+    SmartDashboard::PutNumber("Shooter Tolerance (%)", m_speedTolerance);
+
+    m_speedStable = 4; // 4 ticks = 2.0 seconds
+    SmartDashboard::PutNumber("Shooter Stable Time (ticks)", m_speedStable);
+
     // Initialize pneumatics
-    LiveWindow* lw = LiveWindow::GetInstance();
-    m_deploySolenoid = new DoubleSolenoid(1, 2); //TODO: Need channel values
-    lw->AddActuator("Shooter", "Deploy", m_deploySolenoid);
-    m_positionSolenoid = new DoubleSolenoid(3, 4); //TODO: Need channel values
-    lw->AddActuator("Shooter", "Position", m_positionSolenoid);
+    m_positioner = new Solenoid(1);
+    SmartDashboard::PutBoolean("Shooter Position", false);
 
     m_report = 0;
+    m_upToSpeed = 0;
+    m_deployed = false;
 }
 
 Shooter::~Shooter()
 {
     Stop();
-    delete p_notifier;
+    delete m_notifier;
 }
 
 void Shooter::Set( double speed )
@@ -55,59 +63,60 @@ void Shooter::Start()
     Stop();
 
     // Set control mode
-    p_shooterMotor->ChangeControlMode( CANJaguar::kSpeed );
+    m_shooterMotor->ChangeControlMode( CANJaguar::kSpeed );
 
     // Set encoder as reference device for speed controller mode:
-    p_shooterMotor->SetSpeedReference( CANJaguar::kSpeedRef_Encoder );
+    m_shooterMotor->SetSpeedReference( CANJaguar::kSpeedRef_Encoder );
 
     // Set codes per revolution parameter:
-    p_shooterMotor->ConfigEncoderCodesPerRev( 1 );
+    m_shooterMotor->ConfigEncoderCodesPerRev( 1 );
 
     // Set voltage ramp rate:
     m_rampRate = SmartDashboard::GetNumber("Shooter RampRate");
-    p_shooterMotor->SetVoltageRampRate( m_rampRate );
+    m_shooterMotor->SetVoltageRampRate( m_rampRate );
 
     // Set Jaguar PID parameters:
     m_P = SmartDashboard::GetNumber("Shooter P");
     m_I = SmartDashboard::GetNumber("Shooter I");
     m_D = SmartDashboard::GetNumber("Shooter D");
-    p_shooterMotor->SetPID( m_P, m_I, m_D );
+    m_shooterMotor->SetPID( m_P, m_I, m_D );
 
     // Enable Jaguar control:
-    p_shooterMotor->EnableControl();
+    m_shooterMotor->EnableControl();
 
     // Poke the motor speed to reset the watchdog, then enable the watchdog
     m_speed = SmartDashboard::GetNumber("Shooter Speed");
-    p_shooterMotor->Set(m_speed);
+    m_shooterMotor->Set(m_speed);
 
-    p_shooterMotor->SetSafetyEnabled(true);
+    m_shooterMotor->SetSafetyEnabled(true);
+
+    // If we haven't already been deployed, deploy now
+    if (!m_deployed) {
+	SetPosition(true);
+	SmartDashboard::PutBoolean("Shooter Position", true);
+    }
 
     // Start run timer
-    if (!p_notifier) {
-	p_notifier = new Notifier( Shooter::TimerEvent, this );
+    if (!m_notifier) {
+	m_notifier = new Notifier( Shooter::TimerEvent, this );
     }
     m_report = 0;
-    p_notifier->StartPeriodic(0.10);
-
-    m_deploySolenoid->Set(DoubleSolenoid::kForward);
+    m_notifier->StartPeriodic(kPollInterval);
 }
 
 void Shooter::Stop()
 {
     // stop timer
-    if (p_notifier) {
-	p_notifier->Stop();
+    if (m_notifier) {
+	m_notifier->Stop();
     }
 
     // stop motor
-    p_shooterMotor->StopMotor();
-    p_shooterMotor->SetSafetyEnabled(false);
+    m_shooterMotor->StopMotor();
+    m_shooterMotor->SetSafetyEnabled(false);
 
     // not running any more!
     m_upToSpeed = 0;
-    SmartDashboard::PutNumber("Shooter UpToSpeed", (double) m_upToSpeed);
-
-    m_deploySolenoid->Set(DoubleSolenoid::kReverse);
 }
 
 void Shooter::TimerEvent( void *param )
@@ -117,20 +126,23 @@ void Shooter::TimerEvent( void *param )
 
 void Shooter::Run()
 {
+    bool position = SmartDashboard::GetBoolean("Shooter Position");
+    SetPosition(position);
+
     m_speed = SmartDashboard::GetNumber("Shooter Speed");
-    p_shooterMotor->Set(m_speed, 0);
-    if (++m_report >= 5) {
+    m_shooterMotor->Set(m_speed, 0);
+    if (++m_report >= kReportInterval) {
 	ReportStatus();
     }
 }
 
 void Shooter::ReportStatus()
 {
-    // UINT8 jagHWVersion = p_shooterMotor->GetHardwareVersion();
-    // UINT32 jagFWVersion = p_shooterMotor->GetFirmwareVersion();
-    // double jagTemp  = p_shooterMotor->GetTemperature();
-    double jagOutV = p_shooterMotor->GetOutputVoltage();
-    double jagSpeed = p_shooterMotor->GetSpeed(); 
+    // UINT8 jagHWVersion = m_shooterMotor->GetHardwareVersion();
+    // UINT32 jagFWVersion = m_shooterMotor->GetFirmwareVersion();
+    // double jagTemp  = m_shooterMotor->GetTemperature();
+    double jagOutV = m_shooterMotor->GetOutputVoltage();
+    double jagSpeed = m_shooterMotor->GetSpeed(); 
 
     // Send values to SmartDashboard
     // SmartDashboard::PutNumber("Jaguar Hardware Version", double(jagHWVersion));
@@ -140,33 +152,28 @@ void Shooter::ReportStatus()
     SmartDashboard::PutNumber("Shooter RPM", jagSpeed);
 
     double error = jagSpeed - m_speed;
-    if (fabs(error) < m_speed * 0.10) {
+    if (fabs(error) < m_speed * m_speedTolerance / 100.0) {
 	// 1000 is arbitrary, just to limit number of digits displayed on dashboard
 	if (m_upToSpeed < 1000) m_upToSpeed++;
     } else {
 	m_upToSpeed = 0;
     }
-    SmartDashboard::PutNumber("Shooter UpToSpeed", (double) m_upToSpeed);
 }
 
 bool Shooter::IsUpToSpeed()
 {
-    return (m_upToSpeed > 3);
-}
-
-
-/*
- * Should handle moving the shooter to the deployed position
- */
-void Shooter::deploy()
-{
-	
+    bool isUpToSpeed = (m_upToSpeed >= m_speedStable);
+    SmartDashboard::PutBoolean("Shooter UpToSpeed", isUpToSpeed);
+    return isUpToSpeed;
 }
 
 /*
- * Should handle position the shooter between its two deployed positions
+ * Move the shooter to the desired position
  */
-void Shooter::position(int newPosition)
+void Shooter::SetPosition(bool position)
 {
-    // Use m_positionSolenoid to position the shooter
+    m_positioner->Set(position);
+    if (position) {
+	m_deployed = true;
+    }
 }

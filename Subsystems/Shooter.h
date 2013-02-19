@@ -8,20 +8,20 @@
 
 class Shooter : public Subsystem {
 private:
-    CANJaguar* p_shooterMotor;
-    Notifier* p_notifier;
+    CANJaguar* m_shooterMotor;
+    Notifier* m_notifier;
     double m_rampRate, m_P, m_I, m_D;
     double m_speed;
-    // additional tuning parameters:
-    // drive polling interval (must be faster than MotorSafety timeout)
-    // status polling interval
-    // motor "up to speed" threshold
-    // motor "up to speed" time
+    double m_speedTolerance;
+    int m_speedStable;
     int m_report;
     int m_upToSpeed;
+    bool m_deployed;
     
-    DoubleSolenoid* m_deploySolenoid;
-    DoubleSolenoid* m_positionSolenoid;
+    static const double kPollInterval;	// not changeable at runtime
+    static const int kReportInterval;
+
+    Solenoid *m_positioner;
 
 public:
     Shooter( CANJaguar* motor );
@@ -30,8 +30,7 @@ public:
     void Start(void);
     void Stop(void);
     bool IsUpToSpeed(void);
-    void deploy(void);
-    void position(int);
+    void SetPosition(bool);
 	
 private:
     static void Shooter::TimerEvent( void *param );
