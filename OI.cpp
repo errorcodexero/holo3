@@ -10,18 +10,25 @@
 OI::OI() 
 {
     // Process operator interface input here.
-    stick = new Joystick(1);
-    button1 = new JoystickButton(stick, 1);
-    button2 = new JoystickButton(stick, 2);
-    button3 = new JoystickButton(stick, 3);
-    button4 = new JoystickButton(stick, 4);
-    button5 = new JoystickButton(stick, 5);
-    button6 = new JoystickButton(stick, 6);
-    button7 = new JoystickButton(stick, 7);
-    button8 = new JoystickButton(stick, 8);
-    
-    button1->WhenPressed(new TargetCommand());
-    button2->WhenPressed(new SelectTarget("right"));
-    button3->WhenPressed(new SelectTarget("left"));
-    button4->WhenPressed(new SelectTarget("mid"));
+    m_stick = new Joystick(1);
+
+    m_gamepadButtonA = new JoystickButton(m_stick, 1);
+    m_gamepadButtonA->WhenPressed(new TargetCommand());
+
+    m_gamepadButtonB = new JoystickButton(m_stick, 2);
+    m_gamepadButtonB->WhenPressed(new SelectTarget("right"));
+
+    m_gamepadButtonX = new JoystickButton(m_stick, 3);
+    m_gamepadButtonX->WhenPressed(new SelectTarget("left"));
+
+    m_gamepadButtonY = new JoystickButton(m_stick, 4);
+    m_gamepadButtonY->WhenPressed(new SelectTarget("mid"));
+
+    m_gamepadLeftBumper = new JoystickButton(m_stick, 5);
+
+    m_gamepadRightBumper = new JoystickButton(m_stick, 6);
+
+    m_gamepadBack = new JoystickButton(m_stick, 7);
+
+    m_gamepadStart = new JoystickButton(m_stick, 8);
 }

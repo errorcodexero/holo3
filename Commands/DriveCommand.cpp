@@ -21,7 +21,7 @@ void DriveCommand::Initialize()
 void DriveCommand::Execute()
 {
     Joystick *joy = Robot::oi()->getStick();
-    float throttle = (1.0 - Robot::oi()->GetDriverThrottle())/2.0;
+    float throttle = (1.0 - joy->GetThrottle())/2.0;
     float x = joy->GetX() * throttle;
     float y = joy->GetY() * throttle;
     float t = joy->GetTwist();
