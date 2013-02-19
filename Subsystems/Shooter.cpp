@@ -57,7 +57,7 @@ Shooter::Shooter( int motorChannel, int positionerChannel, int switchChannel,
 
     m_report = 0;
     m_timeAtSpeed = 0;
-    m_injected = 0;
+    m_injectTimer = 0;
 }
 
 Shooter::~Shooter()
@@ -185,11 +185,11 @@ void Shooter::Run()
 
     if (m_injector->Get()) {
 	m_injectTime = (int)SmartDashboard::GetNumber("Shooter Injection Time (ticks)");
-	if (++m_injected >= m_injectTime) {
+	if (++m_injectTimer >= m_injectTime) {
 	    m_injector->Set(false);
 	}
-    } else if (m_injected) {
-	if (--m_injected == 0) {
+    } else if (m_injectTimer) {
+	if (--m_injectTimer == 0) {
 	    SmartDashboard::PutBoolean("Shooter Injector", false);
 	}
     }
@@ -259,6 +259,11 @@ bool Shooter::IsUpToSpeed()
     return isUpToSpeed;
 }
 
+bool Shooter::IsInjectorActive()
+{
+    return m_injectTimer != 0;
+}
+
 bool Shooter::IsReadyToShoot()
 {
     // check positioner at correct angle
@@ -282,7 +287,7 @@ bool Shooter::IsReadyToShoot()
     }
 
     // we are ready when in position, wheel up to speed and injector idle
-    return (inPosition && IsUpToSpeed() && (m_injected == 0));
+    return (inPosition && IsUpToSpeed() && !IsInjectorActive());
 }
 
 /*
@@ -291,6 +296,6 @@ bool Shooter::IsReadyToShoot()
 void Shooter::Inject()
 {
     m_injector->Set(true);
-    m_injected++;
+    m_injectTimer++;
     SmartDashboard::PutBoolean("Shooter Injector", true);
 }

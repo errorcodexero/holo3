@@ -27,6 +27,7 @@ public:
     void Start(void);
     void Stop(void);
     bool IsUpToSpeed(void);
+    bool IsInjectorActive(void);
     bool IsReadyToShoot(void);
 
     void Inject();
@@ -40,7 +41,7 @@ private:
     int m_report;
     int m_timeAtSpeed;
     int m_injectTime;
-    int m_injected;
+    int m_injectTimer;
     
     ThreePositionSolenoid *m_positioner;
     SendableChooser *m_positionChooser;
