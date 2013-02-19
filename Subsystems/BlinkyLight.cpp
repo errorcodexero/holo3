@@ -1,11 +1,14 @@
 #include "Robot.h"
 #include "BlinkyLight.h"
 
-BlinkyLight::BlinkyLight( SpeedController* pwm )
-    : Subsystem("BlinkyLight"),
-    m_pwm(pwm)
+BlinkyLight::BlinkyLight( int pwmChannel )
+    : Subsystem("BlinkyLight")
 {
+    m_pwm = new Victor(pwmChannel);
+    LiveWindow::GetInstance()->AddActuator("BlinkyLight", "PWM", m_pwm);
     m_pwm->Set(0.0);
+    // blinky lights don't need watchdogs
+    m_pwm->SetSafetyEnabled(false);
 }
     
 void BlinkyLight::InitDefaultCommand()

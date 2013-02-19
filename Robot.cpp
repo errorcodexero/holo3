@@ -22,14 +22,6 @@ void Robot::RobotInit()
     //compressor
     m_compressor = new Compressor(1, 1);
 
-    // connect remaining sensors and actuators to LiveWindow
-    LiveWindow* lw = LiveWindow::GetInstance();
-
-    m_blinkyPWM = new Victor(1, 1);
-    // blinky lights don't need watchdogs
-    m_blinkyPWM->SetSafetyEnabled(false);
-    lw->AddActuator("BlinkyLight", "PWM", m_blinkyPWM);
-
     // DriveBase( leftMotorChannel, rightMotorChannel, rearMotorChannel,
     //		  gyroAnalogChannel );
     m_driveBase = new DriveBase( 4, 5, 6, 1 ),
@@ -39,7 +31,7 @@ void Robot::RobotInit()
     m_shooter = new Shooter( 6, 1 );
     // printf("m_shooter = %p\n", m_shooter);
     
-    m_blinkyLight = new BlinkyLight( m_blinkyPWM );
+    m_blinkyLight = new BlinkyLight( 1 );
     // printf("m_blinkyLight = %p\n", m_blinkyLight);
 
     m_autonomousCommand = new AutoCommand();

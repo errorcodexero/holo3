@@ -46,7 +46,6 @@ private:
 
     // global sensors
     Compressor* m_compressor;
-    Victor* m_blinkyPWM;
 
     // OI
     OI* m_oi;
