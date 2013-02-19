@@ -5,36 +5,54 @@
 #define SHOOTER_H
 
 #include <WPILib.h>
+#include "ThreePositionSolenoid.h"
 
 class Shooter : public Subsystem {
 private:
     CANJaguar* m_motor;
-    Notifier* m_notifier;
     double m_rampRate, m_P, m_I, m_D;
     double m_speed;
     double m_speedTolerance;
     int m_speedStable;
     int m_report;
-    int m_upToSpeed;
-    bool m_deployed;
+    int m_timeAtSpeed;
+    int m_injectTime;
+    int m_injected;
     
+    ThreePositionSolenoid *m_positioner;
+    SendableChooser *m_positionChooser;
+    Solenoid *m_injector;
+
+    Notifier* m_notifier;
+
     static const double kPollInterval;	// not changeable at runtime
     static const int kReportInterval;
 
-    Solenoid *m_positioner;
-
 public:
-    Shooter( int motorChannel, int solenoidChannel );
+    Shooter( int motorChannel, int positionerChannel, int switchChannel,
+    		int injectorChannel );
     ~Shooter();
     void Set(double speed);
     void Start(void);
     void Stop(void);
     bool IsUpToSpeed(void);
-    void SetPosition(bool);
+
+    enum ShooterPosition {
+	kUnknown,
+	kHome,
+	kShort,
+	kLong,
+    };
+
+    void SetPosition(ShooterPosition);
+    ShooterPosition GetPosition(ShooterPosition);
+
+    void Inject();
 	
 private:
-    static void Shooter::TimerEvent( void *param );
+    static void TimerEvent( void *param );
     void Run(void);
     void ReportStatus(void);
 };
+
 #endif

@@ -19,6 +19,52 @@ void Robot::RobotInit()
 
     m_oi = new OI();
 
+    ////////////////////////////////////////////////////////////////////
+    //
+    // Digital Inputs:
+    // 1 - pneumatics pressure switch
+    //     (polarity handled by Compressor class)
+    //
+    // 2 - climber left bottom limit switch
+    // 3 - climber left top limit switch
+    // 4 - climber right bottom limit switch
+    // 5 - climber right top limit switch
+    //     limit switches are normally-open switches to ground
+    //     so normally true, switch to false = at limit
+    //
+    // 6 - shooter mid-range position
+    //
+    // Analog Inputs:
+    // 1 - turn rate gyro
+    //     + output is clockwise rotation
+    //
+    // Relay (Spike) Outputs:
+    // 1 - compressor
+    //
+    // Solenoid Outputs:
+    // 1,2 - climber tilt
+    //     1 = extend
+    //     2 = retract
+    //
+    // 3,4 - shooter position
+    //     3 = extend (deploy)
+    //     4 = retract
+    //
+    // 5 - shooter injector
+    //     false = extend (idle)
+    //     true = retract (inject)
+    //
+    // PWM Outputs:
+    // 1 - blinky light (not used)
+    // 4 - drive left
+    // 5 - drive right
+    // 6 - drive rear
+    //
+    // CAN (CANJaguar) channels:
+    // 6 - shooter motor
+    //
+    ////////////////////////////////////////////////////////////////////
+
     //compressor
     m_compressor = new Compressor(1, 1);
 
@@ -27,8 +73,8 @@ void Robot::RobotInit()
     m_driveBase = new DriveBase( 4, 5, 6, 1 ),
     // printf("m_driveBase = %p\n", m_driveBase);
 
-    // Shooter( motorChannel, solenoidChannel );
-    m_shooter = new Shooter( 6, 1 );
+    // Shooter( motorChannel, solenoidChannel, switchChannel, injectorChannel );
+    m_shooter = new Shooter( 6, 3, 6, 5);
     // printf("m_shooter = %p\n", m_shooter);
     
     m_blinkyLight = new BlinkyLight( 1 );

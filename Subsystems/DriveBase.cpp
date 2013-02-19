@@ -98,12 +98,10 @@ void DriveBase::Drive3( float x, float y, float twist )
     if (!m_started) Start();
 
     // Reduce the sensitivity to the "twist" control.
+    // Add gyro compensation (adjust the "500" for best PID response).
     // Also reverse the direction, since our drive base is a mirror
     // image of what RobotDrive3 expects.
-    twist = -twist / 2.;
-
-    // add gyro compensation (adjust the "500" for best PID response)
-    twist -= m_gyro->GetRate() / 500.;
+    twist = -( twist / 2. - m_gyro->GetRate() / 500. );
 
     // limit the twist range to avoid normalization problems
     if (twist < -1.0) twist = -1.0;

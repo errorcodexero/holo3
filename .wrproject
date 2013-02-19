@@ -251,7 +251,7 @@
     <buildtargets>
         <buildtarget buildtool="Linker" name="holo3" passed="false" targetname="holo3">
             <contents>
-                <folder name="/Holo3" recursive="true"/>
+                <folder name="/holo3" recursive="true"/>
             </contents>
         </buildtarget>
     </buildtargets>
