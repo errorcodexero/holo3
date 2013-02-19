@@ -4,22 +4,24 @@
 #ifndef _ROBOT_H
 #define _ROBOT_H
 
-#include "WPILib.h"
-#include "LiveWindow/LiveWindow.h"
-#include "RateGyro.h"
-#include "DriveBase.h"
+#include <WPILib.h>
+#include <LiveWindow/LiveWindow.h>
 #include "BlinkyLight.h"
+#include "DriveBase.h"
+#include "RateGyro.h"
 #include "Shooter.h"
+#include "ThreePositionSolenoid.h"
+#include "AimTrim.h"
 #include "AutoCommand.h"
-#include "TeleCommand.h"
-#include "DriveCommand.h"
-#include "TargetCommand.h"
-#include "TimedDrive.h"
-#include "ShootCommand.h"
 #include "BlinkyBreathe.h"
 #include "BlinkyOff.h"
 #include "BlinkyOn.h"
-
+#include "DriveCommand.h"
+#include "SelectTarget.h"
+#include "ShootCommand.h"
+#include "TargetCommand.h"
+#include "TeleCommand.h"
+#include "TimedDrive.h"
 #include "OI.h"
 
 class Robot : public IterativeRobot {

@@ -2,12 +2,7 @@
 // for FRC 2013 game "Ultimate Ascent"
 
 #include "OI.h"
-#include "AutoCommand.h"
-#include "DriveCommand.h"
-#include "TeleCommand.h"
-#include "TargetCommand.h"
-#include "SelectTarget.h"
-#include "TimedDrive.h"
+#include "Robot.h"
 
 OI::OI() 
 {
@@ -33,6 +28,8 @@ OI::OI()
     m_gamepadRightBumper->WhenPressed(new TimedDrive( 0.0, 0.0, .35, 0.15 ));
 
     m_gamepadBack = new JoystickButton(m_stick, 7);
+    m_gamepadBack->WhenPressed(new AimTrim(true));
 
     m_gamepadStart = new JoystickButton(m_stick, 8);
+    m_gamepadStart->WhenPressed(new AimTrim(false));
 }

@@ -2,6 +2,7 @@
 // for FRC 2013 game "Ultimate Ascent"
 
 #include "Robot.h"
+#include "OI.h"
 
 Robot::Robot()
 {
