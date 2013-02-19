@@ -5,7 +5,9 @@
 #include "AutoCommand.h"
 #include "DriveCommand.h"
 #include "TeleCommand.h"
-#include "Commands/SelectTarget.h"
+#include "TargetCommand.h"
+#include "SelectTarget.h"
+#include "TimedDrive.h"
 
 OI::OI() 
 {
@@ -25,8 +27,10 @@ OI::OI()
     m_gamepadButtonY->WhenPressed(new SelectTarget("mid"));
 
     m_gamepadLeftBumper = new JoystickButton(m_stick, 5);
+    m_gamepadLeftBumper->WhenPressed(new TimedDrive( 0.0, 0.0, -.35, 0.15 ));
 
     m_gamepadRightBumper = new JoystickButton(m_stick, 6);
+    m_gamepadRightBumper->WhenPressed(new TimedDrive( 0.0, 0.0, .35, 0.15 ));
 
     m_gamepadBack = new JoystickButton(m_stick, 7);
 

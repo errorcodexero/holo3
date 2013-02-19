@@ -86,18 +86,6 @@ void Robot::RobotInit()
     m_teleopCommand = new TeleCommand();
     // printf("m_teleopCommand = %p\n", m_teleopCommand);
 
-    m_targetCommand = new TargetCommand();
-    // printf("m_targetCommand = %p\n", m_targetCommand);
-    SmartDashboard::PutData("makeItSo", m_targetCommand);
-    
-    m_nudgeLeft = new TimedDrive( 0.0, 0.0, -.35, 0.15 );
-    // printf("m_nudgeLeft = %p\n", m_nudgeLeft);
-    // SmartDashboard::PutData("Lean to da Left!", m_nudgeLeft);
-    
-    m_nudgeRight = new TimedDrive( 0.0, 0.0, .35, 0.15);
-    // printf("m_nudgeRight = %p\n", m_nudgeRight);
-    // SmartDashboard::PutData("Lean to da Right Ya!", m_nudgeRight);
-
     m_shootCommand = new ShootCommand();
     // printf("m_shootCommand = %p\n", m_shootCommand);
     SmartDashboard::PutData("Shoot", m_shootCommand);

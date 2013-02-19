@@ -60,13 +60,6 @@ public:
     AutoCommand* m_autonomousCommand;
     TeleCommand* m_teleopCommand;
 
-    // targeting
-    TargetCommand* m_targetCommand;
-    
-    // nudge
-    TimedDrive* m_nudgeLeft;
-    TimedDrive* m_nudgeRight;
-    
     // shooting
     ShootCommand* m_shootCommand;
 
