@@ -1,7 +1,7 @@
-#ifndef _THREE_POSITION_SOLENOID_H
-#define _THREE_POSITION_SOLENOID_H
+#ifndef _TRIPLE_SOLENOID_H_
+#define _TRIPLE_SOLENOID_H_
 
-class ThreePositionSolenoid {
+class TripleSolenoid : public DoubleSolenoid {
 public:
     enum Position {
 	kUnknown,
@@ -12,16 +12,16 @@ public:
 	kExtended,
     };
 
-    ThreePositionSolenoid( int forwardChannel, int reverseChannel,
+    TripleSolenoid( int forwardChannel, int reverseChannel,
     			   int switchChannel );
-    ~ThreePositionSolenoid();
-    void Set( Position );
-    Position Get(void);
+    virtual ~TripleSolenoid();
+    void SetPosition( Position );
+    Position GetPosition(void);
     void Start();
     void Stop();
+    std::string GetSmartDashboardType() { return "3PS"; };
 
 private:
-    DoubleSolenoid *m_solenoid;
     DigitalInput *m_switch;
     Position m_goal;
     Position m_position;

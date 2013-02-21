@@ -12,7 +12,10 @@ Shooter::Shooter( int motorChannel, int positionerChannel, int switchChannel,
 			int injectorChannel )
     : Subsystem("Shooter")
 {
+    LiveWindow *lw = LiveWindow::GetInstance();
+
     m_motor = new CANJaguar( motorChannel );
+    lw->AddActuator("Shooter", "Motor", m_motor);
     m_motor->SetSafetyEnabled(false);
     m_notifier = NULL;
 
@@ -41,18 +44,14 @@ Shooter::Shooter( int motorChannel, int positionerChannel, int switchChannel,
     SmartDashboard::PutNumber("Shooter Injection Time (ticks)", m_injectTime);
 
     // Initialize pneumatics
-    m_positioner = new ThreePositionSolenoid(
-	    positionerChannel, positionerChannel+1, switchChannel
-	);
-    m_positionChooser = new SendableChooser();
-    m_positionChooser->AddDefault("Unknown", (void *)kUnknown);
-    m_positionChooser->AddObject("Short", (void *)kShort);
-    m_positionChooser->AddObject("Mid",   (void *)kMid);
-    m_positionChooser->AddObject("Long",  (void *)kLong);
-    SmartDashboard::PutData("Shooter Target", m_positionChooser);
+    m_positioner = new TripleSolenoid(
+	positionerChannel, positionerChannel+1, switchChannel
+    );
+    lw->AddActuator("Shooter", "Positioner", m_positioner);
     m_distance = kUnknown;
 
     m_injector = new Solenoid( injectorChannel );
+    lw->AddActuator("Shooter", "Injector", m_injector);
     SmartDashboard::PutBoolean("Shooter Injector", false);
 
     m_report = 0;
@@ -64,8 +63,6 @@ Shooter::~Shooter()
 {
     Stop();
     delete m_notifier;
-    // no "SmartDashboard::removeData" method
-    // delete m_positionChooser;
     delete m_positioner;
     delete m_motor;
 }
@@ -77,19 +74,19 @@ void Shooter::SetAngle(TargetDistance target)
 {
     m_distance = target;
 
-    // map TargetDistance to ThreePositionSolenoid::Position
+    // map TargetDistance to TripleSolenoid::Position
     switch (m_distance) {
     case kShort:
-	m_positioner->Set(ThreePositionSolenoid::kRetracted);
-    	m_positionChooser->GetTable()->PutString("selected", "Short");
+	m_positioner->SetPosition(TripleSolenoid::kRetracted);
+	SmartDashboard::PutString("Shooter Distance", "Short");
 	break;
     case kMid:
-	m_positioner->Set(ThreePositionSolenoid::kCenter);
-    	m_positionChooser->GetTable()->PutString("selected", "Mid");
+	m_positioner->SetPosition(TripleSolenoid::kCenter);
+	SmartDashboard::PutString("Shooter Distance", "Mid");
 	break;
     case kLong:
-	m_positioner->Set(ThreePositionSolenoid::kExtended);
-    	m_positionChooser->GetTable()->PutString("selected", "Long");
+	m_positioner->SetPosition(TripleSolenoid::kExtended);
+	SmartDashboard::PutString("Shooter Distance", "Long");
 	break;
     default:
 	break;
@@ -176,12 +173,11 @@ void Shooter::TimerEvent( void *param )
 
 void Shooter::Run()
 {
-    TargetDistance target = (TargetDistance)
-    	(int)m_positionChooser->GetSelected();
-    SetAngle(target);
-
-    // bool inject = SmartDashboard::GetBoolean("Shooter Injector");
-    // m_injector->Set(inject);
+    m_speed = SmartDashboard::GetNumber("Shooter Speed");
+    m_motor->Set(m_speed, 0);
+    if (++m_report >= kReportInterval) {
+	ReportStatus();
+    }
 
     if (m_injector->Get()) {
 	m_injectTime = (int)SmartDashboard::GetNumber("Shooter Injection Time (ticks)");
@@ -193,34 +189,28 @@ void Shooter::Run()
 	    SmartDashboard::PutBoolean("Shooter Injector", false);
 	}
     }
-
-    m_speed = SmartDashboard::GetNumber("Shooter Speed");
-    m_motor->Set(m_speed, 0);
-    if (++m_report >= kReportInterval) {
-	ReportStatus();
-    }
 }
 
 void Shooter::ReportStatus()
 {
     char *pos = "";
-    switch (m_positioner->Get()) {
-    case ThreePositionSolenoid::kUnknown:
+    switch (m_positioner->GetPosition()) {
+    case TripleSolenoid::kUnknown:
 	pos = "unknown";
 	break;
-    case ThreePositionSolenoid::kRetracted:
+    case TripleSolenoid::kRetracted:
 	pos = "retracted";
 	break;
-    case ThreePositionSolenoid::kPartlyRetracted:
+    case TripleSolenoid::kPartlyRetracted:
 	pos = "partly retracted";
 	break;
-    case ThreePositionSolenoid::kCenter:
+    case TripleSolenoid::kCenter:
 	pos = "center";
 	break;
-    case ThreePositionSolenoid::kPartlyExtended:
+    case TripleSolenoid::kPartlyExtended:
 	pos = "partly extended";
 	break;
-    case ThreePositionSolenoid::kExtended:
+    case TripleSolenoid::kExtended:
 	pos = "extended";
 	break;
     }
@@ -250,6 +240,32 @@ void Shooter::ReportStatus()
     }
 }
 
+// check positioner at correct angle
+bool Shooter::IsInPosition()
+{
+    TripleSolenoid::Position pos = m_positioner->GetPosition();
+    bool inPosition;
+
+    switch (m_distance) {
+    case kUnknown:
+	inPosition = true;
+	break;
+    case kShort:
+	inPosition = (pos == TripleSolenoid::kRetracted) ||
+		     (pos == TripleSolenoid::kPartlyRetracted);
+	break;
+    case kMid:
+	inPosition = (pos == TripleSolenoid::kCenter);
+	break;
+    case kLong:
+	inPosition = (pos == TripleSolenoid::kExtended) ||
+		     (pos == TripleSolenoid::kPartlyExtended);
+	break;
+    }
+    SmartDashboard::PutBoolean("ShooterInPosition", inPosition);
+    return inPosition;
+}
+
 bool Shooter::IsUpToSpeed()
 {
     m_speedStable =
@@ -261,33 +277,17 @@ bool Shooter::IsUpToSpeed()
 
 bool Shooter::IsInjectorActive()
 {
-    return m_injectTimer != 0;
+    bool active = (m_injectTimer != 0);
+    SmartDashboard::PutBoolean("Shooter InjectorActive", active);
+    return active;
 }
 
 bool Shooter::IsReadyToShoot()
 {
-    // check positioner at correct angle
-    ThreePositionSolenoid::Position pos = m_positioner->Get();
-    bool inPosition;
-    switch (m_distance) {
-    case kUnknown:
-	inPosition = true;
-	break;
-    case kShort:
-	inPosition = (pos == ThreePositionSolenoid::kRetracted) ||
-		     (pos == ThreePositionSolenoid::kPartlyRetracted);
-	break;
-    case kMid:
-	inPosition = (pos == ThreePositionSolenoid::kCenter);
-	break;
-    case kLong:
-	inPosition = (pos == ThreePositionSolenoid::kExtended) ||
-		     (pos == ThreePositionSolenoid::kPartlyExtended);
-	break;
-    }
-
     // we are ready when in position, wheel up to speed and injector idle
-    return (inPosition && IsUpToSpeed() && !IsInjectorActive());
+    bool ready = (IsInPosition() && IsUpToSpeed() && !IsInjectorActive());
+    SmartDashboard::PutBoolean("Shooter Ready", ready);
+    return ready;
 }
 
 /*

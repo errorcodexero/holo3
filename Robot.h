@@ -5,12 +5,11 @@
 #define _ROBOT_H
 
 #include <WPILib.h>
-#include <LiveWindow/LiveWindow.h>
 #include "BlinkyLight.h"
 #include "DriveBase.h"
 #include "RateGyro.h"
 #include "Shooter.h"
-#include "ThreePositionSolenoid.h"
+#include "TripleSolenoid.h"
 #include "AimTrim.h"
 #include "AutoCommand.h"
 #include "BlinkyBreathe.h"

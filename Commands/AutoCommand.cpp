@@ -12,10 +12,22 @@ AutoCommand::AutoCommand()
     AddSequential(m_shoot);
 }
 
+void AutoCommand::Initialize()
+{
+}
+
+void AutoCommand::Execute()
+{
+}
+
 bool AutoCommand::IsFinished()
 {
     return (m_shoot->IsRunning() && (m_shoot->GetLaunched() >= 3) &&
             !Robot::shooter()->IsInjectorActive());
+}
+
+void AutoCommand::Stop()
+{
 }
 
 void AutoCommand::Interrupted()

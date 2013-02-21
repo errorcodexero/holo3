@@ -5,7 +5,7 @@
 #define SHOOTER_H
 
 #include <WPILib.h>
-#include "ThreePositionSolenoid.h"
+#include "TripleSolenoid.h"
 
 class Shooter : public Subsystem {
 public:
@@ -26,6 +26,7 @@ public:
     void SetSpeed(double speed);
     void Start(void);
     void Stop(void);
+    bool IsInPosition(void);
     bool IsUpToSpeed(void);
     bool IsInjectorActive(void);
     bool IsReadyToShoot(void);
@@ -43,8 +44,7 @@ private:
     int m_injectTime;
     int m_injectTimer;
     
-    ThreePositionSolenoid *m_positioner;
-    SendableChooser *m_positionChooser;
+    TripleSolenoid *m_positioner;
     TargetDistance m_distance;
 
     Solenoid *m_injector;

@@ -12,6 +12,7 @@ ShootCommand::ShootCommand( Shooter::TargetDistance targetDistance )
     Requires(Robot::shooter());
     m_targetDistance = targetDistance;
     m_launched = 0;
+    SmartDashboard::PutNumber("ShootCommand Launched", (double) m_launched);
 }
 
 void ShootCommand::Initialize()
@@ -32,6 +33,7 @@ void ShootCommand::Initialize()
     }
     Robot::shooter()->Start();
     m_launched = 0;
+    SmartDashboard::PutNumber("ShootCommand Launched", (double) m_launched);
 }
 
 void ShootCommand::Execute()
@@ -39,6 +41,7 @@ void ShootCommand::Execute()
     if (Robot::shooter()->IsReadyToShoot()) {
 	Robot::shooter()->Inject();
 	m_launched++;
+	SmartDashboard::PutNumber("ShootCommand Launched", (double) m_launched);
     }
 }
 

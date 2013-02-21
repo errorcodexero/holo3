@@ -19,6 +19,7 @@ private:
 	JoystickButton* m_gamepadStart;
 public:
 	OI();
+	void Initialize();
 	Joystick* getStick() { return m_stick; }
 };
 

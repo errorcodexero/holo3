@@ -2,64 +2,64 @@
 // for FRC 2013 game "Ultimate Ascent"
 
 #include <WPILib.h>
-#include "ThreePositionSolenoid.h"
+#include "TripleSolenoid.h"
 
-ThreePositionSolenoid::ThreePositionSolenoid(
-	int forwardChannel, int reverseChannel, int switchChannel
-    )
+TripleSolenoid::TripleSolenoid( int forwardChannel,
+					      int reverseChannel,
+					      int switchChannel )
+    : DoubleSolenoid( forwardChannel, reverseChannel )
 {
-    m_solenoid = new DoubleSolenoid( forwardChannel, reverseChannel );
     m_switch = new DigitalInput( switchChannel );
+    LiveWindow::GetInstance()->AddSensor("3PS", "SW", m_switch);
     m_goal = kUnknown;
     m_position = kUnknown;
     m_direction = DoubleSolenoid::kOff;
     m_notifier = NULL;
 }
 
-ThreePositionSolenoid::~ThreePositionSolenoid()
+TripleSolenoid::~TripleSolenoid()
 {
     Stop();
     delete m_notifier;
     delete m_switch;
-    delete m_solenoid;
 }
 
-ThreePositionSolenoid::Position ThreePositionSolenoid::Get()
+TripleSolenoid::Position TripleSolenoid::GetPosition()
 {
     return m_position;
 }
 
-void ThreePositionSolenoid::Set( Position position )
+void TripleSolenoid::SetPosition( Position position )
 {
     m_goal = position;
     Start();
 }
 
-void ThreePositionSolenoid::Start()
+void TripleSolenoid::Start()
 {
     if (m_notifier) {
 	m_notifier->Stop();
     } else {
-	m_notifier = new Notifier( ThreePositionSolenoid::TimerEvent, this );
+	m_notifier = new Notifier( TripleSolenoid::TimerEvent, this );
     }
     Run();
     m_notifier->StartPeriodic( 0.027 );
 }
 
-void ThreePositionSolenoid::Stop()
+void TripleSolenoid::Stop()
 {
     if (m_notifier) {
 	m_notifier->Stop();
     }
-    m_solenoid->Set(DoubleSolenoid::kOff);
+    Set(DoubleSolenoid::kOff);
 }
 
-void ThreePositionSolenoid::TimerEvent( void *param )
+void TripleSolenoid::TimerEvent( void *param )
 {
-    ((ThreePositionSolenoid*)param)->Run();
+    ((TripleSolenoid*)param)->Run();
 }
 
-void ThreePositionSolenoid::Run()
+void TripleSolenoid::Run()
 {
     // update current position
     if (!m_switch->Get()) {
@@ -104,5 +104,7 @@ void ThreePositionSolenoid::Run()
 	    break;
 	}
     }
-    m_solenoid->Set(m_direction);
+    SmartDashboard::PutNumber("3PS Direction", (double)m_direction);
+    Set(m_direction);
 }
+
