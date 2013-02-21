@@ -4,7 +4,7 @@
 #include "Shooter.h"
 #include <math.h>
 
-const double Shooter::kPollInterval = 0.100;
+const double Shooter::kPollInterval = 0.034;
 const double Shooter::kReportInterval = 0.500;
 
 // Constructor
@@ -137,10 +137,10 @@ printf("Shooter::Start\n");
 
     // Increase motor safety timer to match status reporting interval
     // Poke the motor speed to reset the watchdog, then enable the watchdog
-    m_motor->SetExpiration(kPollInterval * kReportInterval);
     m_speed = SmartDashboard::GetNumber("Shooter Speed");
     m_motor->Set(m_speed);
 #if 0
+    m_motor->SetExpiration(kReportInterval);
     m_motor->SetSafetyEnabled(true);
 #endif
 
@@ -178,15 +178,9 @@ void Shooter::TimerEvent( void *param )
 
 void Shooter::Run()
 {
-    m_speed = SmartDashboard::GetNumber("Shooter Speed");
-    m_motor->Set(m_speed, 0);
-    if (++m_report * kPollInterval >= kReportInterval) {
-	ReportStatus();
-    }
-
     if (m_injector->Get()) {
 	m_injectTime = (int)SmartDashboard::GetNumber("Shooter Injection Time");
-	if (++m_injectCounter * kReportInterval >= m_injectTime) {
+	if (++m_injectCounter * kPollInterval >= m_injectTime) {
 	    m_injector->Set(false);
 	}
     } else if (m_injectCounter) {
@@ -194,33 +188,19 @@ void Shooter::Run()
 	    SmartDashboard::PutBoolean("Shooter Injector", false);
 	}
     }
+
+    m_speed = SmartDashboard::GetNumber("Shooter Speed");
+    m_motor->Set(m_speed, 0);
+    if (++m_report * kPollInterval >= kReportInterval) {
+	ReportSpeed();
+
+	bool ready = IsReadyToShoot();
+	SmartDashboard::PutBoolean("Shooter Ready", ready);
+    }
 }
 
-void Shooter::ReportStatus()
+void Shooter::ReportSpeed()
 {
-    char *pos = "";
-    switch (m_positioner->GetPosition()) {
-    case TripleSolenoid::kUnknown:
-	pos = "unknown";
-	break;
-    case TripleSolenoid::kRetracted:
-	pos = "retracted";
-	break;
-    case TripleSolenoid::kPartlyRetracted:
-	pos = "partly retracted";
-	break;
-    case TripleSolenoid::kCenter:
-	pos = "center";
-	break;
-    case TripleSolenoid::kPartlyExtended:
-	pos = "partly extended";
-	break;
-    case TripleSolenoid::kExtended:
-	pos = "extended";
-	break;
-    }
-    SmartDashboard::PutString("Shooter Position", pos);
-
     // UINT8 jagHWVersion = m_motor->GetHardwareVersion();
     // UINT32 jagFWVersion = m_motor->GetFirmwareVersion();
     // double jagTemp  = m_motor->GetTemperature();
@@ -252,21 +232,44 @@ void Shooter::ReportStatus()
 // check positioner at correct angle
 bool Shooter::IsInPosition()
 {
-    TripleSolenoid::Position pos = m_positioner->GetPosition();
-    bool inPosition;
+    TripleSolenoid::Position position = m_positioner->GetPosition();
+    char *where = "";
+    bool inPosition = false;
+
+    switch (position) {
+    case TripleSolenoid::kUnknown:
+	where = "unknown";
+	break;
+    case TripleSolenoid::kRetracted:
+	where = "retracted";
+	break;
+    case TripleSolenoid::kPartlyRetracted:
+	where = "partly retracted";
+	break;
+    case TripleSolenoid::kCenter:
+	where = "center";
+	break;
+    case TripleSolenoid::kPartlyExtended:
+	where = "partly extended";
+	break;
+    case TripleSolenoid::kExtended:
+	where = "extended";
+	break;
+    }
+    SmartDashboard::PutString("Shooter Position", where);
 
     switch (m_distance) {
     case kUnknown:
 	inPosition = true;
 	break;
     case kShort:
-	inPosition = (pos == TripleSolenoid::kRetracted);
+	inPosition = (position == TripleSolenoid::kRetracted);
 	break;
     case kMid:
-	inPosition = (pos == TripleSolenoid::kCenter);
+	inPosition = (position == TripleSolenoid::kCenter);
 	break;
     case kLong:
-	inPosition = (pos == TripleSolenoid::kExtended);
+	inPosition = (position == TripleSolenoid::kExtended);
 	break;
     }
     SmartDashboard::PutBoolean("Shooter InPosition", inPosition);
@@ -288,9 +291,7 @@ bool Shooter::IsInjectorActive()
 bool Shooter::IsReadyToShoot()
 {
     // we are ready when in position, wheel up to speed and injector idle
-    bool ready = (IsInPosition() && IsUpToSpeed() && !IsInjectorActive());
-    SmartDashboard::PutBoolean("Shooter Ready", ready);
-    return ready;
+    return (IsInPosition() && IsUpToSpeed() && !IsInjectorActive());
 }
 
 /*
@@ -299,6 +300,7 @@ bool Shooter::IsReadyToShoot()
 void Shooter::Inject()
 {
     m_injector->Set(true);
-    m_injectCounter++;
     SmartDashboard::PutBoolean("Shooter Injector", true);
+    m_injectCounter++;
+    SmartDashboard::PutBoolean("Shooter Ready", false);
 }

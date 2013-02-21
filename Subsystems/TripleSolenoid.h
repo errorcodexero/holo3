@@ -34,6 +34,9 @@ private:
     void Run(void);
     void Update(void);
     bool Move(void);
+
+    static const double TripleSolenoid::kPollInterval;
+    static const double TripleSolenoid::kTravelTime;
 };
 
 #endif

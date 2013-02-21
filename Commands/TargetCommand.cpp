@@ -172,7 +172,7 @@ bool TargetCommand::IsFinished()
 // Called once after IsFinished returns true
 void TargetCommand::End()
 {
-    Robot::driveBase()->Drive3(0.0, 0.0, 0.0);  // make sure 
+    Robot::driveBase()->Stop();  // make sure 
 
     double tm = AimTime();
 
@@ -193,4 +193,5 @@ void TargetCommand::End()
 void TargetCommand::Interrupted()
 {
     printf("TargetCommand::Interrupted\n");
+    Robot::driveBase()->Stop();
 }

@@ -7,10 +7,10 @@
 
 // 47mS update period chosen to avoid collisions
 // with other scheduled tasks
-static const double kPollInterval = 0.047;
+const double TripleSolenoid::kPollInterval = 0.047;
 
 // end-to-end travel time
-static const int kTravelTime = 80;
+const double TripleSolenoid::kTravelTime = 4.00;
 
 TripleSolenoid::TripleSolenoid( int forwardChannel,
 			        int reverseChannel,
@@ -96,7 +96,7 @@ void TripleSolenoid::Update()
 	    m_position = kPartlyExtended;
 	// use timer instead of limit switch to detect
 	// PartlyExtended => Extended
-	else if (m_howLong >= kTravelTime)
+	else if (m_howLong * kPollInterval >= kTravelTime)
 	    m_position = kExtended;
     } else if (m_direction == BugfixDoubleSolenoid::kReverse) {
 	if (m_position == kExtended)
@@ -105,7 +105,7 @@ void TripleSolenoid::Update()
 	    m_position = kPartlyRetracted;
 	// use timer instead of limit switch to detect
 	// PartlyRetracted => Retracted
-	else if (m_howLong >= kTravelTime)
+	else if (m_howLong * kPollInterval >= kTravelTime)
 	    m_position = kRetracted;
     }
 //  printf("TripleSolenoid::Update sw=%d pos=%d\n", (int)sw, (int)m_position);

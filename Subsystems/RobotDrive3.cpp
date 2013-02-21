@@ -30,6 +30,7 @@ RobotDrive3::RobotDrive3(UINT32 frontMotorChannel,
 {
     m_frontLeftMotor = new Jaguar(frontMotorChannel);
     SetLeftRightMotorOutputs(0.0, 0.0);
+    m_safetyHelper->SetSafetyEnabled(false);
 }
 
 // Constructor for RobotDrive3 with 3 motors specified as SpeedController
@@ -53,6 +54,7 @@ RobotDrive3::RobotDrive3(SpeedController *frontMotor,
     }
     m_frontLeftMotor = frontMotor;
     SetLeftRightMotorOutputs(0.0, 0.0);
+    m_safetyHelper->SetSafetyEnabled(false);
 }
 
 RobotDrive3::RobotDrive3(SpeedController &frontMotor,
@@ -62,6 +64,7 @@ RobotDrive3::RobotDrive3(SpeedController &frontMotor,
 {
     m_frontLeftMotor = &frontMotor;
     SetLeftRightMotorOutputs(0.0, 0.0);
+    m_safetyHelper->SetSafetyEnabled(false);
 }
 
 // Holonomic Drive method for 3-wheel Omni-wheeled robots.

@@ -42,9 +42,8 @@ DriveBase::DriveBase( int leftMotorChannel,
 
 DriveBase::~DriveBase()
 {
-    // This is dangerous because the default command
-    // may still be (probably still is) registered within the
-    // Command/Scheduler subsystem
+    SetDefaultCommand(NULL);
+    Scheduler::GetInstance()->Remove(m_defaultCommand);
     delete m_defaultCommand;
     m_defaultCommand = NULL;
 
@@ -67,6 +66,8 @@ void DriveBase::InitDefaultCommand()
 
 void DriveBase::Stop()
 {
+    printf("DriveBase::Stop\n");
+
     // stop and disable all motors
     m_drive3->StopMotor();
     // watchdogs not needed while stopped
@@ -81,6 +82,7 @@ void DriveBase::Stop()
 void DriveBase::Start()
 {
     if (!m_started) {
+	printf("DriveBase::Start\n");
 	// set all motors to 0.0 in order to feed their watchdogs
 	m_drive3->SetLeftRightMotorOutputs(0.0, 0.0);
 	// now enable the watchdogs

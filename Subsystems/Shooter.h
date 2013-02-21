@@ -57,7 +57,7 @@ private:
 
     static void TimerEvent( void *param );
     void Run(void);
-    void ReportStatus(void);
+    void ReportSpeed(void);
 };
 
 #endif

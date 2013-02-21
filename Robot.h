@@ -19,7 +19,6 @@
 #include "SelectTarget.h"
 #include "ShootCommand.h"
 #include "TargetCommand.h"
-#include "TeleCommand.h"
 #include "TimedDrive.h"
 #include "OI.h"
 
@@ -59,7 +58,6 @@ private:
 public:
     // commands
     AutoCommand* m_autonomousCommand;
-    TeleCommand* m_teleopCommand;
 
     // shooting
     ShootCommand* m_shootShort;

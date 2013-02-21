@@ -120,8 +120,6 @@ void Robot::RobotInit()
 
     m_autonomousCommand = new AutoCommand();
 
-    m_teleopCommand = new TeleCommand();
-
     m_shootShort = new ShootCommand( Shooter::kShort );
     SmartDashboard::PutData("Shoot Short", m_shootShort);
 
@@ -142,9 +140,6 @@ void Robot::Cancel()
 {
     if (m_autonomousCommand->IsRunning()) {
 	m_autonomousCommand->Cancel();
-    }
-    if (m_teleopCommand->IsRunning()) {
-	m_teleopCommand->Cancel();
     }
     m_driveBase->Stop();
     m_blinkyLight->Set(0.0);
@@ -174,7 +169,6 @@ void Robot::AutonomousPeriodic()
 void Robot::TeleopInit()
 {
     Cancel();
-    m_teleopCommand->Start();
 }
     
 void Robot::TeleopPeriodic()
