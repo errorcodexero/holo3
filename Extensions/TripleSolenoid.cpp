@@ -41,7 +41,7 @@ TripleSolenoid::Position TripleSolenoid::GetPosition()
 
 void TripleSolenoid::SetPosition( Position position )
 {
-    printf("TripleSolenoid::SetPosition %d\n", (int)position);
+//  printf("TripleSolenoid::SetPosition %d\n", (int)position);
     m_notifier->Stop();
     m_goal = position;
     Start();
@@ -49,22 +49,19 @@ void TripleSolenoid::SetPosition( Position position )
 
 void TripleSolenoid::Start()
 {
-    printf("TripleSolenoid::Start\n");
+//  printf("TripleSolenoid::Start\n");
     m_howLong = 0;
     if (Move()) {
-        printf("TripleSolenoid::Start: we are moving\n");
+//      printf("TripleSolenoid::Start: we are moving\n");
 	m_notifier->StartPeriodic( kPollInterval );
     }
 }
 
 void TripleSolenoid::Stop()
 {
-    printf("TripleSolenoid::Stop\n");
-    printf("TripleSolenoid: stopping notifier...\n");
+//  printf("TripleSolenoid::Stop\n");
     m_notifier->Stop();
-    printf("TripleSolenoid: turning off solenoid driver...\n");
     Set(DoubleSolenoid::kOff);
-    printf("TripleSolenoid: stopped!\n");
 }
 
 void TripleSolenoid::TimerEvent( void *param )
@@ -80,7 +77,7 @@ void TripleSolenoid::Run()
     SmartDashboard::PutNumber("position time", (double)m_howLong);
     Update();
     if (!Move()) {
-        printf("TripleSolenoid::Run done!\n");
+//      printf("TripleSolenoid::Run done!\n");
 	Stop();
     }
 }

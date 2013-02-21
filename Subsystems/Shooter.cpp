@@ -67,7 +67,7 @@ Shooter::Shooter( int motorChannel, int positionerChannel, int switchChannel,
 
 Shooter::~Shooter()
 {
-printf("Shooter::~Shooter\n");
+//  printf("Shooter::~Shooter\n");
     Stop();
     delete m_notifier;
     delete m_positioner;
@@ -112,7 +112,8 @@ void Shooter::SetSpeed( double speed )
 
 void Shooter::Start()
 {
-printf("Shooter::Start\n");
+//  printf("Shooter::Start\n");
+
     // Set control mode
     m_motor->ChangeControlMode( CANJaguar::kSpeed );
 
@@ -139,10 +140,8 @@ printf("Shooter::Start\n");
     // Poke the motor speed to reset the watchdog, then enable the watchdog
     m_speed = SmartDashboard::GetNumber("Shooter Speed");
     m_motor->Set(m_speed);
-#if 0
     m_motor->SetExpiration(kReportInterval);
     m_motor->SetSafetyEnabled(true);
-#endif
 
     // Start run timer
     m_report = 0;
@@ -151,32 +150,25 @@ printf("Shooter::Start\n");
 
 void Shooter::Stop()
 {
-printf("Shooter::Stop\n");
+//  printf("Shooter::Stop\n");
+
     // stop timer
-printf("Shooter: stopping notifier...\n");
     m_notifier->Stop();
 
     // stop motor
-printf("Shooter: stopping motor...\n");
     m_motor->StopMotor();
-printf("Shooter: turning off motor safety...\n");
     m_motor->SetSafetyEnabled(false);
 
     // stop positioner
-printf("Shooter: stopping positioner...\n");
     m_positioner->Stop();
 
     // reset injector
-printf("Shooter: stopping injector...\n");
     m_injector->Set(false);
 
     // not running any more!
-printf("Shooter: post status\n");
     m_timeAtSpeed = 0;
     m_isUpToSpeed = false;
     SmartDashboard::PutBoolean("Shooter UpToSpeed", m_isUpToSpeed);
-
-printf("Shooter is stopped!\n");
 }
 
 void Shooter::TimerEvent( void *param )

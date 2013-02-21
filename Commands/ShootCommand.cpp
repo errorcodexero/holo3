@@ -17,7 +17,7 @@ ShootCommand::ShootCommand( Shooter::TargetDistance targetDistance )
 
 void ShootCommand::Initialize()
 {
-printf("ShootCommand::Initialize\n");
+//  printf("ShootCommand::Initialize\n");
     m_launched = 0;
     SmartDashboard::PutNumber("ShootCommand Launched", (double) m_launched);
     Robot::shooter()->SetAngle(m_targetDistance);
@@ -59,12 +59,12 @@ bool ShootCommand::IsFinished()
 
 void ShootCommand::End()
 {
-printf("ShootCommand::End\n");
+//  printf("ShootCommand::End\n");
     Robot::shooter()->Stop();
 }
 
 void ShootCommand::Interrupted()
 {
-printf("ShootCommand::Interrupted\n");
+//  printf("ShootCommand::Interrupted\n");
     Robot::shooter()->Stop();
 }

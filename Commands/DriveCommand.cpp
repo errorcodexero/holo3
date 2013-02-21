@@ -11,32 +11,32 @@ static UINT32 then;
 // when this command is Started.
 DriveCommand::DriveCommand()
 {
-    printf("DriveCommand::DriveCommand\n");
+//  printf("DriveCommand::DriveCommand\n");
     Requires(Robot::driveBase());
 }
 
 // Called just before this Command runs the first time
 void DriveCommand::Initialize()
 {
-    printf("DriveCommand::Initialize\n");
+//  printf("DriveCommand::Initialize\n");
     then = GetFPGATime();
 }
 
 // Called repeatedly when this Command is scheduled to run
 void DriveCommand::Execute()
 {
-    UINT32 now = GetFPGATime();
-    if (now - then > 30000) {
-	printf("DriveCommand::Execute %u\n", now - then);
-    }
-    then = now;
+//  UINT32 now = GetFPGATime();
+//  if (now - then > 30000) {
+//      printf("DriveCommand::Execute %u\n", now - then);
+//  }
+//  then = now;
 
     Joystick *joy = Robot::oi()->getStick();
     float throttle = (1.0 - joy->GetThrottle())/2.0;
     float x = joy->GetX() * throttle;
     float y = joy->GetY() * throttle;
     float t = joy->GetTwist();
-    // printf("%g %g %g\n", x, y, t);
+//  printf("%g %g %g\n", x, y, t);
 
     Robot::driveBase()->Drive3(x, y, t);
 }
@@ -50,14 +50,13 @@ bool DriveCommand::IsFinished()
 // Called once after isFinished returns true
 void DriveCommand::End()
 {
-    printf("DriveCommand::End (can't happen)\n");
-    /*NOTREACHED*/ ;
+//  printf("DriveCommand::End (can't happen)\n");
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void DriveCommand::Interrupted()
 {
-    printf("DriveCommand::Interrupted\n");
+//  printf("DriveCommand::Interrupted\n");
     Robot::driveBase()->Stop();
 }
