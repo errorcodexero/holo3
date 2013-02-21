@@ -38,11 +38,12 @@ private:
     double m_rampRate, m_P, m_I, m_D;
     double m_speed;
     double m_speedTolerance;
-    int m_speedStable;
+    double m_speedStable;
     int m_report;
     int m_timeAtSpeed;
-    int m_injectTime;
-    int m_injectTimer;
+    bool m_isUpToSpeed;
+    double m_injectTime;
+    int m_injectCounter;
     
     TripleSolenoid *m_positioner;
     TargetDistance m_distance;
@@ -52,7 +53,7 @@ private:
     Notifier* m_notifier;
 
     static const double kPollInterval;	// not changeable at runtime
-    static const int kReportInterval;
+    static const double kReportInterval;
 
     static void TimerEvent( void *param );
     void Run(void);

@@ -5,7 +5,7 @@
 #include <math.h>
 
 const double Shooter::kPollInterval = 0.100;
-const int Shooter::kReportInterval = 5;
+const double Shooter::kReportInterval = 0.500;
 
 // Constructor
 Shooter::Shooter( int motorChannel, int positionerChannel, int switchChannel,
@@ -16,8 +16,7 @@ Shooter::Shooter( int motorChannel, int positionerChannel, int switchChannel,
 
     m_motor = new CANJaguar( motorChannel );
     lw->AddActuator("Shooter", "Motor", m_motor);
-    m_motor->SetSafetyEnabled(false);
-    m_notifier = NULL;
+    m_motor->SetSafetyEnabled(false);	// motor safety off while configuring
 
     m_rampRate = 0.5; // 0.0 disables rate limiting
     SmartDashboard::PutNumber("Shooter RampRate", m_rampRate);
@@ -37,30 +36,38 @@ Shooter::Shooter( int motorChannel, int positionerChannel, int switchChannel,
     m_speedTolerance = 10.0;  // +/- 10% speed tolerance
     SmartDashboard::PutNumber("Shooter Tolerance (%)", m_speedTolerance);
 
-    m_speedStable = 4; // 4 ticks = 2.0 seconds
-    SmartDashboard::PutNumber("Shooter Stable Time (ticks)", m_speedStable);
+    m_speedStable = 2.0; // 4 ticks = 2.0 seconds
+    SmartDashboard::PutNumber("Shooter Stable Time", m_speedStable);
 
-    m_injectTime = 4; // 4 ticks = 2.0 seconds
-    SmartDashboard::PutNumber("Shooter Injection Time (ticks)", m_injectTime);
+    m_injectTime = 2.0; // 4 ticks = 2.0 seconds
+    SmartDashboard::PutNumber("Shooter Injection Time", m_injectTime);
 
     // Initialize pneumatics
-    m_positioner = new TripleSolenoid(
-	positionerChannel, positionerChannel+1, switchChannel
-    );
+    m_positioner = new TripleSolenoid( positionerChannel,
+				       positionerChannel+1,
+				       switchChannel );
     lw->AddActuator("Shooter", "Positioner", m_positioner);
+    lw->AddSensor("Shooter", "PositionCenter", m_positioner->m_switch);
     m_distance = kUnknown;
+    SmartDashboard::PutBoolean("Shooter InPosition", false);
 
     m_injector = new Solenoid( injectorChannel );
     lw->AddActuator("Shooter", "Injector", m_injector);
     SmartDashboard::PutBoolean("Shooter Injector", false);
 
+    m_notifier = new Notifier( Shooter::TimerEvent, this );
+
     m_report = 0;
     m_timeAtSpeed = 0;
-    m_injectTimer = 0;
+    m_isUpToSpeed = false;
+    SmartDashboard::PutBoolean("Shooter UpToSpeed", m_isUpToSpeed);
+
+    m_injectCounter = 0;
 }
 
 Shooter::~Shooter()
 {
+printf("Shooter::~Shooter\n");
     Stop();
     delete m_notifier;
     delete m_positioner;
@@ -105,10 +112,7 @@ void Shooter::SetSpeed( double speed )
 
 void Shooter::Start()
 {
-    // If we were already running, shut down the periodic timer and motor,
-    // then (re)configure the motor controller and start.
-    Stop();
-
+printf("Shooter::Start\n");
     // Set control mode
     m_motor->ChangeControlMode( CANJaguar::kSpeed );
 
@@ -131,26 +135,25 @@ void Shooter::Start()
     // Enable Jaguar control:
     m_motor->EnableControl();
 
+    // Increase motor safety timer to match status reporting interval
     // Poke the motor speed to reset the watchdog, then enable the watchdog
+    m_motor->SetExpiration(kPollInterval * kReportInterval);
     m_speed = SmartDashboard::GetNumber("Shooter Speed");
     m_motor->Set(m_speed);
-
+#if 0
     m_motor->SetSafetyEnabled(true);
+#endif
 
     // Start run timer
-    if (!m_notifier) {
-	m_notifier = new Notifier( Shooter::TimerEvent, this );
-    }
     m_report = 0;
     m_notifier->StartPeriodic(kPollInterval);
 }
 
 void Shooter::Stop()
 {
+printf("Shooter::Stop\n");
     // stop timer
-    if (m_notifier) {
-	m_notifier->Stop();
-    }
+    m_notifier->Stop();
 
     // stop motor
     m_motor->StopMotor();
@@ -164,6 +167,8 @@ void Shooter::Stop()
 
     // not running any more!
     m_timeAtSpeed = 0;
+    m_isUpToSpeed = false;
+    SmartDashboard::PutBoolean("Shooter UpToSpeed", m_isUpToSpeed);
 }
 
 void Shooter::TimerEvent( void *param )
@@ -175,17 +180,17 @@ void Shooter::Run()
 {
     m_speed = SmartDashboard::GetNumber("Shooter Speed");
     m_motor->Set(m_speed, 0);
-    if (++m_report >= kReportInterval) {
+    if (++m_report * kPollInterval >= kReportInterval) {
 	ReportStatus();
     }
 
     if (m_injector->Get()) {
-	m_injectTime = (int)SmartDashboard::GetNumber("Shooter Injection Time (ticks)");
-	if (++m_injectTimer >= m_injectTime) {
+	m_injectTime = (int)SmartDashboard::GetNumber("Shooter Injection Time");
+	if (++m_injectCounter * kReportInterval >= m_injectTime) {
 	    m_injector->Set(false);
 	}
-    } else if (m_injectTimer) {
-	if (--m_injectTimer == 0) {
+    } else if (m_injectCounter) {
+	if (--m_injectCounter == 0) {
 	    SmartDashboard::PutBoolean("Shooter Injector", false);
 	}
     }
@@ -235,9 +240,13 @@ void Shooter::ReportStatus()
 	// 1000 is arbitrary, just to limit number of digits
 	//  displayed on the dashboard.
 	if (m_timeAtSpeed < 1000) m_timeAtSpeed++;
+	m_speedStable = (int) SmartDashboard::GetNumber("Shooter Stable Time");
+	m_isUpToSpeed = (m_timeAtSpeed * kReportInterval >= m_speedStable);
     } else {
 	m_timeAtSpeed = 0;
+	m_isUpToSpeed = false;
     }
+    SmartDashboard::PutBoolean("Shooter UpToSpeed", m_isUpToSpeed);
 }
 
 // check positioner at correct angle
@@ -251,34 +260,28 @@ bool Shooter::IsInPosition()
 	inPosition = true;
 	break;
     case kShort:
-	inPosition = (pos == TripleSolenoid::kRetracted) ||
-		     (pos == TripleSolenoid::kPartlyRetracted);
+	inPosition = (pos == TripleSolenoid::kRetracted);
 	break;
     case kMid:
 	inPosition = (pos == TripleSolenoid::kCenter);
 	break;
     case kLong:
-	inPosition = (pos == TripleSolenoid::kExtended) ||
-		     (pos == TripleSolenoid::kPartlyExtended);
+	inPosition = (pos == TripleSolenoid::kExtended);
 	break;
     }
-    SmartDashboard::PutBoolean("ShooterInPosition", inPosition);
+    SmartDashboard::PutBoolean("Shooter InPosition", inPosition);
     return inPosition;
 }
 
 bool Shooter::IsUpToSpeed()
 {
-    m_speedStable =
-	(int) SmartDashboard::GetNumber("Shooter Stable Time (ticks)");
-    bool isUpToSpeed = (m_timeAtSpeed >= m_speedStable);
-    SmartDashboard::PutBoolean("Shooter UpToSpeed", isUpToSpeed);
-    return isUpToSpeed;
+    return m_isUpToSpeed;
 }
 
 bool Shooter::IsInjectorActive()
 {
-    bool active = (m_injectTimer != 0);
-    SmartDashboard::PutBoolean("Shooter InjectorActive", active);
+    bool active = (m_injectCounter != 0);
+    SmartDashboard::PutBoolean("Shooter Active", active);
     return active;
 }
 
@@ -296,6 +299,6 @@ bool Shooter::IsReadyToShoot()
 void Shooter::Inject()
 {
     m_injector->Set(true);
-    m_injectTimer++;
+    m_injectCounter++;
     SmartDashboard::PutBoolean("Shooter Injector", true);
 }

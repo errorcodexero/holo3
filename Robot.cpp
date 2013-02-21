@@ -185,7 +185,6 @@ void Robot::TeleopPeriodic()
 void Robot::TestInit()
 {
     Cancel();
-    LiveWindow::GetInstance()->SetEnabled(true);
 }
 
 void Robot::TestPeriodic()
