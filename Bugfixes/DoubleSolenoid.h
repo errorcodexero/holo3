@@ -4,8 +4,8 @@
 /* must be accompanied by the FIRST BSD license file in $(WIND_BASE)/WPILib.  */
 /*----------------------------------------------------------------------------*/
 
-#ifndef _BUGFIX_DOUBLE_SOLENOID_H_
-#define _BUGFIX_DOUBLE_SOLENOID_H_
+#ifndef DOUBLE_SOLENOID_H_BUGFIX
+#define DOUBLE_SOLENOID_H_BUGFIX
 
 #include "SolenoidBase.h"
 #include "LiveWindow/LiveWindowSendable.h"
@@ -13,19 +13,19 @@
 
 
 /**
- * BugfixDoubleSolenoid class for running 2 channels of high voltage Digital Output
+ * DoubleSolenoid class for running 2 channels of high voltage Digital Output
  * (9472 module).
  * 
- * The BugfixDoubleSolenoid class is typically used for pneumatics solenoids that
+ * The DoubleSolenoid class is typically used for pneumatics solenoids that
  * have two positions controlled by two separate channels.
  */
-class BugfixDoubleSolenoid : public SolenoidBase, public LiveWindowSendable, public ITableListener {
+class DoubleSolenoid : public SolenoidBase, public LiveWindowSendable, public ITableListener {
 public:
 	typedef enum {kOff, kForward, kReverse} Value;
 
-	explicit BugfixDoubleSolenoid(UINT32 forwardChannel, UINT32 reverseChannel);
-	BugfixDoubleSolenoid(UINT8 moduleNumber, UINT32 forwardChannel, UINT32 reverseChannel);
-	virtual ~BugfixDoubleSolenoid();
+	explicit DoubleSolenoid(UINT32 forwardChannel, UINT32 reverseChannel);
+	DoubleSolenoid(UINT8 moduleNumber, UINT32 forwardChannel, UINT32 reverseChannel);
+	virtual ~DoubleSolenoid();
 	virtual void Set(Value value);
 	virtual Value Get();
 	

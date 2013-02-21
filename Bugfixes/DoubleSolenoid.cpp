@@ -13,7 +13,7 @@
 /**
  * Common function to implement constructor behavior.
  */
-void BugfixDoubleSolenoid::InitSolenoid()
+void DoubleSolenoid::InitSolenoid()
 {
     char buf[64];
     if (!CheckSolenoidModule(m_moduleNumber))
@@ -54,7 +54,7 @@ void BugfixDoubleSolenoid::InitSolenoid()
     nUsageReporting::report(nUsageReporting::kResourceType_Solenoid, m_forwardChannel, m_moduleNumber - 1);
     nUsageReporting::report(nUsageReporting::kResourceType_Solenoid, m_reverseChannel, m_moduleNumber - 1);
 
-    LiveWindow::GetInstance()->AddActuator("BugfixDoubleSolenoid", m_moduleNumber, m_forwardChannel, this);
+    LiveWindow::GetInstance()->AddActuator("DoubleSolenoid", m_moduleNumber, m_forwardChannel, this);
 }
 
 /**
@@ -63,7 +63,7 @@ void BugfixDoubleSolenoid::InitSolenoid()
  * @param forwardChannel The forward channel on the module to control.
  * @param reverseChannel The reverse channel on the module to control.
  */
-BugfixDoubleSolenoid::BugfixDoubleSolenoid(UINT32 forwardChannel, UINT32 reverseChannel)
+DoubleSolenoid::DoubleSolenoid(UINT32 forwardChannel, UINT32 reverseChannel)
     : SolenoidBase (GetDefaultSolenoidModule())
     , m_forwardChannel (forwardChannel)
     , m_reverseChannel (reverseChannel)
@@ -78,7 +78,7 @@ BugfixDoubleSolenoid::BugfixDoubleSolenoid(UINT32 forwardChannel, UINT32 reverse
  * @param forwardChannel The forward channel on the module to control.
  * @param reverseChannel The reverse channel on the module to control.
  */
-BugfixDoubleSolenoid::BugfixDoubleSolenoid(UINT8 moduleNumber, UINT32 forwardChannel, UINT32 reverseChannel)
+DoubleSolenoid::DoubleSolenoid(UINT8 moduleNumber, UINT32 forwardChannel, UINT32 reverseChannel)
     : SolenoidBase (moduleNumber)
     , m_forwardChannel (forwardChannel)
     , m_reverseChannel (reverseChannel)
@@ -89,7 +89,7 @@ BugfixDoubleSolenoid::BugfixDoubleSolenoid(UINT8 moduleNumber, UINT32 forwardCha
 /**
  * Destructor.
  */
-BugfixDoubleSolenoid::~BugfixDoubleSolenoid()
+DoubleSolenoid::~DoubleSolenoid()
 {
     if (CheckSolenoidModule(m_moduleNumber))
     {
@@ -103,7 +103,7 @@ BugfixDoubleSolenoid::~BugfixDoubleSolenoid()
  * 
  * @param value Move the solenoid to forward, reverse, or don't move it.
  */
-void BugfixDoubleSolenoid::Set(Value value)
+void DoubleSolenoid::Set(Value value)
 {
     if (StatusIsFatal()) return;
 
@@ -133,10 +133,10 @@ void BugfixDoubleSolenoid::Set(Value value)
  * 
  * @return The current value of the solenoid.
  */
-BugfixDoubleSolenoid::Value BugfixDoubleSolenoid::Get()
+DoubleSolenoid::Value DoubleSolenoid::Get()
 {
     if (StatusIsFatal()) {
-	printf("BugfixDoubleSolenoid[%d][%d-%d]::Get"
+	printf("DoubleSolenoid[%d][%d-%d]::Get"
 		" status is FATAL, returning kOff\n",
 		(int)m_moduleNumber, (int)m_forwardChannel,
 		(int)m_reverseChannel);
@@ -149,18 +149,18 @@ BugfixDoubleSolenoid::Value BugfixDoubleSolenoid::Get()
     return kOff;
 }
 
-void BugfixDoubleSolenoid::ValueChanged(ITable* source, const std::string& key, EntryValue value, bool isNew)
+void DoubleSolenoid::ValueChanged(ITable* source, const std::string& key, EntryValue value, bool isNew)
 {
     std::string *val = (std::string *) value.ptr;
-    if (*val == "Off") Set(BugfixDoubleSolenoid::kOff);
-    else if (*val == "Forward") Set(BugfixDoubleSolenoid::kForward);
-    else if (*val == "Reverse") Set(BugfixDoubleSolenoid::kReverse);
-    else printf("BugfixDoubleSolenoid[%d][%d-%d]::ValueChanged"
+    if (*val == "Off") Set(DoubleSolenoid::kOff);
+    else if (*val == "Forward") Set(DoubleSolenoid::kForward);
+    else if (*val == "Reverse") Set(DoubleSolenoid::kReverse);
+    else printf("DoubleSolenoid[%d][%d-%d]::ValueChanged"
     		" value [%s] not valid\n", (int)m_moduleNumber,
 		(int)m_forwardChannel, (int)m_reverseChannel, val->c_str());
 }
 
-void BugfixDoubleSolenoid::UpdateTable()
+void DoubleSolenoid::UpdateTable()
 {
     if (m_table != NULL) {
 	Value lvalue = Get();
@@ -168,27 +168,27 @@ void BugfixDoubleSolenoid::UpdateTable()
     }
 }
 
-void BugfixDoubleSolenoid::StartLiveWindowMode()
+void DoubleSolenoid::StartLiveWindowMode()
 {
     Set(kOff);
     m_table->AddTableListener("Value", this, true);
 }
 
-void BugfixDoubleSolenoid::StopLiveWindowMode() {
+void DoubleSolenoid::StopLiveWindowMode() {
     Set(kOff);
     m_table->RemoveTableListener(this);
 }
 
-std::string BugfixDoubleSolenoid::GetSmartDashboardType() {
+std::string DoubleSolenoid::GetSmartDashboardType() {
     return "Double Solenoid";
 }
 
-void BugfixDoubleSolenoid::InitTable(ITable *subTable) {
+void DoubleSolenoid::InitTable(ITable *subTable) {
     m_table = subTable;
     UpdateTable();
 }
 
-ITable * BugfixDoubleSolenoid::GetTable() {
+ITable * DoubleSolenoid::GetTable() {
     return m_table;
 }
 

@@ -138,6 +138,7 @@ void Robot::RobotInit()
 
 void Robot::Cancel()
 {
+    printf("Robot::Cancel\n");
     if (m_autonomousCommand->IsRunning()) {
 	m_autonomousCommand->Cancel();
     }
@@ -147,6 +148,7 @@ void Robot::Cancel()
 	
 void Robot::DisabledInit()
 {
+    printf("Robot::DisabledInit\n");
     Cancel();
 }
 
@@ -157,6 +159,7 @@ void Robot::DisabledPeriodic()
 
 void Robot::AutonomousInit()
 {
+    printf("Robot::AutonomousInit\n");
     Cancel();
     m_autonomousCommand->Start();
 }
@@ -168,6 +171,7 @@ void Robot::AutonomousPeriodic()
     
 void Robot::TeleopInit()
 {
+    printf("Robot::TeleopInit\n");
     Cancel();
 }
     
@@ -178,6 +182,7 @@ void Robot::TeleopPeriodic()
 
 void Robot::TestInit()
 {
+    printf("Robot::TestInit\n");
     Cancel();
 }
 

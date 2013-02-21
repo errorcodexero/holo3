@@ -3,7 +3,7 @@
 
 #include "DoubleSolenoid.h"
 
-class TripleSolenoid : public BugfixDoubleSolenoid {
+class TripleSolenoid : public DoubleSolenoid {
 public:
     enum Position {
 	kUnknown,
@@ -27,7 +27,7 @@ public:
 private:
     Position m_goal;
     Position m_position;
-    BugfixDoubleSolenoid::Value m_direction;
+    DoubleSolenoid::Value m_direction;
     int m_howLong;
     Notifier *m_notifier;
     static void TimerEvent( void *param );

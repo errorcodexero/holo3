@@ -153,22 +153,30 @@ void Shooter::Stop()
 {
 printf("Shooter::Stop\n");
     // stop timer
+printf("Shooter: stopping notifier...\n");
     m_notifier->Stop();
 
     // stop motor
+printf("Shooter: stopping motor...\n");
     m_motor->StopMotor();
+printf("Shooter: turning off motor safety...\n");
     m_motor->SetSafetyEnabled(false);
 
     // stop positioner
+printf("Shooter: stopping positioner...\n");
     m_positioner->Stop();
 
     // reset injector
+printf("Shooter: stopping injector...\n");
     m_injector->Set(false);
 
     // not running any more!
+printf("Shooter: post status\n");
     m_timeAtSpeed = 0;
     m_isUpToSpeed = false;
     SmartDashboard::PutBoolean("Shooter UpToSpeed", m_isUpToSpeed);
+
+printf("Shooter is stopped!\n");
 }
 
 void Shooter::TimerEvent( void *param )

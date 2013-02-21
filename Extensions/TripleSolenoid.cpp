@@ -15,14 +15,14 @@ const double TripleSolenoid::kTravelTime = 4.00;
 TripleSolenoid::TripleSolenoid( int forwardChannel,
 			        int reverseChannel,
 			        int switchChannel )
-    : BugfixDoubleSolenoid( forwardChannel, reverseChannel )
+    : DoubleSolenoid( forwardChannel, reverseChannel )
 {
 //  printf("TripleSolenoid::TripleSolenoid\n");
     m_switch = new DigitalInput( switchChannel );
     m_notifier = new Notifier( TripleSolenoid::TimerEvent, this );
     m_goal = kUnknown;
     m_position = kUnknown;
-    m_direction = BugfixDoubleSolenoid::kOff;
+    m_direction = DoubleSolenoid::kOff;
 }
 
 TripleSolenoid::~TripleSolenoid()
@@ -52,7 +52,7 @@ void TripleSolenoid::Start()
     printf("TripleSolenoid::Start\n");
     m_howLong = 0;
     if (Move()) {
-        printf("TripleSolenoid::Start is moving\n");
+        printf("TripleSolenoid::Start: we are moving\n");
 	m_notifier->StartPeriodic( kPollInterval );
     }
 }
@@ -60,8 +60,11 @@ void TripleSolenoid::Start()
 void TripleSolenoid::Stop()
 {
     printf("TripleSolenoid::Stop\n");
+    printf("TripleSolenoid: stopping notifier...\n");
     m_notifier->Stop();
-    Set(BugfixDoubleSolenoid::kOff);
+    printf("TripleSolenoid: turning off solenoid driver...\n");
+    Set(DoubleSolenoid::kOff);
+    printf("TripleSolenoid: stopped!\n");
 }
 
 void TripleSolenoid::TimerEvent( void *param )
@@ -89,7 +92,7 @@ void TripleSolenoid::Update()
     SmartDashboard::PutBoolean("position center", sw);
     if (sw) {
 	m_position = kCenter;
-    } else if (m_direction == BugfixDoubleSolenoid::kForward) {
+    } else if (m_direction == DoubleSolenoid::kForward) {
 	if (m_position == kRetracted)
 	    m_position = kPartlyRetracted;
 	else if (m_position == kCenter)
@@ -98,7 +101,7 @@ void TripleSolenoid::Update()
 	// PartlyExtended => Extended
 	else if (m_howLong * kPollInterval >= kTravelTime)
 	    m_position = kExtended;
-    } else if (m_direction == BugfixDoubleSolenoid::kReverse) {
+    } else if (m_direction == DoubleSolenoid::kReverse) {
 	if (m_position == kExtended)
 	    m_position = kPartlyExtended;
 	else if (m_position == kCenter)
@@ -121,31 +124,31 @@ bool TripleSolenoid::Move()
 
     switch (m_goal) {
     case kRetracted:
-	m_direction = BugfixDoubleSolenoid::kReverse;
+	m_direction = DoubleSolenoid::kReverse;
 	break;
     case kPartlyRetracted:
 	if (m_position == kRetracted)
-	    m_direction = BugfixDoubleSolenoid::kForward;
+	    m_direction = DoubleSolenoid::kForward;
 	else
-	    m_direction = BugfixDoubleSolenoid::kReverse;
+	    m_direction = DoubleSolenoid::kReverse;
 	break;
     case kCenter:
 	if (m_position == kRetracted || m_position == kPartlyRetracted)
-	    m_direction = BugfixDoubleSolenoid::kForward;
+	    m_direction = DoubleSolenoid::kForward;
 	else
-	    m_direction = BugfixDoubleSolenoid::kReverse;
+	    m_direction = DoubleSolenoid::kReverse;
 	break;
     case kPartlyExtended:
 	if (m_position == kExtended)
-	    m_direction = BugfixDoubleSolenoid::kReverse;
+	    m_direction = DoubleSolenoid::kReverse;
 	else
-	    m_direction = BugfixDoubleSolenoid::kForward;
+	    m_direction = DoubleSolenoid::kForward;
 	break;
     case kExtended:
-	m_direction = BugfixDoubleSolenoid::kForward;
+	m_direction = DoubleSolenoid::kForward;
 	break;
     default: // can't happen
-	m_direction = BugfixDoubleSolenoid::kOff;
+	m_direction = DoubleSolenoid::kOff;
 	break;
     }
     SmartDashboard::PutNumber("position direction", (double)m_direction);
