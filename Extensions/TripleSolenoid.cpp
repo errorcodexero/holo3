@@ -7,7 +7,7 @@
 
 // 47mS update period chosen to avoid collisions
 // with other scheduled tasks
-const double TripleSolenoid::kPollInterval = 0.047;
+const double TripleSolenoid::kPollInterval = 0.031;
 
 // end-to-end travel time
 const double TripleSolenoid::kTravelTime = 4.00;
@@ -116,42 +116,41 @@ bool TripleSolenoid::Move()
 {
     if (m_position == m_goal || m_goal == kUnknown) {
 //      printf("TripleSolenoid::Move stopping\n");
-	return false;
-    }
-
-    switch (m_goal) {
-    case kRetracted:
-	m_direction = DoubleSolenoid::kReverse;
-	break;
-    case kPartlyRetracted:
-	if (m_position == kRetracted)
-	    m_direction = DoubleSolenoid::kForward;
-	else
-	    m_direction = DoubleSolenoid::kReverse;
-	break;
-    case kCenter:
-	if (m_position == kRetracted || m_position == kPartlyRetracted)
-	    m_direction = DoubleSolenoid::kForward;
-	else
-	    m_direction = DoubleSolenoid::kReverse;
-	break;
-    case kPartlyExtended:
-	if (m_position == kExtended)
-	    m_direction = DoubleSolenoid::kReverse;
-	else
-	    m_direction = DoubleSolenoid::kForward;
-	break;
-    case kExtended:
-	m_direction = DoubleSolenoid::kForward;
-	break;
-    default: // can't happen
 	m_direction = DoubleSolenoid::kOff;
-	break;
+    } else {
+	switch (m_goal) {
+	case kRetracted:
+	    m_direction = DoubleSolenoid::kReverse;
+	    break;
+	case kPartlyRetracted:
+	    if (m_position == kRetracted)
+		m_direction = DoubleSolenoid::kForward;
+	    else
+		m_direction = DoubleSolenoid::kReverse;
+	    break;
+	case kCenter:
+	    if (m_position == kRetracted || m_position == kPartlyRetracted)
+		m_direction = DoubleSolenoid::kForward;
+	    else
+		m_direction = DoubleSolenoid::kReverse;
+	    break;
+	case kPartlyExtended:
+	    if (m_position == kExtended)
+		m_direction = DoubleSolenoid::kReverse;
+	    else
+		m_direction = DoubleSolenoid::kForward;
+	    break;
+	case kExtended:
+	    m_direction = DoubleSolenoid::kForward;
+	    break;
+	default: // can't happen
+	    m_direction = DoubleSolenoid::kOff;
+	    break;
+	}
     }
-    SmartDashboard::PutNumber("position direction", (double)m_direction);
-//  printf("TripleSolenoid::Move dir %d\n", (int)m_direction);
     Set(m_direction);
-    return true;
+    SmartDashboard::PutNumber("position direction", (double)m_direction);
+    return (m_direction != DoubleSolenoid::kOff);
 }
 
 

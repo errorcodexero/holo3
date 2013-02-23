@@ -33,36 +33,44 @@ Shooter::Shooter( int motorChannel, int positionerChannel, int switchChannel,
     m_speed = 3200.0;
     SmartDashboard::PutNumber("Shooter Speed", m_speed);
 
+    SmartDashboard::PutNumber("Shooter Voltage", 0.0);
+    SmartDashboard::PutNumber("Shooter RPM", 0.0);
+
     m_speedTolerance = 10.0;  // +/- 10% speed tolerance
     SmartDashboard::PutNumber("Shooter Tolerance (%)", m_speedTolerance);
 
     m_speedStable = 2.0; // 4 ticks = 2.0 seconds
     SmartDashboard::PutNumber("Shooter Stable Time", m_speedStable);
 
-    m_injectTime = 2.0; // 4 ticks = 2.0 seconds
-    SmartDashboard::PutNumber("Shooter Injection Time", m_injectTime);
+    m_timeAtSpeed = 0;
+    m_isUpToSpeed = false;
+    SmartDashboard::PutBoolean("Shooter UpToSpeed", m_isUpToSpeed);
 
-    // Initialize pneumatics
+    // Initialize positioner
+    m_distance = kUnknown;
+    SmartDashboard::PutString("Shooter Distance", "Unknown");
     m_positioner = new TripleSolenoid( positionerChannel,
 				       positionerChannel+1,
 				       switchChannel );
     lw->AddActuator("Shooter", "Positioner", m_positioner);
     lw->AddSensor("Shooter", "PositionCenter", m_positioner->m_switch);
-    m_distance = kUnknown;
+    SmartDashboard::PutString("Shooter Position", "Unknown");
     SmartDashboard::PutBoolean("Shooter InPosition", false);
 
+    // Initialize injector
+    m_injectCounter = 0;
+    m_injectTime = 2.0; // 4 ticks = 2.0 seconds
+    SmartDashboard::PutNumber("Shooter Injection Time", m_injectTime);
     m_injector = new Solenoid( injectorChannel );
     lw->AddActuator("Shooter", "Injector", m_injector);
     SmartDashboard::PutBoolean("Shooter Injector", false);
 
+    // Ready/Shooting status
+    SmartDashboard::PutBoolean("Shooter Ready", false);
+    SmartDashboard::PutBoolean("Shooter Active", false);
+
     m_notifier = new Notifier( Shooter::TimerEvent, this );
-
     m_report = 0;
-    m_timeAtSpeed = 0;
-    m_isUpToSpeed = false;
-    SmartDashboard::PutBoolean("Shooter UpToSpeed", m_isUpToSpeed);
-
-    m_injectCounter = 0;
 }
 
 Shooter::~Shooter()
