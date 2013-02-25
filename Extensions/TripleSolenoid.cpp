@@ -5,9 +5,9 @@
 #include "DoubleSolenoid.h"
 #include "TripleSolenoid.h"
 
-// 47mS update period chosen to avoid collisions
+// update period chosen to avoid collisions
 // with other scheduled tasks
-const double TripleSolenoid::kPollInterval = 0.031;
+const double TripleSolenoid::kPollInterval = 0.053;
 
 // end-to-end travel time
 const double TripleSolenoid::kTravelTime = 4.00;

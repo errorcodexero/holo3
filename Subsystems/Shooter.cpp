@@ -5,7 +5,7 @@
 #include <math.h>
 
 const double Shooter::kPollInterval = 0.034;
-const double Shooter::kReportInterval = 0.500;
+const double Shooter::kReportInterval = 0.300;
 
 // Constructor
 Shooter::Shooter( int motorChannel, int positionerChannel, int switchChannel,
@@ -24,7 +24,7 @@ Shooter::Shooter( int motorChannel, int positionerChannel, int switchChannel,
     m_P = 1.000;
     SmartDashboard::PutNumber("Shooter P", m_P);
 
-    m_I = 0.003;
+    m_I = 0.005;
     SmartDashboard::PutNumber("Shooter I", m_I);
 
     m_D = 0.000;
@@ -36,10 +36,10 @@ Shooter::Shooter( int motorChannel, int positionerChannel, int switchChannel,
     SmartDashboard::PutNumber("Shooter Voltage", 0.0);
     SmartDashboard::PutNumber("Shooter RPM", 0.0);
 
-    m_speedTolerance = 10.0;  // +/- 10% speed tolerance
+    m_speedTolerance = 4.0;  // +/- 4% speed tolerance
     SmartDashboard::PutNumber("Shooter Tolerance (%)", m_speedTolerance);
 
-    m_speedStable = 2.0; // 4 ticks = 2.0 seconds
+    m_speedStable = 1.2; // must remain in tolerance at least this long
     SmartDashboard::PutNumber("Shooter Stable Time", m_speedStable);
 
     m_timeAtSpeed = 0;
@@ -59,15 +59,14 @@ Shooter::Shooter( int motorChannel, int positionerChannel, int switchChannel,
 
     // Initialize injector
     m_injectCounter = 0;
-    m_injectTime = 2.0; // 4 ticks = 2.0 seconds
+    m_injectTime = 2.2; // time for full travel
     SmartDashboard::PutNumber("Shooter Injection Time", m_injectTime);
     m_injector = new Solenoid( injectorChannel );
     lw->AddActuator("Shooter", "Injector", m_injector);
-    SmartDashboard::PutBoolean("Shooter Injector", false);
+    SmartDashboard::PutBoolean("Shooter Active", false);
 
     // Ready/Shooting status
     SmartDashboard::PutBoolean("Shooter Ready", false);
-    SmartDashboard::PutBoolean("Shooter Active", false);
 
     m_notifier = new Notifier( Shooter::TimerEvent, this );
     m_report = 0;
@@ -193,7 +192,7 @@ void Shooter::Run()
 	}
     } else if (m_injectCounter) {
 	if (--m_injectCounter == 0) {
-	    SmartDashboard::PutBoolean("Shooter Injector", false);
+	    SmartDashboard::PutBoolean("Shooter Active", false);
 	}
     }
 
@@ -292,7 +291,6 @@ bool Shooter::IsUpToSpeed()
 bool Shooter::IsInjectorActive()
 {
     bool active = (m_injectCounter != 0);
-    SmartDashboard::PutBoolean("Shooter Active", active);
     return active;
 }
 
@@ -308,7 +306,7 @@ bool Shooter::IsReadyToShoot()
 void Shooter::Inject()
 {
     m_injector->Set(true);
-    SmartDashboard::PutBoolean("Shooter Injector", true);
+    SmartDashboard::PutBoolean("Shooter Active", true);
     m_injectCounter++;
     SmartDashboard::PutBoolean("Shooter Ready", false);
 }
