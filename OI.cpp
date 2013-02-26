@@ -2,7 +2,6 @@
 // for FRC 2013 game "Ultimate Ascent"
 
 #include "OI.h"
-#include "Robot.h"
 
 OI::OI() 
 {
@@ -29,4 +28,16 @@ void OI::Initialize()
     m_gamepadRightBumper->WhenPressed(new TimedDrive( 0.0, 0.0, .35, 0.20 ));
     m_gamepadBack->WhenPressed(new AimTrim(true));
     m_gamepadStart->WhenPressed(new AimTrim(false));
+
+    m_rotate = new Rotate();
+    SmartDashboard::PutData("Rotate", m_rotate);
+
+    m_shootShort = new ShootCommand( Shooter::kShort );
+    SmartDashboard::PutData("Shoot Short", m_shootShort);
+
+    m_shootMid = new ShootCommand( Shooter::kMid );
+    SmartDashboard::PutData("Shoot Mid", m_shootMid);
+
+    m_shootLong = new ShootCommand( Shooter::kLong );
+    SmartDashboard::PutData("Shoot Long", m_shootLong);
 }

@@ -120,15 +120,6 @@ void Robot::RobotInit()
 
     m_autonomousCommand = new AutoCommand();
 
-    m_shootShort = new ShootCommand( Shooter::kShort );
-    SmartDashboard::PutData("Shoot Short", m_shootShort);
-
-    m_shootMid = new ShootCommand( Shooter::kMid );
-    SmartDashboard::PutData("Shoot Mid", m_shootMid);
-
-    m_shootLong = new ShootCommand( Shooter::kLong );
-    SmartDashboard::PutData("Shoot Long", m_shootLong);
-
     // link operator controls to commands
     m_oi->Initialize();
 

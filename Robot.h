@@ -16,11 +16,15 @@
 #include "BlinkyOff.h"
 #include "BlinkyOn.h"
 #include "DriveCommand.h"
+#include "ResetRobot.h"
+#include "Rotate.h"
 #include "SelectTarget.h"
 #include "ShootCommand.h"
 #include "TargetCommand.h"
 #include "TimedDrive.h"
 #include "OI.h"
+
+class OI;
 
 class Robot : public IterativeRobot {
 private:
@@ -58,11 +62,6 @@ private:
 public:
     // commands
     AutoCommand* m_autonomousCommand;
-
-    // shooting
-    ShootCommand* m_shootShort;
-    ShootCommand* m_shootMid;
-    ShootCommand* m_shootLong;
 
 public:
     // singleton accessor

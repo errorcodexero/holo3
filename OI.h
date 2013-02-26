@@ -4,23 +4,34 @@
 #ifndef OI_H
 #define OI_H
 
-#include "WPILib.h"
+#include <WPILib.h>
+#include "Robot.h"
+
 
 class OI {
 private:
-	Joystick* m_stick;
-	JoystickButton* m_gamepadButtonA;
-	JoystickButton* m_gamepadButtonB;
-	JoystickButton* m_gamepadButtonX;
-	JoystickButton* m_gamepadButtonY;
-	JoystickButton* m_gamepadLeftBumper;
-	JoystickButton* m_gamepadRightBumper;
-	JoystickButton* m_gamepadBack;
-	JoystickButton* m_gamepadStart;
+    Joystick* m_stick;
+    JoystickButton* m_gamepadButtonA;
+    JoystickButton* m_gamepadButtonB;
+    JoystickButton* m_gamepadButtonX;
+    JoystickButton* m_gamepadButtonY;
+    JoystickButton* m_gamepadLeftBumper;
+    JoystickButton* m_gamepadRightBumper;
+    JoystickButton* m_gamepadBack;
+    JoystickButton* m_gamepadStart;
+
+    // aiming
+    Rotate* m_rotate;
+
+    // shooting
+    ShootCommand* m_shootShort;
+    ShootCommand* m_shootMid;
+    ShootCommand* m_shootLong;
+
 public:
-	OI();
-	void Initialize();
-	Joystick* getStick() { return m_stick; }
+    OI();
+    void Initialize();
+    Joystick* getStick() { return m_stick; }
 };
 
 #endif
