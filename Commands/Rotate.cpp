@@ -24,16 +24,21 @@ Rotate::Rotate()
 // Called just before this Command runs the first time
 void Rotate::Initialize()
 {
+    m_x = SmartDashboard::GetNumber("Rotate X");
+    m_y = SmartDashboard::GetNumber("Rotate Y");
+    m_t = SmartDashboard::GetNumber("Rotate T");
+    m_time = SmartDashboard::GetNumber("Rotate time");
+
     m_startTime = Timer::GetFPGATimestamp();
 }
 
 // Call this while running to update the speed, direction or time to run.
 void Rotate::Set( double x, double y, double t, double seconds )
 {
-    m_x = SmartDashboard::GetNumber("Rotate X");
-    m_y = SmartDashboard::GetNumber("Rotate Y");
-    m_t = SmartDashboard::GetNumber("Rotate T");
-    m_time = SmartDashboard::GetNumber("Rotate time");
+    m_x = x;
+    m_y = y;
+    m_t = t;
+    m_time = seconds;
 
     m_startTime = Timer::GetFPGATimestamp();
 }
