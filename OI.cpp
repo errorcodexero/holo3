@@ -29,8 +29,11 @@ void OI::Initialize()
     m_gamepadBack->WhenPressed(new AimTrim(true));
     m_gamepadStart->WhenPressed(new AimTrim(false));
 
-    m_rotate = new Rotate();
-    SmartDashboard::PutData("Rotate", m_rotate);
+    m_rotateFwd = new Rotate(1);
+    SmartDashboard::PutData("Rotate Fwd", m_rotateFwd);
+
+    m_rotateRev = new Rotate(-1);
+    SmartDashboard::PutData("Rotate Rev", m_rotateRev);
 
     m_shootShort = new ShootCommand( Shooter::kShort );
     SmartDashboard::PutData("Shoot Short", m_shootShort);

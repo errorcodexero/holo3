@@ -21,7 +21,8 @@ private:
     JoystickButton* m_gamepadStart;
 
     // aiming
-    Rotate* m_rotate;
+    Rotate* m_rotateFwd;
+    Rotate* m_rotateRev;
 
     // shooting
     ShootCommand* m_shootShort;
