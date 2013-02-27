@@ -170,7 +170,7 @@ void Shooter::Stop()
     m_positioner->Stop();
 
     // reset injector
-    m_injector->Set(false);
+    m_injector->Set(true);
 
     // not running any more!
     m_timeAtSpeed = 0;
@@ -188,7 +188,7 @@ void Shooter::Run()
     if (m_injector->Get()) {
 	m_injectTime = (int)SmartDashboard::GetNumber("Shooter Injection Time");
 	if (++m_injectCounter * kPollInterval >= m_injectTime) {
-	    m_injector->Set(false);
+	    m_injector->Set(true);
 	}
     } else if (m_injectCounter) {
 	if (--m_injectCounter == 0) {
@@ -305,8 +305,16 @@ bool Shooter::IsReadyToShoot()
  */
 void Shooter::Inject()
 {
-    m_injector->Set(true);
+    m_injector->Set(false);
     SmartDashboard::PutBoolean("Shooter Active", true);
     m_injectCounter++;
     SmartDashboard::PutBoolean("Shooter Ready", false);
+}
+
+/*
+ * Current setup false is the inject position (retracted), true is the ready (extended) position
+ */
+void Shooter::SetInjector(state)
+{
+	m_injector->Set(state);
 }

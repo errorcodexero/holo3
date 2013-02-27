@@ -32,6 +32,7 @@ public:
     bool IsReadyToShoot(void);
 
     void Inject();
+    void SetInjector(bool state);
 	
 private:
     CANJaguar* m_motor;
