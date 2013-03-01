@@ -1,8 +1,8 @@
 // First Team 1425 "Error Code Xero"
 // for FRC 2013 game "Ultimate Ascent"
 
-#ifndef TIMEDDRIVE_H
-#define TIMEDDRIVE_H
+#ifndef TIMED_DRIVE_H
+#define TIMED_DRIVE_H
 
 #include <Commands/Command.h>
 

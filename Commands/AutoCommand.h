@@ -9,10 +9,22 @@
 
 // This command group is started whenever the robot enters autonomous mode
 // and canceled when the robot enters any other mode.
+
+class BlinkyBreathe;
+class ShootCommand;
+
 class AutoCommand: public CommandGroup {
 public:	
-	AutoCommand();
-	virtual void Interrupted();
+    AutoCommand();
+    virtual void Initialize();
+    virtual void Execute();
+    virtual bool IsFinished();
+    virtual void Stop();
+    virtual void Interrupted();
+
+private:
+    BlinkyBreathe *m_blinky;
+    ShootCommand *m_shoot;
 };
 
 #endif

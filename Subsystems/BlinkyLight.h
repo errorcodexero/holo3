@@ -6,10 +6,10 @@
 class BlinkyLight: public Subsystem
 {
 private:
-    SpeedController* m_pwm;
+    Victor* m_pwm;
 
 public:
-    BlinkyLight( SpeedController* pwm );
+    BlinkyLight( int pwmChannel );
     void InitDefaultCommand();
     void Set( float value );
 };

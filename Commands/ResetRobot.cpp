@@ -3,42 +3,43 @@
 
 #include "Robot.h"
 
-BlinkyOn::BlinkyOn()
+ResetRobot::ResetRobot()
 {
     // Use Requires() here to declare subsystem dependencies
     // eg. Requires(chassis);
-    Requires(Robot::blinkyLight());
-    m_onTimer.Start();
+    Requires(Robot::driveBase());
+    Requires(Robot::shooter());
 }
 
 // Called just before this Command runs the first time
-void BlinkyOn::Initialize()
+void ResetRobot::Initialize()
 {
-    Robot::blinkyLight()->Set(1.0);
-    m_onTimer.Reset();
+    Robot::shooter()->SetAngle(Shooter::kShort);
+    Robot::shooter()->SetSpeed(0.0);
+    Robot::shooter()->Start();
 }
 
 // Called repeatedly when this Command is scheduled to run
-void BlinkyOn::Execute()
+void ResetRobot::Execute()
 {
     ;
 }
 
 // Make this return true when this Command no longer needs to run execute()
-bool BlinkyOn::IsFinished()
+bool ResetRobot::IsFinished()
 {
-    return (m_onTimer.Get() >= 1.0);
+    return (Robot::shooter()->IsInPosition());
 }
 
 // Called once after isFinished returns true
-void BlinkyOn::End()
+void ResetRobot::End()
 {
-    ;
+    Robot::shooter()->Stop();
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
-void BlinkyOn::Interrupted()
+void ResetRobot::Interrupted()
 {
-    ;
+    Robot::shooter()->Stop();
 }

@@ -17,14 +17,20 @@
                 <stringAttribute value="-I$(WIND_BASE)/target/h/WPILib"/>
                 <stringAttribute value="-I$(WIND_BASE)/target/h"/>
                 <stringAttribute value="-I$(WIND_BASE)/target/h/wrn/coreip"/>
+                <stringAttribute value="-I$(WS_DIR)/Bugfix"/>
+                <stringAttribute value="-I$(WS_DIR)/Extensions"/>
             </listAttribute>
             <listAttribute key="BLD::Info|Incl|PPC32gnu">
                 <stringAttribute value="-I$(WIND_BASE)/target/h"/>
                 <stringAttribute value="-I$(WIND_BASE)/target/h/wrn/coreip"/>
+                <stringAttribute value="-I$(WS_DIR)/Bugfix"/>
+                <stringAttribute value="-I$(WS_DIR)/Extensions"/>
             </listAttribute>
             <listAttribute key="BLD::Info|Incl|PPC603diab">
                 <stringAttribute value="-I$(WIND_BASE)/target/h"/>
                 <stringAttribute value="-I$(WIND_BASE)/target/h/wrn/coreip"/>
+                <stringAttribute value="-I$(WS_DIR)/Bugfix"/>
+                <stringAttribute value="-I$(WS_DIR)/Extensions"/>
             </listAttribute>
             <listAttribute key="BLD::Info|Incl|PPC603gnu">
                 <stringAttribute value="-I$(WIND_BASE)/target/h"/>
@@ -33,6 +39,8 @@
                 <stringAttribute value="-I$(WS_DIR)"/>
                 <stringAttribute value="-I$(WS_DIR)/Commands"/>
                 <stringAttribute value="-I$(WS_DIR)/Subsystems"/>
+                <stringAttribute value="-I$(WS_DIR)/Bugfixes"/>
+                <stringAttribute value="-I$(WS_DIR)/Extensions"/>
             </listAttribute>
             <listAttribute key="BLD::Info|Libs|PPC32diab">
                 <stringAttribute value="$(WIND_BASE)/target/lib/WPILib.a"/>
@@ -250,11 +258,6 @@
     </attributes>
     <buildtargets>
         <buildtarget buildtool="Linker" name="holo3" passed="false" targetname="holo3">
-            <contents>
-                <buildtargetreference name="/holo3/holo3_partialimage"/>
-            </contents>
-        </buildtarget>
-        <buildtarget buildtool="Partial Image Linker" name="holo3_partialimage" passed="true" targetname="holo3_partialimage">
             <contents>
                 <folder name="/holo3" recursive="true"/>
             </contents>

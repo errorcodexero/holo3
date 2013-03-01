@@ -4,21 +4,27 @@
 #ifndef _ROBOT_H
 #define _ROBOT_H
 
-#include "WPILib.h"
-#include "LiveWindow/LiveWindow.h"
-#include "RateGyro.h"
-#include "DriveBase.h"
+#include <WPILib.h>
 #include "BlinkyLight.h"
+#include "DriveBase.h"
+#include "RateGyro.h"
+#include "Shooter.h"
+#include "TripleSolenoid.h"
+#include "AimTrim.h"
 #include "AutoCommand.h"
-#include "TeleCommand.h"
-#include "DriveCommand.h"
-#include "TargetCommand.h"
-#include "TimedDrive.h"
 #include "BlinkyBreathe.h"
 #include "BlinkyOff.h"
 #include "BlinkyOn.h"
-
+#include "DriveCommand.h"
+#include "ResetRobot.h"
+#include "Rotate.h"
+#include "SelectTarget.h"
+#include "ShootCommand.h"
+#include "TargetCommand.h"
+#include "TimedDrive.h"
 #include "OI.h"
+
+class OI;
 
 class Robot : public IterativeRobot {
 private:
@@ -42,31 +48,20 @@ private:
     //   then the OI,
     //   then any other commands
 
-    // sensors and actuators
-    Jaguar* m_driveBaseFront;
-    Jaguar* m_driveBaseLeft;
-    Jaguar* m_driveBaseRight;
-    RateGyro* m_gyro;
-    Victor* m_blinkyPWM;
-
-public:
-    // subsystems
-    DriveBase* m_driveBase;
-    BlinkyLight* m_blinkyLight;
+    // global sensors
+    Compressor* m_compressor;
 
     // OI
     OI* m_oi;
 
+    // subsystems
+    DriveBase* m_driveBase;
+    Shooter* m_shooter;
+    BlinkyLight* m_blinkyLight;
+    
+public:
     // commands
     AutoCommand* m_autonomousCommand;
-    TeleCommand* m_teleopCommand;
-
-    // targeting
-    TargetCommand* m_targetCommand;
-    
-    //nudge
-    TimedDrive* m_nudgeLeft;
-    TimedDrive* m_nudgeRight;
 
 public:
     // singleton accessor
@@ -75,6 +70,7 @@ public:
     // convenience accessors
     static DriveBase* driveBase() { return theRobot().m_driveBase; };
     static BlinkyLight* blinkyLight() { return theRobot().m_blinkyLight; };
+    static Shooter* shooter() { return theRobot().m_shooter; };
     static OI* oi() { return theRobot().m_oi; };
 
     void Cancel();

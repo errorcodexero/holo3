@@ -1,17 +1,14 @@
 // First Team 1425 "Error Code Xero"
 // for FRC 2013 game "Ultimate Ascent"
 
-#ifndef BLINKY_BREATHE_H
-#define BLINKY_BREATHE_H
+#ifndef RESET_ROBOT_H
+#define RESET_ROBOT_H
 
 #include <Commands/Command.h>
 
-class BlinkyBreathe: public Command {
-private:
-    double m_cycleTime;
-    double m_startTime;
+class ResetRobot: public Command {
 public:
-    BlinkyBreathe( float seconds );
+    ResetRobot();
     virtual void Initialize();
     virtual void Execute();
     virtual bool IsFinished();

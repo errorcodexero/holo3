@@ -3,21 +3,20 @@
 AimTrim::AimTrim(bool left) :
     Command("AimTrim")
 {
-	m_left = left;
-	
-	SmartDashboard::PutNumber("trim",0);
+    m_left = left;
+    SmartDashboard::PutNumber("trim",0);
 }
 
 // Called just before this Command runs the first time
 void AimTrim::Initialize()
 {
-	double val = SmartDashboard::GetNumber("trim");
-	if (m_left)
-		val -= 1;
-	else
-		val +=1;
+    double val = SmartDashboard::GetNumber("trim");
+    if (m_left)
+	val -= 1;
+    else
+	val += 1;
 	
-	SmartDashboard::PutNumber("trim",val);
+    SmartDashboard::PutNumber("trim",val);
 }
 
 // Called repeatedly when this Command is scheduled to run

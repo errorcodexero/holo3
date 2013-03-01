@@ -4,34 +4,123 @@
 #ifndef OI_H
 #define OI_H
 
-#include "WPILib.h"
+#include <WPILib.h>
+#include "Robot.h"
 
 
-class OI {
+class DSAnalogInput {
+private:
+    DriverStationEnhancedIO *m_pEIO;
+    UINT32 m_channel;
 
 public:
-	Joystick* stick;
-	JoystickButton* button1; //On Gamepad, is mapped to "A"
-	JoystickButton* button2; //On Gamepad, is mapped to "B"
-	JoystickButton* button3; //On Gamepad, is mapped to "X"
-	JoystickButton* button4; //On Gamepad, is mapped to "Y"
-	JoystickButton* button5; //On Gamepad, is mapped to "LeftBumper"
-	JoystickButton* button6; //On Gamepad, is mapped to "RightBumper"
-	JoystickButton* button7; //On Gamepad, is mapped to "Back"
-	JoystickButton* button8; //On Gamepad, is mapped to "Start"
-	
-	OI();
-	Joystick* getStick();
-	float GetDriverThrottle()	{ return stick->GetThrottle(); }
-	bool GetDriverButton1() {return button1->Get();}
-	bool GetDriverButton2() {return button2->Get();}
-	bool GetDriverButton3() {return button3->Get();}
-	bool GetDriverButton4() {return button4->Get();}
-	bool GetDriverButton5() {return button5->Get();}
-	bool GetDriverButton6() {return button6->Get();}
-	bool GetDriverButton7() {return button7->Get();}
-	bool GetDriverButton8() {return button8->Get();}
-		
+    DSAnalogInput( DriverStationEnhancedIO *pEIO, UINT32 channel ) :
+	m_pEIO(pEIO),
+	m_channel(channel)
+    {
+	;
+    }
+
+    ~DSAnalogInput() {}
+
+    double GetAnalog() {
+	return m_pEIO->GetAnalogInRatio(m_channel); 
+    }
+
+    int GetDigital( int numPositions ) {
+	return (int)(GetAnalog() * numPositions) / numPositions;
+    }
+};
+
+class DSDigitalInput : Button {
+private:
+    DriverStationEnhancedIO *m_pEIO;
+    UINT32 m_channel;
+
+public:
+    DSDigitalInput( DriverStationEnhancedIO *pEIO, UINT32 channel ) :
+	m_pEIO(pEIO),
+	m_channel(channel)
+    {
+	m_pEIO->SetDigitalConfig(channel,
+	    DriverStationEnhancedIO::kInputPullUp);
+    }
+
+    ~DSDigitalInput() {}
+
+    bool Get() {
+	return m_pEIO->GetDigital(m_channel);
+    }
+};
+
+class DSDigitalOutput {
+private:
+    DriverStationEnhancedIO *m_pEIO;
+    UINT32 m_channel;
+
+public:
+    DSDigitalOutput( DriverStationEnhancedIO *pEIO, UINT32 channel ) :
+	m_pEIO(pEIO),
+	m_channel(channel)
+    {
+	m_pEIO->SetDigitalConfig(channel,
+	    DriverStationEnhancedIO::kOutput);
+    }
+
+    ~DSDigitalOutput() {}
+
+    void Set( bool value ) {
+	return m_pEIO->SetDigitalOutput(m_channel, value);
+    }
+};
+
+class OI {
+private:
+    DriverStation *m_pDS;
+    DriverStationEnhancedIO *m_pEIO;
+    DriverStationLCD *m_pLCD;
+
+    Joystick* m_pStick;
+    JoystickButton* m_pGamepadButtonA;
+    JoystickButton* m_pGamepadButtonB;
+    JoystickButton* m_pGamepadButtonX;
+    JoystickButton* m_pGamepadButtonY;
+    JoystickButton* m_pGamepadLeftBumper;
+    JoystickButton* m_pGamepadRightBumper;
+    JoystickButton* m_pGamepadBack;
+    JoystickButton* m_pGamepadStart;
+
+    DSAnalogInput* m_pClimber;
+    DSAnalogInput* m_pTip;
+    DSAnalogInput* m_pSpeedAdjust;
+    DSAnalogInput* m_pShooterPosition;
+
+    DSDigitalInput* m_pDump;
+    DSDigitalInput* m_pCameraLight;
+    DSDigitalInput* m_pCameraPosition;
+    DSDigitalInput* m_pQueryButton;
+    DSDigitalInput* m_pSpeedOverride;
+    DSDigitalInput* m_pLaunch;
+    DSDigitalInput* m_pKey;
+
+    DSDigitalOutput* m_pReadyLED;
+
+    // aiming
+    Rotate* m_pRotateFwd;
+    Rotate* m_pRotateRev;
+
+    // shooting
+    ShootCommand* m_pShootShort;
+    ShootCommand* m_pShootMid;
+    ShootCommand* m_pShootLong;
+
+public:
+    OI();
+    void Initialize();
+    DriverStation *getDS() { return m_pDS; }
+    Joystick* getStick() { return m_pStick; }
+    DriverStationEnhancedIO* getEIO() { return m_pEIO; }
+    DriverStationLCD* getLCD() { return m_pLCD; }
 };
 
 #endif

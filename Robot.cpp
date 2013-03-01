@@ -3,7 +3,90 @@
 
 #include "Robot.h"
 #include "OI.h"
-#include "AimTrim.h"
+
+
+////////////////////////////////////////////////////////////////////
+// Digital Inputs:
+// 1 - pneumatics pressure switch
+//     (polarity handled by Compressor class)
+
+#define	DIGITAL_PRESSURE_SWITCH		1
+
+// 2 - climber left bottom limit switch
+// 3 - climber left top limit switch
+// 4 - climber right bottom limit switch
+// 5 - climber right top limit switch
+//     limit switches are normally-open switches to ground
+//     so normally true, switch to false = at limit
+
+#define DIGITAL_LIMIT_LEFT_BOTTOM	2
+#define DIGITAL_LIMIT_LEFT_TOP		3
+#define DIGITAL_LIMIT_RIGHT_BOTTOM	4
+#define DIGITAL_LIMIT_RIGHT_TOP		5
+
+// 6 - shooter mid-range position
+
+#define DIGITAL_SHOOTER_CENTER		6
+
+////////////////////////////////////////////////////////////////////
+// Analog Inputs:
+// 1 - turn rate gyro
+//     + output is clockwise rotation
+
+#define ANALOG_GYRO			1
+
+////////////////////////////////////////////////////////////////////
+// Relay (Spike) Outputs:
+// 1 - compressor
+
+#define	RELAY_COMPRESSOR		1
+
+////////////////////////////////////////////////////////////////////
+// Solenoid Outputs:
+// 1,2 - climber tilt
+//     1 = extend
+//     2 = retract
+//
+
+#define	SOLENOID_CLIMBER_EXTEND		1
+#define	SOLENOID_CLIMBER_RETRACT	2
+
+// 3,4 - shooter position
+//     3 = extend (deploy for long range)
+//     4 = retract (for shooting at tower goal)
+
+#define SOLENOID_SHOOTER_EXTEND		3
+#define SOLENOID_SHOOTER_RETRACT	4
+
+// 5 - shooter injector
+//     false = retract (idle)
+//     true  = extend (to let a disk drop into firing position)
+
+#define SOLENOID_SHOOTER_INJECT		5
+
+////////////////////////////////////////////////////////////////////
+// PWM Outputs:
+// 1 - blinky light (not used)
+
+#define PWM_BLINKY			1
+
+// (PWM 2-3 not used)
+
+// 4 - drive left
+// 5 - drive right
+// 6 - drive rear
+
+#define PWM_DRIVE_LEFT			4
+#define PWM_DRIVE_RIGHT			5
+#define PWM_DRIVE_REAR			6
+
+// CAN (CANJaguar) channels:
+// 6 - shooter motor
+
+#define CAN_SHOOTER			6
+
+////////////////////////////////////////////////////////////////////
+
 
 Robot::Robot()
 {
@@ -19,61 +102,36 @@ void Robot::RobotInit()
 {
     printf("Robot::RobotInit()\n");
 
-    // connect sensors and actuators to LiveWindow
-    LiveWindow* lw = LiveWindow::GetInstance();
-
-    m_driveBaseFront = new Jaguar(1, 6);
-    lw->AddActuator("DriveBase", "Front", m_driveBaseFront);
-
-    m_driveBaseLeft  = new Jaguar(1, 5);
-    lw->AddActuator("DriveBase", "Left",  m_driveBaseLeft);
-
-    m_driveBaseRight = new Jaguar(1, 4);
-    lw->AddActuator("DriveBase", "Right", m_driveBaseRight);
-
-    m_gyro = new RateGyro(1, 1);
-    lw->AddSensor("DriveBase", "Gyro", m_gyro);
-
-    m_blinkyPWM = new Victor(1, 1);
-    // blinky lights don't need watchdogs
-    m_blinkyPWM->SetSafetyEnabled(false);
-    lw->AddActuator("BlinkyLight", "PWM", m_blinkyPWM);
-
-    // m_unused = new Victor(1, 2);
-
-    m_driveBase = new DriveBase( m_driveBaseFront, m_driveBaseLeft,
-				 m_driveBaseRight, m_gyro ),
-
-    m_blinkyLight = new BlinkyLight( m_blinkyPWM );
-
     m_oi = new OI();
+
+    // subsystems
+
+    m_compressor = new Compressor( DIGITAL_PRESSURE_SWITCH, RELAY_COMPRESSOR );
+
+    m_driveBase = new DriveBase( PWM_DRIVE_LEFT, PWM_DRIVE_RIGHT,
+    				 PWM_DRIVE_REAR, ANALOG_GYRO );
+
+    m_shooter = new Shooter( CAN_SHOOTER, SOLENOID_SHOOTER_EXTEND,
+			     DIGITAL_SHOOTER_CENTER, SOLENOID_SHOOTER_INJECT );
+    
+    m_blinkyLight = new BlinkyLight( PWM_BLINKY );
+
+    // commands
 
     m_autonomousCommand = new AutoCommand();
 
-    m_teleopCommand = new TeleCommand();
+    // link operator controls to commands
+    m_oi->Initialize();
 
-    m_targetCommand = new TargetCommand();
-    SmartDashboard::PutData("makeItSo", m_targetCommand);
-    
-    m_nudgeLeft = new TimedDrive( 0.0, 0.0, -.35, 0.02 );
-    SmartDashboard::PutData ("Lean to da Left!", m_nudgeLeft);
-    
-    m_nudgeRight = new TimedDrive( 0.0, 0.0, .35, 0.02);
-    SmartDashboard::PutData ("Lean to da Right Ya!", m_nudgeRight);
-    
-    m_oi->button5->WhenPressed(m_nudgeLeft);
-    m_oi->button6->WhenPressed(m_nudgeRight);
-    m_oi->button7->WhenPressed(new AimTrim (true));
-    m_oi->button8->WhenPressed(new AimTrim (false));
+    // Now that everything else is set up, start the compressor
+    m_compressor->Start();
 }
 
 void Robot::Cancel()
 {
+    printf("Robot::Cancel\n");
     if (m_autonomousCommand->IsRunning()) {
 	m_autonomousCommand->Cancel();
-    }
-    if (m_teleopCommand->IsRunning()) {
-	m_teleopCommand->Cancel();
     }
     m_driveBase->Stop();
     m_blinkyLight->Set(0.0);
@@ -81,6 +139,7 @@ void Robot::Cancel()
 	
 void Robot::DisabledInit()
 {
+    printf("Robot::DisabledInit\n");
     Cancel();
 }
 
@@ -91,6 +150,7 @@ void Robot::DisabledPeriodic()
 
 void Robot::AutonomousInit()
 {
+    printf("Robot::AutonomousInit\n");
     Cancel();
     m_autonomousCommand->Start();
 }
@@ -102,8 +162,8 @@ void Robot::AutonomousPeriodic()
     
 void Robot::TeleopInit()
 {
+    printf("Robot::TeleopInit\n");
     Cancel();
-    m_teleopCommand->Start();
 }
     
 void Robot::TeleopPeriodic()
@@ -113,6 +173,7 @@ void Robot::TeleopPeriodic()
 
 void Robot::TestInit()
 {
+    printf("Robot::TestInit\n");
     Cancel();
 }
 
@@ -121,5 +182,5 @@ void Robot::TestPeriodic()
     LiveWindow::GetInstance()->Run();
 }
 
-//START_ROBOT_CLASS(Robot);
+START_ROBOT_CLASS(Robot);
 

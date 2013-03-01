@@ -5,22 +5,29 @@
 
 AutoCommand::AutoCommand()
 {
-    // Add Commands here:
-    // e.g. AddSequential(new Command1());
-    //      AddSequential(new Command2());
-    // these will run in order.
+    m_blinky = new BlinkyBreathe(3.0);
+    m_shoot = new ShootCommand(Shooter::kMid);
 
-    // To run multiple commands at the same time,
-    // use AddParallel()
-    // e.g. AddParallel(new Command1());
-    //      AddSequential(new Command2());
-    // Command1 and Command2 will run in parallel.
+    AddParallel(m_blinky);
+    AddSequential(m_shoot);
+}
 
-    // A command group will require all of the subsystems that each member
-    // would require.  e.g. if Command1 requires chassis, and Command2
-    // requires arm, a CommandGroup containing them would require both
-    // the chassis and the arm.
-    AddSequential(new BlinkyBreathe(6.0));
+void AutoCommand::Initialize()
+{
+}
+
+void AutoCommand::Execute()
+{
+}
+
+bool AutoCommand::IsFinished()
+{
+    return (m_shoot->IsRunning() && (m_shoot->GetLaunched() >= 3) &&
+            !Robot::shooter()->IsInjectorActive());
+}
+
+void AutoCommand::Stop()
+{
 }
 
 void AutoCommand::Interrupted()

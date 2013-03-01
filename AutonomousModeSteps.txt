@@ -14,12 +14,12 @@ Trigger Autonomous Mode - from driver station
 	Start Blinky Lights
 	Confirm pneumatic pressure at correct level
 	
-	Unfold shooter - pneumatics
+	Unfold shooter - pneumatics (1)
 	
 	Confirm pneumatic pressure at correct level
 	
 	PARALELL TASKS:
-	Position shooter - pneumatics
+	Position shooter - pneumatics (2)
 	Do something with under-light??
 	
 	PARALELL TASKS:
@@ -33,7 +33,7 @@ Trigger Autonomous Mode - from driver station
 	
 	Loop through 3 frisbees:
 		Confirm pneumatic pressure at correct level
-		Feed frisbee - pneumatic
+		Feed frisbee - pneumatics (3)
 
 		Verify shooter motor back to speed - Sensor
 

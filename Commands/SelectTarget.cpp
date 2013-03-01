@@ -3,13 +3,13 @@
 SelectTarget::SelectTarget(char* targetName) :
     Command("SelectTarget")
 {
-	m_targetName = targetName; 
+    m_targetName = targetName; 
 }
 
 // Called just before this Command runs the first time
 void SelectTarget::Initialize()
 {
-	 SmartDashboard::PutString("targetSelection", m_targetName);
+    SmartDashboard::PutString("targetSelection", m_targetName);
 }
 
 // Called repeatedly when this Command is scheduled to run
