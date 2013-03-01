@@ -40,4 +40,14 @@ void OI::Initialize()
 
     m_shootLong = new ShootCommand( Shooter::kLong );
     SmartDashboard::PutData("Shoot Long", m_shootLong);
+    
+    //--------------
+    m_tiltShort = new TiltCommand( Shooter::kShort );
+    SmartDashboard::PutData("Tilt Short", m_tiltShort);
+
+    m_tiltMid = new TiltCommand( Shooter::kMid );
+    SmartDashboard::PutData("Tilt Mid", m_tiltMid);
+
+    m_tiltLong = new TiltCommand( Shooter::kLong );
+    SmartDashboard::PutData("Tilt Long", m_tiltLong);
 }

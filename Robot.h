@@ -23,6 +23,7 @@
 #include "TargetCommand.h"
 #include "TimedDrive.h"
 #include "OI.h"
+#include "TiltCommand.h"
 
 class OI;
 

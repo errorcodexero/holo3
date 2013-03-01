@@ -27,6 +27,11 @@ private:
     ShootCommand* m_shootShort;
     ShootCommand* m_shootMid;
     ShootCommand* m_shootLong;
+    
+    //Tilting
+    TiltCommand* m_tiltShort;
+    TiltCommand* m_tiltLong;
+    TiltCommand* m_tiltMid;
 
 public:
     OI();
