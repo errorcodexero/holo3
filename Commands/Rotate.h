@@ -8,10 +8,11 @@
 
 class Rotate: public Command {
 private:
+    int m_direction;
     double m_x, m_y, m_t, m_time;
     double m_startTime;
 public:
-    Rotate();
+    Rotate( int direction );
     void Set( double x, double y, double t, double seconds );
     virtual void Initialize();
     virtual void Execute();

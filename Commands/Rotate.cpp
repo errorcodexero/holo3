@@ -7,9 +7,10 @@
 #include "Rotate.h"
 #include <math.h>
 
-Rotate::Rotate()
+Rotate::Rotate( int direction )
 {
     Requires(Robot::driveBase());
+    m_direction = direction;
     m_x = 0.0;
     m_y = 0.0;
     m_t = 0.0;
@@ -24,9 +25,9 @@ Rotate::Rotate()
 // Called just before this Command runs the first time
 void Rotate::Initialize()
 {
-    m_x = SmartDashboard::GetNumber("Rotate X");
-    m_y = SmartDashboard::GetNumber("Rotate Y");
-    m_t = SmartDashboard::GetNumber("Rotate T");
+    m_x = SmartDashboard::GetNumber("Rotate X") * m_direction;
+    m_y = SmartDashboard::GetNumber("Rotate Y") * m_direction;
+    m_t = SmartDashboard::GetNumber("Rotate T") * m_direction;
     m_time = SmartDashboard::GetNumber("Rotate time");
 
     m_startTime = Timer::GetFPGATimestamp();

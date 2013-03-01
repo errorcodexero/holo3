@@ -13,7 +13,8 @@ private:
 	int m_launched;
 
 public:
-	ShootCommand( Shooter::TargetDistance targetDistance );
+	ShootCommand( Shooter::TargetDistance targetDistance
+			= Shooter::kUnknown );
 	int GetLaunched();
 	virtual void Initialize();
 	virtual void Execute();

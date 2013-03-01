@@ -4,57 +4,67 @@
 #include "Robot.h"
 #include <math.h>
 
+// m_powercurve uses observations to figure out how far we'll rotate with a
+// given time/power.  Offsets between any two values are then computed using a
+// simple linear approximation, so, an offset 80 adds (80 - 50) * time/power for
+// the value for offset 50, etc.
+RobotRotation TargetCommand::m_powercurve[] = {
+ // offset, power, time
+    {  280, -.5, .72 },
+    {  200, -.5, .51 },
+    {  150, -.5, .38 },
+    {  100, -.5, .26 },
+    {   50, -.5, .13 },
+    {   20, -.5, .05 },
+    {    0, -.5, .00 },   // you're aimed already...
+    {  -20,  .5, .04 },
+    {  -50,  .5, .10 },
+    { -100,  .5, .20 },
+    { -150,  .5, .30 },
+    { -200,  .5, .40 },
+    { -280,  .5, .56 },
+};
+
+void TargetCommand::findPower(int offset, double *time, double *power) 
+{
+    int count = sizeof(m_powercurve) / sizeof(RobotRotation);
+    RobotRotation *last = &m_powercurve[0];
+
+    *power = 0;
+    *time = 0;
+
+    if (offset < last->offset) {  
+        for (int i = 1; i < count; i++) {
+            RobotRotation *current = &m_powercurve[i];
+
+            if (offset > current->offset) {  // we're between last and current
+                int range = last->offset - current->offset;
+                int dcur  = offset - current->offset;  
+                double mult = ((double) dcur)/((double) range);
+
+                *power = current->power;
+
+                *time = current->time + mult * (last->time - current->time);
+                break;
+            }
+
+            last = current;
+        }
+    }
+}
+
 // ReadCamera returns true if we've received a new camera frame.
-//   init - set m_d2Offset and d_deltaOffset to 0, so we start from a known state.
-bool TargetCommand::ReadCamera(bool init) 
+bool TargetCommand::ReadCamera() 
 {
     int frame     = (int) SmartDashboard::GetNumber("frameNum");
     bool newframe = frame > m_cameraFrame;
 
     if (newframe) {
-        int newHeight = (int) (SmartDashboard::GetNumber("height") + 0.5);
-        int newWidth  = (int) (SmartDashboard::GetNumber("width") + 0.5);
-        int newOffset = (int) (SmartDashboard::GetNumber("offset") + 0.5);
-
-        double ft = Timer::GetFPGATimestamp();
-
-        if (init) {
-            m_d2Offset = 0;
-            m_deltaOffset = 0;
-            m_fps = 10;
-        }
-        else {
-            int newdeltaOffset = newOffset - m_tgtOffset;
-        
-            m_d2Offset = m_deltaOffset - newdeltaOffset;
-            m_deltaOffset = newdeltaOffset;
-            m_fps = 1.0 / (ft - m_lastFrameTime);
-        }
-
+        m_tgtOffset = (int) (SmartDashboard::GetNumber("offset") + 0.5);
         m_cameraFrame = frame;
-        m_tgtOffset = newOffset;
-        m_tgtWidth  = newWidth;
-        m_tgtHeight = newHeight;
-        m_lastFrameTime = ft;
-        
-        printf("+++ newframe %d offset %d frame %d fps %g\n", newframe, m_tgtOffset, frame, m_fps);
-        // these printf's can upset the delicate timing balance, so caution is advised
-        // printf("+++ newframe %s, doffset %d d2offset %d\n", newframe ? "true" : "false", m_deltaOffset, m_d2Offset);
     }
 
     return newframe;
-}
-
-// return show long we've been aiming
-double TargetCommand::AimTime() 
-{
-    return (Timer::GetFPGATimestamp() - m_startAimTime);
-}
-
-// TimeDone returns true when we've run out of time...
-bool TargetCommand::TimeDone() 
-{
-    return (AimTime() >= MAX_AIM_TIME);
 }
 
 // Identify resources required by this command.
@@ -64,18 +74,11 @@ TargetCommand::TargetCommand()
 {
     Requires(Robot::driveBase());
 
-    SmartDashboard::PutNumber("kMaxPower", 0.500);
-    SmartDashboard::PutNumber("kMinPower", 0.350);
-    SmartDashboard::PutNumber("kMinPowerOffset", 100.0);
-
     SmartDashboard::PutNumber("frameNum", 0.0);
     SmartDashboard::PutNumber("height", 0.0);
     SmartDashboard::PutNumber("width",  0.0);
     SmartDashboard::PutNumber("offset", 0.0);
-    SmartDashboard::PutNumber("aimExCycles", 0.0);
     SmartDashboard::PutNumber("aimFrames", 0.0);
-    SmartDashboard::PutNumber("aimTime", 0.0);
-    
     SmartDashboard::PutBoolean("aiming", false);
 }
 
@@ -84,108 +87,38 @@ void TargetCommand::Initialize()
 {
     printf("TargetCommand::Initialize\n");
 
+    m_cameraFrame = -1;
+    // m_tgtHeight = 0;
+    // m_tgtWidth = 0;
+    m_tgtOffset = 0;
+
+    ReadCamera();
+
+    m_cameraStartFrame = m_cameraFrame;
+
     // let the world know that somebody pushed the button 
     SmartDashboard::PutBoolean("aiming", true);
-    
-    m_startAimTime   = Timer::GetFPGATimestamp();
-    m_kMaxPower      = SmartDashboard::GetNumber("kMaxPower");
-    m_kMinPower      = SmartDashboard::GetNumber("kMinPower");
-    m_kMinPowerOffset = SmartDashboard::GetNumber("kMinPowerOffset");
 
-    ReadCamera(true);
-  
-    m_tgtOffset = 0;
-    m_aimExCycles = 0;
-    m_aimFrames   = 0;
-    m_cameraFrame = -1;
-    m_done = false;  
+    // figure out time/power
+    double power, time;
+    findPower(m_tgtOffset, &time, &power);
 
-    m_timedmode = false;
-    m_timedStart = 0;
-    m_timedDuration = 0;
-}
+    printf("frame %d offset %d time %g power %g\n", m_cameraFrame, m_tgtOffset, time, power);
 
-// Called repeatedly when this Command is scheduled to run
-void TargetCommand::Execute()
-{
-    // printf("TargetCommand::Execute\n");
-    
-    m_aimExCycles++;
-
-    if (m_timedmode) {
-        if ((Timer::GetFPGATimestamp() - m_timedStart) >= m_timedDuration) {
-            m_done = true;
-            Robot::driveBase()->Drive3(0.0, 0.0, 0.0);  // so, stop already...
-        }
-    }
-    else if (ReadCamera(false)) { // we have a new frame
-        m_aimFrames++;
-
-        if (m_tgtHeight <= 1.0 || m_tgtWidth <= 1.0) {
-            // if we've lost the target, give up!
-            m_done = true;
-        } 
-        else {
-            // double angle = CAMERA_FOV * ((double) m_tgtOffset / IMAGE_WIDTH);
-            float twist;
-            int absoffset = abs(m_tgtOffset);
-
-            if ((absoffset > m_kMinPowerOffset) || (m_aimExCycles < 4))
-                twist = (m_tgtOffset < 0) ? -m_kMaxPower : m_kMaxPower;  
-            else
-                twist = (m_tgtOffset < 0) ? -m_kMinPower : m_kMinPower;  
-
-            // printf("+++ angle %g twist %g doffset %d time %g\n", angle, twist, m_deltaOffset, AimTime());
-
-            if (absoffset < AIM_MIN) { 
-                m_done = true;  // we need to stop
-                printf("offset %d - done\n", m_tgtOffset);
-
-                Robot::driveBase()->Drive3(0.0, 0.0, 0.0);  // so, stop already...
-            }
-            else {
-                if (absoffset < TIMED_OFFSET) {
-                    // switch to timed drive
-                	m_timedmode = true;
-                    m_timedStart = Timer::GetFPGATimestamp();
-                    // m_timedDuration = fabs((((double) m_tgtOffset) / ((double)m_deltaOffset)) * .9) / m_fps;
-                    m_timedDuration = .08 * ((double)absoffset) / ((double) TIMED_OFFSET);
-                    
-                    printf("timed mode start duration %g\n", m_timedDuration);
-                }
-                
-                Robot::driveBase()->Drive3(0.0, 0.0, twist);  // keep going
-            }
-        }
-    }
-}
-
-bool TargetCommand::IsFinished()
-{
-    if (m_done || TimeDone()) {
-         return true;
-    }
-    else
-        return false;
+    Set(0.0, 0.0, time, power);
 }
 
 // Called once after IsFinished returns true
-void TargetCommand::End()
+void TargetCommand::End() 
 {
-    Robot::driveBase()->Stop();  // make sure 
+    ReadCamera();  // one last time, just to report 
 
-    double tm = AimTime();
+    int aimFrames = m_cameraFrame - m_cameraStartFrame;
 
-	printf("TargetCommand::End time %g\n", tm);
-
-    ReadCamera(true);  // one last time, just to report 
-
-    printf("+++ offset %d frame %d\n", m_tgtOffset, m_cameraFrame);
+    printf("+++ offset %d frames %d\n", m_tgtOffset, aimFrames);
 
     SmartDashboard::PutBoolean("aiming", false);
-    SmartDashboard::PutNumber("aimExCycles", m_aimExCycles);
-    SmartDashboard::PutNumber("aimFrames", m_aimFrames);
-    SmartDashboard::PutNumber("aimTime", tm);
+    SmartDashboard::PutNumber("aimFrames", aimFrames);
 }
 
 // Called when another command which requires one or more of the same
@@ -193,5 +126,4 @@ void TargetCommand::End()
 void TargetCommand::Interrupted()
 {
     printf("TargetCommand::Interrupted\n");
-    Robot::driveBase()->Stop();
 }
