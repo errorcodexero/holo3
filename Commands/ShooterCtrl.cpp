@@ -1,6 +1,5 @@
 #include <WPILib.h>
-#include "ClimberEnum.h"
-#include "ClimberTest.h"
+#include "Climber.h"
 #include<relay.h>
 
 class BuiltinDefaultCode : public IterativeRobot
@@ -14,20 +13,18 @@ public:
 	//CANJaguar *m_mot1;
 	
 	//Victor
-	Victor *m_mot1,*m_mot2;
+	Victor *m_mot1;
 	
 	//ClimberState
-	ClimberState m_state1;
+	ClimberStateSingle m_state1;
 	
 	// Joystick:
 	Joystick *m_joy1;
 	Relay *m_compressor;
 	
 	// Digital Inputs:
-	DigitalInput *m_lTop; // Top Left limit switch
-	DigitalInput *m_lBot; // Bot Left limit switch
-	DigitalInput *m_rTop; // Top Right Lim switch
-	DigitalInput *m_rBot; // Bot Right Lim Switch
+	DigitalInput *m_Top; // Top limit switch
+	DigitalInput *m_Bot; // Bot limit switch
 	DigitalInput *m_pressure;
 	
 	// Solenoid valve drivers:
@@ -52,15 +49,12 @@ public:
 		//m_ShooterWheel = new CANJaguar(deviceNumber, controlMode);
 		
 		m_mot1 = new Victor(7); //CANJaguar(6, controlMode);
-		m_mot2 = new Victor(8);
 		m_compressor=new Relay(1,Relay::kForwardOnly);
 		m_joy1 = new Joystick(1);
 	
 		//convention from spreadsheet: front=bottom
-		m_lTop = new DigitalInput(3);
-		m_lBot = new DigitalInput(2);
-		m_rTop = new DigitalInput(5);
-		m_rBot = new DigitalInput(4);
+		m_Top = new DigitalInput(3);
+		m_Bot = new DigitalInput(2);
 		m_pressure=new DigitalInput(1);
 		
 		m_sol1 = new Solenoid(1);
@@ -68,7 +62,7 @@ public:
 		
 		m_state = IDLE; // default state
 		
-		m_state1 = BothTillLim;
+		m_state1 = TillLim;
 		
 		printf("BuiltinDefaultCode Constructor Completed\n");
 	}
@@ -167,20 +161,17 @@ public:
 		bool button4 = m_joy1->GetRawButton(6);
 		
 		// Read limit switches:
-		bool lTop = !m_lTop->Get();  // pulled-up, so need to reverse
-		bool lBot = !m_lBot->Get();  // ditto
-		bool rTop = !m_rTop->Get();
-		bool rBot = !m_rBot->Get();
+		bool Top = !m_Top->Get();  // pulled-up, so need to reverse
+		bool Bot = !m_Bot->Get();  // ditto
 				
 		// State Change
-		m_state1 = nextState (m_state1, rTop, lTop, rBot, lBot, button1, button2, button3);
+		m_state1 = nextStateSingle (m_state1, Top, Bot, button1, button2, button3);
 			
 		//Motor Output
-		ClimberOutput motorValue = climberReturnOut(m_state1);
+		ClimberMotorOut motorValue = climberReturnOutSingle(m_state1);
 		
 		//Based on the two motors mountings, they have to have opposite polarity to go the same direction.  
-		m_mot1->Set(motorValue.motorL * 100);
-		m_mot2->Set(motorValue.motorR * -100);
+		m_mot1->Set(motorValue * 100);
 		
 		//m_mot2->Set(m_joy1->GetY() * 100);
 		
@@ -205,8 +196,8 @@ public:
 		//UINT8 status = 4*m_state | 2*limit2 | limit1;
 
 		char status_str[80]; 
-		sprintf (status_str, "%d %d %d %d %d %s %f ]",
-				button1, lTop, lBot, rTop, rBot, getString(m_state1),f);
+		sprintf (status_str, "%d %d %d %s",
+				button1, Top, Bot, getStringSingle(m_state1));
 		
 		ShowState("DisabledPeriodic", status_str);
 		//Jaguar(1, 6).Set(100);
