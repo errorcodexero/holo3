@@ -185,7 +185,7 @@ void Shooter::TimerEvent( void *param )
 
 void Shooter::Run()
 {
-    if (m_injector->Get()) {
+    if (!m_injector->Get()) {
 	m_injectTime = (int)SmartDashboard::GetNumber("Shooter Injection Time");
 	if (++m_injectCounter * kPollInterval >= m_injectTime) {
 	    m_injector->Set(true);
