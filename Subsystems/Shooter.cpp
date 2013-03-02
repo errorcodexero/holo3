@@ -100,16 +100,8 @@ void Shooter::SetAngle(TargetDistance target)
 	SmartDashboard::PutString("Shooter Distance", "Short");
 	break;
     case kMid:
-    TripleSolenoid::Position position = m_positioner->GetPosition();
-    if(position == TripleSolenoid::kUnknown){
-    	m_positioner->SetPosition(TripleSolenoid::kExtended);
-    	while (!IsInPosition()){
-    		
-    	}
-    }else {
     	m_positioner->SetPosition(TripleSolenoid::kCenter);
     	SmartDashboard::PutString("Shooter Distance", "Mid");
-    }
 	break;
     case kLong:
 	m_positioner->SetPosition(TripleSolenoid::kExtended);
