@@ -81,6 +81,11 @@ Shooter::~Shooter()
     delete m_motor;
 }
 
+Shooter::TargetDistance Shooter::GetAngle()
+{
+	return m_distance;
+}
+
 /*
  * Move the shooter to the desired position
  */
