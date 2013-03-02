@@ -1,6 +1,8 @@
 // First Team 1425 "Error Code Xero"
 // for FRC 2013 game "Ultimate Ascent"
 
+class OI;
+
 #ifndef OI_H
 #define OI_H
 
