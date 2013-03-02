@@ -1,22 +1,45 @@
 #ifndef CLIMBER_H
 #define CLIMBER_H
-
-enum ClimberStateSingle {
-	TillLim,
-	SingleUpIdle,
-	SingleDwnIdle,
-	GoingUp,
-	GoingDwn,
-	SingleErrorState
+		
+enum ClimberState {
+	BothTillLim,
+	LTillLim,
+	RTillLim,
+	UpIdle,
+	DwnIdle,
+	BothGoingUp,
+	LeftGoingUp,
+	RightGoingUp,
+	LUpIdle,
+	RUpIdle,
+	BothGoingDwn,
+	LeftGoingDwn,
+	RightGoingDwn,
+	LDwnIdle,
+	RDwnIdle,
+	ErrorState
+};
+ 	
+struct ClimberOutput {
+	int motorL; int motorR; // When 0, Off; 1, Forward; -1, Reverse;
+	ClimberOutput ();
+	ClimberOutput (int a, int b);
 };
 
-typedef int ClimberMotorOut; // When 0, Off; 1, Forward; -1, Reverse;
-	
-ClimberMotorOut climberReturnOutSingle (ClimberStateSingle climberInput);
-ClimberStateSingle nextStateSingle (ClimberStateSingle currentState, bool TopLim, bool BotLim, bool btn, bool errorbtnDwn, bool errorbtnUp);
+ClimberOutput climberReturnOut (ClimberState climberInput);
+ClimberState nextState (
+	ClimberState currentState, 
+	bool rTopLim, 
+	bool lTopLim, 
+	bool rBotLim, 
+	bool lBotLim, 
+	bool btn, 
+	bool errorBtnUp, 
+	bool errorBtnDwn
+);
 
-//Code for ClimberTest
-const char* getStringSingle (ClimberStateSingle );
-void printSingle(ClimberMotorOut printClimberMotorOut);
+//ClimberTest Code
+const char* getString (ClimberState );
+void print(ClimberOutput printClimberOutput);
 
-#endif 
+#endif
