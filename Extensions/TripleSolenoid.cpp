@@ -19,17 +19,18 @@ TripleSolenoid::TripleSolenoid( int forwardChannel,
 {
 //  printf("TripleSolenoid::TripleSolenoid\n");
     m_switch = new DigitalInput( switchChannel );
-    m_notifier = new Notifier( TripleSolenoid::TimerEvent, this );
+    m_pNotifier = new Notifier( TripleSolenoid::TimerEvent, this );
     m_goal = kUnknown;
     m_position = kUnknown;
     m_direction = DoubleSolenoid::kOff;
+    m_howLong = 0;
 }
 
 TripleSolenoid::~TripleSolenoid()
 {
 //  printf("TripleSolenoid::~TripleSolenoid\n");
     Stop();
-    delete m_notifier;
+    delete m_pNotifier;
     delete m_switch;
 }
 
@@ -41,10 +42,12 @@ TripleSolenoid::Position TripleSolenoid::GetPosition()
 
 void TripleSolenoid::SetPosition( Position position )
 {
-//  printf("TripleSolenoid::SetPosition %d\n", (int)position);
-    m_notifier->Stop();
-    m_goal = position;
-    Start();
+    if (m_goal != position) {
+	// printf("TripleSolenoid::SetPosition %d\n", (int)m_goal);
+	m_pNotifier->Stop();
+	m_goal = position;
+	Start();
+    }
 }
 
 void TripleSolenoid::Start()
@@ -52,15 +55,15 @@ void TripleSolenoid::Start()
 //  printf("TripleSolenoid::Start\n");
     m_howLong = 0;
     if (Move()) {
-//      printf("TripleSolenoid::Start: we are moving\n");
-	m_notifier->StartPeriodic( kPollInterval );
+        // printf("TripleSolenoid::Start: we are moving\n");
+	m_pNotifier->StartPeriodic( kPollInterval );
     }
 }
 
 void TripleSolenoid::Stop()
 {
-//  printf("TripleSolenoid::Stop\n");
-    m_notifier->Stop();
+    // printf("TripleSolenoid::Stop\n");
+    m_pNotifier->Stop();
     Set(DoubleSolenoid::kOff);
 }
 
@@ -77,7 +80,7 @@ void TripleSolenoid::Run()
     SmartDashboard::PutNumber("position time", (double)m_howLong);
     Update();
     if (!Move()) {
-//      printf("TripleSolenoid::Run done!\n");
+        // printf("TripleSolenoid::Run done!\n");
 	Stop();
     }
 }
@@ -115,7 +118,7 @@ void TripleSolenoid::Update()
 bool TripleSolenoid::Move()
 {
     if (m_position == m_goal || m_goal == kUnknown) {
-//      printf("TripleSolenoid::Move stopping\n");
+        // printf("TripleSolenoid::Move stopping\n");
 	m_direction = DoubleSolenoid::kOff;
     } else {
 	switch (m_goal) {
@@ -152,5 +155,4 @@ bool TripleSolenoid::Move()
     SmartDashboard::PutNumber("position direction", (double)m_direction);
     return (m_direction != DoubleSolenoid::kOff);
 }
-
 

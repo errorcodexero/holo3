@@ -23,15 +23,29 @@ OI::OI()
     m_pClimber            = new DSAnalogInput(m_pEIO, 1);
     m_pTip                = new DSAnalogInput(m_pEIO, 2);
     m_pSpeedAdjust        = new DSAnalogInput(m_pEIO, 3);
-    m_pShooterPosition    = new DSAnalogInput(m_pEIO, 4);
+    m_pShooterTarget      = new DSAnalogInput(m_pEIO, 4);
 
-    m_pDump               = new DSDigitalInput(m_pEIO, 1);
-    m_pCameraLight        = new DSDigitalInput(m_pEIO, 2);
-    m_pCameraPosition     = new DSDigitalInput(m_pEIO, 3);
-    m_pQueryButton        = new DSDigitalInput(m_pEIO, 4);
-    m_pSpeedOverride      = new DSDigitalInput(m_pEIO, 5);
-    m_pLaunch             = new DSDigitalInput(m_pEIO, 6);
-    m_pKey                = new DSDigitalInput(m_pEIO, 7);
+    m_pDump               = new DSDigitalInput(m_pEIO, 1,
+				    DriverStationEnhancedIO::kInputPullUp,
+				    true);
+    m_pCameraLight        = new DSDigitalInput(m_pEIO, 2,
+				    DriverStationEnhancedIO::kInputPullUp,
+				    true);
+    m_pCameraPosition     = new DSDigitalInput(m_pEIO, 3,
+				    DriverStationEnhancedIO::kInputPullUp,
+				    false);	// switch mounted backwards
+    m_pQueryButton        = new DSDigitalInput(m_pEIO, 4,
+				    DriverStationEnhancedIO::kInputPullUp,
+				    false);	// active-low pushbutton
+    m_pManualOverride     = new DSDigitalInput(m_pEIO, 5,
+				    DriverStationEnhancedIO::kInputPullUp,
+				    true);
+    m_pLaunch             = new DSDigitalInput(m_pEIO, 6,
+				    DriverStationEnhancedIO::kInputPullDown,
+				    true);	// active-high pushbutton
+    m_pKey                = new DSDigitalInput(m_pEIO, 7,
+				    DriverStationEnhancedIO::kInputPullUp,
+				    true);
 
     m_pReadyLED           = new DSDigitalOutput(m_pEIO, 8);
 }
@@ -94,6 +108,9 @@ void OI::Initialize()
 
     m_pShootLong = new ShootCommand( Shooter::kLong );
     SmartDashboard::PutData("Shoot Long", m_pShootLong);
+
+    m_pShootManual = new ShootManual();
+    m_pManualOverride->WhileHeld(m_pShootManual);
 
     // m_pBlinkyOn = new BlinkyOn();
     // SmartDashboard::PutData("Blinky On", m_pBlinkyOn);

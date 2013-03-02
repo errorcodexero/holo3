@@ -28,28 +28,32 @@ public:
     }
 
     int GetDigital( int numPositions ) {
-	return (int)(GetAnalog() * numPositions) / numPositions;
+	return (int)(GetAnalog() * numPositions);
     }
 };
 
-class DSDigitalInput : Button {
+class DSDigitalInput : public Button {
 private:
     DriverStationEnhancedIO *m_pEIO;
     UINT32 m_channel;
+    bool m_active;
 
 public:
-    DSDigitalInput( DriverStationEnhancedIO *pEIO, UINT32 channel ) :
+    DSDigitalInput( DriverStationEnhancedIO *pEIO, UINT32 channel,
+    		    DriverStationEnhancedIO::tDigitalConfig config,
+		    bool active ) :
 	m_pEIO(pEIO),
-	m_channel(channel)
+	m_channel(channel),
+	m_active(active)
     {
-	m_pEIO->SetDigitalConfig(channel,
-	    DriverStationEnhancedIO::kInputPullUp);
+	m_pEIO->SetDigitalConfig(channel, config);
     }
 
     ~DSDigitalInput() {}
 
+    // return true when the button is in the active state, whether high or low
     bool Get() {
-	return m_pEIO->GetDigital(m_channel);
+	return (m_pEIO->GetDigital(m_channel) == m_active);
     }
 };
 
@@ -93,13 +97,13 @@ private:
     DSAnalogInput* m_pClimber;
     DSAnalogInput* m_pTip;
     DSAnalogInput* m_pSpeedAdjust;
-    DSAnalogInput* m_pShooterPosition;
+    DSAnalogInput* m_pShooterTarget;
 
     DSDigitalInput* m_pDump;
     DSDigitalInput* m_pCameraLight;
     DSDigitalInput* m_pCameraPosition;
     DSDigitalInput* m_pQueryButton;
-    DSDigitalInput* m_pSpeedOverride;
+    DSDigitalInput* m_pManualOverride;
     DSDigitalInput* m_pLaunch;
     DSDigitalInput* m_pKey;
 
@@ -110,20 +114,16 @@ private:
     Rotate* m_pRotateRev;
 
     // shooting
-<<<<<<< HEAD
     ShootCommand* m_shootShort;
     ShootCommand* m_shootMid;
     ShootCommand* m_shootLong;
-    
+    ShootManual*  m_pShootManual;
+
     //Tilting
     TiltCommand* m_tiltShort;
     TiltCommand* m_tiltLong;
     TiltCommand* m_tiltMid;
-=======
-    ShootCommand* m_pShootShort;
-    ShootCommand* m_pShootMid;
-    ShootCommand* m_pShootLong;
->>>>>>> b1710a205d100e3a3ed93f43754179e625f06c3e
+
 
 public:
     OI();
@@ -132,6 +132,10 @@ public:
     Joystick* getStick() { return m_pStick; }
     DriverStationEnhancedIO* getEIO() { return m_pEIO; }
     DriverStationLCD* getLCD() { return m_pLCD; }
+    int getTarget() { return m_pShooterTarget->GetDigital(3); }
+    double getSpeedAdjust() { return m_pSpeedAdjust->GetAnalog(); }
+    void setReadyLED( bool value ) { m_pReadyLED->Set(value); }
+    bool getLaunch() { return m_pLaunch->Get(); }
 };
 
 #endif
