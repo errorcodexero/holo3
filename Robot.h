@@ -23,8 +23,8 @@
 #include "ShootManual.h"
 #include "TargetCommand.h"
 #include "TimedDrive.h"
-#include "OI.h"
 #include "TiltCommand.h"
+#include "OI.h"
 
 ////////////////////////////////////////////////////////////////////
 // Digital Inputs:
