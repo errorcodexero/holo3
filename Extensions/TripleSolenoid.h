@@ -29,7 +29,7 @@ private:
     Position m_position;
     DoubleSolenoid::Value m_direction;
     int m_howLong;
-    Notifier *m_notifier;
+    Notifier *m_pNotifier;
     static void TimerEvent( void *param );
     void Run(void);
     void Update(void);
