@@ -314,7 +314,7 @@ void Shooter::Inject()
 /*
  * Current setup false is the inject position (retracted), true is the ready (extended) position
  */
-void Shooter::SetInjector(state)
+void Shooter::SetInjector( bool state )
 {
 	m_injector->Set(state);
 }

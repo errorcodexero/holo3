@@ -29,7 +29,7 @@ OI::OI()
     m_pCameraLight        = new DSDigitalInput(m_pEIO, 2);
     m_pCameraPosition     = new DSDigitalInput(m_pEIO, 3);
     m_pQueryButton        = new DSDigitalInput(m_pEIO, 4);
-    m_pSpeedOverride      = new DSDigitalInput(m_pEIO, 5);
+    m_pManualOverride     = new DSDigitalInput(m_pEIO, 5);
     m_pLaunch             = new DSDigitalInput(m_pEIO, 6);
     m_pKey                = new DSDigitalInput(m_pEIO, 7);
 
@@ -62,6 +62,9 @@ void OI::Initialize()
 
     m_pShootLong = new ShootCommand( Shooter::kLong );
     SmartDashboard::PutData("Shoot Long", m_pShootLong);
+
+    m_pShootManual = new ShootManual();
+    m_pManualOverride->WhileHeld(m_pShootManual);
 
     // m_pBlinkyOn = new BlinkyOn();
     // SmartDashboard::PutData("Blinky On", m_pBlinkyOn);

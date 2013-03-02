@@ -32,7 +32,7 @@ public:
     }
 };
 
-class DSDigitalInput : Button {
+class DSDigitalInput : public Button {
 private:
     DriverStationEnhancedIO *m_pEIO;
     UINT32 m_channel;
@@ -99,7 +99,7 @@ private:
     DSDigitalInput* m_pCameraLight;
     DSDigitalInput* m_pCameraPosition;
     DSDigitalInput* m_pQueryButton;
-    DSDigitalInput* m_pSpeedOverride;
+    DSDigitalInput* m_pManualOverride;
     DSDigitalInput* m_pLaunch;
     DSDigitalInput* m_pKey;
 
@@ -113,6 +113,7 @@ private:
     ShootCommand* m_pShootShort;
     ShootCommand* m_pShootMid;
     ShootCommand* m_pShootLong;
+    ShootManual*  m_pShootManual;
 
 public:
     OI();
@@ -121,6 +122,10 @@ public:
     Joystick* getStick() { return m_pStick; }
     DriverStationEnhancedIO* getEIO() { return m_pEIO; }
     DriverStationLCD* getLCD() { return m_pLCD; }
+    int getTarget() { return m_pShooterPosition->GetDigital(3); }
+    double getSpeedAdjust() { return m_pSpeedAdjust->GetAnalog(); }
+    void setReadyLED( bool value ) { m_pReadyLED->Set(value); }
+    bool getLaunch() { return m_pLaunch->Get(); }
 };
 
 #endif
