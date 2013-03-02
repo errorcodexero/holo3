@@ -86,6 +86,15 @@ void OI::Initialize()
     m_pShootManual = new ShootManual();
     m_pManualOverride->WhileHeld(m_pShootManual);
 
+    m_pTiltShort = new TiltCommand( Shooter::kShort );
+    SmartDashboard::PutData("Tilt Short", m_pTiltShort);
+
+    m_pTiltMid = new TiltCommand( Shooter::kMid );
+    SmartDashboard::PutData("Tilt Mid", m_pTiltMid);
+
+    m_pTiltLong = new TiltCommand( Shooter::kLong );
+    SmartDashboard::PutData("Tilt Long", m_pTiltLong);
+
     // m_pBlinkyOn = new BlinkyOn();
     // SmartDashboard::PutData("Blinky On", m_pBlinkyOn);
     // m_pCameraLight->WhileHeld(m_pBlinkyOn);

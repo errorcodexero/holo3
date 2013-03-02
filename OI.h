@@ -121,6 +121,10 @@ private:
     ShootCommand* m_pShootLong;
     ShootManual*  m_pShootManual;
 
+    TiltCommand* m_pTiltShort;
+    TiltCommand* m_pTiltMid;
+    TiltCommand* m_pTiltLong;
+
 public:
     OI();
     void Initialize();
