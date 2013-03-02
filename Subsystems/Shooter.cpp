@@ -81,6 +81,11 @@ Shooter::~Shooter()
     delete m_motor;
 }
 
+Shooter::TargetDistance Shooter::GetAngle()
+{
+	return m_distance;
+}
+
 /*
  * Move the shooter to the desired position
  */
@@ -96,7 +101,7 @@ void Shooter::SetAngle(TargetDistance target)
 	break;
     case kMid:
     TripleSolenoid::Position position = m_positioner->GetPosition();
-    if(position == kUnknown){
+    if(position == TripleSolenoid::kUnknown){
     	m_positioner->SetPosition(TripleSolenoid::kExtended);
     	while (!IsInPosition()){
     		
