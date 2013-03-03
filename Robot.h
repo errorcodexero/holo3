@@ -1,6 +1,8 @@
 // First Team 1425 "Error Code Xero"
 // for FRC 2013 game "Ultimate Ascent"
 
+class Robot;
+
 #ifndef _ROBOT_H
 #define _ROBOT_H
 
@@ -24,6 +26,7 @@
 #include "ShootCommand.h"
 #include "ShootManual.h"
 #include "TargetCommand.h"
+#include "TiltCommand.h"
 #include "TimedDrive.h"
 #include "OI.h"
 
@@ -115,8 +118,6 @@
 #define	SPEED_LONG	3200	// shooting at high goal from feeder station
 
 ////////////////////////////////////////////////////////////////////
-
-class OI;
 
 class Robot : public IterativeRobot {
 private:

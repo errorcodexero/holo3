@@ -11,6 +11,12 @@ OI::OI()
     m_pLCD = DriverStationLCD::GetInstance();
 
     m_pStick = new Joystick(1);
+#if 1	// using gamepad rather than joystick
+    m_pStick->SetAxisChannel( Joystick::kTwistAxis, 1 );
+    m_pStick->SetAxisChannel( Joystick::kThrottleAxis, 2 );
+    m_pStick->SetAxisChannel( Joystick::kXAxis, 3 );
+    m_pStick->SetAxisChannel( Joystick::kYAxis, 4 );
+#endif
     m_pGamepadButtonA     = new JoystickButton(m_pStick, 1);
     m_pGamepadButtonB     = new JoystickButton(m_pStick, 2);
     m_pGamepadButtonX     = new JoystickButton(m_pStick, 3);
@@ -79,6 +85,15 @@ void OI::Initialize()
 
     m_pShootManual = new ShootManual();
     m_pManualOverride->WhileHeld(m_pShootManual);
+
+    m_pTiltShort = new TiltCommand( Shooter::kShort );
+    SmartDashboard::PutData("Tilt Short", m_pTiltShort);
+
+    m_pTiltMid = new TiltCommand( Shooter::kMid );
+    SmartDashboard::PutData("Tilt Mid", m_pTiltMid);
+
+    m_pTiltLong = new TiltCommand( Shooter::kLong );
+    SmartDashboard::PutData("Tilt Long", m_pTiltLong);
 
     // m_pBlinkyOn = new BlinkyOn();
     // SmartDashboard::PutData("Blinky On", m_pBlinkyOn);

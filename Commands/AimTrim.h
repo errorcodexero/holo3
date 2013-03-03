@@ -1,7 +1,7 @@
 #ifndef AIM_TRIM_H
 #define AIM_TRIM_H
 
-#include "../Robot.h"
+#include "Robot.h"
 
 class AimTrim: public Command {
 public:

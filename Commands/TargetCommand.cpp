@@ -105,7 +105,7 @@ void TargetCommand::Initialize()
 
     printf("frame %d offset %d time %g power %g\n", m_cameraFrame, m_tgtOffset, time, power);
 
-    Set(0.0, 0.0, time, power);
+    Set(0.0, 0.0, power, time);
 }
 
 // Called once after IsFinished returns true
