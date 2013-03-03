@@ -1,7 +1,7 @@
 #ifndef CLIMBER_H
 #define CLIMBER_H
+
 #include <WPILib.h>
-#include "Robot.h"
 
 class Climber : public Subsystem
 {
@@ -14,12 +14,14 @@ private:
 	DigitalInput *m_pRMidLim;
 	DigitalInput *m_pLBotLim;
 	DigitalInput *m_pRBotLim;
-	Solenoid *m_pExtender;
-	Solenoid *m_pClaw;
+	DoubleSolenoid *m_pExtender;
+	DoubleSolenoid *m_pClaw;
 	
 public:
-	Climber();
+	Climber( int leftMotor, int rightMotor, int ltLim, int rtLim,
+	         int lmLim, int rmLim, int lbLim, int rbLim,
+		 int extender, int claw );
 	~Climber();
-	
 };
+
 #endif
