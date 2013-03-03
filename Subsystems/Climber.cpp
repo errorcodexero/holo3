@@ -38,3 +38,16 @@ Climber::Climber( int leftMotor, int rightMotor, int ltLim, int rtLim,
     lw->AddActuator("Climber", "Claw", m_pClaw);
 }
 
+Climber::~Climber()
+{
+    delete m_pLeft;
+    delete m_pRight;
+    delete m_pLTopLim;
+    delete m_pRTopLim;
+    delete m_pLMidLim;
+    delete m_pRMidLim;
+    delete m_pLBotLim;
+    delete m_pRBotLim;
+    delete m_pExtender;
+    delete m_pClaw;
+}
