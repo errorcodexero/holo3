@@ -6,6 +6,7 @@
 
 #include <WPILib.h>
 #include "BlinkyLight.h"
+#include "Climber.h"
 #include "DriveBase.h"
 #include "RateGyro.h"
 #include "Shooter.h"
@@ -15,6 +16,7 @@
 #include "BlinkyBreathe.h"
 #include "BlinkyOff.h"
 #include "BlinkyOn.h"
+#include "ClimbCommand.h"
 #include "DriveCommand.h"
 #include "ResetRobot.h"
 #include "Rotate.h"
@@ -24,6 +26,7 @@
 #include "TargetCommand.h"
 #include "TimedDrive.h"
 #include "OI.h"
+
 
 ////////////////////////////////////////////////////////////////////
 // Digital Inputs:
