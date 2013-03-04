@@ -34,7 +34,7 @@ void DriveCommand::Execute()
 //  }
 //  then = now;
 
-    Joystick *joy = Robot::oi()->getStick();
+    Joystick *joy = Robot::oi()->GetStick();
     float throttle = (1.0 - joy->GetThrottle())/2.0;
     float x = joy->GetX() * throttle;
     float y = joy->GetY() * throttle;

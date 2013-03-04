@@ -33,6 +33,10 @@ ClimberHooks::ClimberHooks( int leftMotor, int rightMotor,
 
     m_pRBotLim = new DigitalInput( rbLim );
     lw->AddSensor("Climber", "RightBotLimit", m_pRBotLim);
+
+    m_leftPosition = kUnknown;
+    m_rightPosition = kUnknown;
+    m_direction = kStop;
 }
 
 ClimberHooks::~ClimberHooks()
@@ -47,48 +51,112 @@ ClimberHooks::~ClimberHooks()
     delete m_pRBotLim;
 }
 
-bool ClimberHooks::Set( HookDirection direction )
+void ClimberHooks::UpdatePosition()
+{
+    if (!m_pLBotLim->Get()) {
+	m_leftPosition = kBottom;
+    } else if (!m_pLTopLim->Get()) {
+	m_leftPosition = kTop;
+    } else if (!m_pLMidLim->Get()) {
+	if (m_direction == kUp) {
+	    m_leftPosition = kMidLow;
+	} else if (m_direction == kDown) {
+	    m_leftPosition = kMidHigh;
+	}
+    } else if (m_direction == kUp && m_leftPosition == kMidLow) {
+	m_leftPosition = kMidHigh;
+    } else if (m_direction == kDown && m_leftPosition == kMidHigh) {
+	m_leftPosition = kMidLow;
+    }
+
+    if (!m_pRBotLim->Get()) {
+	m_rightPosition = kBottom;
+    } else if (!m_pRTopLim->Get()) {
+	m_rightPosition = kTop;
+    } else if (!m_pRMidLim->Get()) {
+	if (m_direction == kUp) {
+	    m_rightPosition = kMidLow;
+	} else if (m_direction == kDown) {
+	    m_rightPosition = kMidHigh;
+	}
+    } else if (m_direction == kUp && m_rightPosition == kMidLow) {
+	m_rightPosition = kMidHigh;
+    } else if (m_direction == kDown && m_rightPosition == kMidHigh) {
+	m_rightPosition = kMidLow;
+    }
+}
+
+bool ClimberHooks::Set( HookDirection direction, HookPosition stopAt )
 {
     int left, right;
-    switch (direction) {
+
+    // figure out where we are now based on last driving directions
+
+    UpdatePosition();
+
+    // set motor driving direction, deal with top/bottom limit switches
+
+    m_direction = direction;
+    switch (m_direction) {
     case kUp:
-	left = m_pLTopLim->Get() ? 1 : 0;
-	right = m_pRTopLim->Get() ? 1 : 0;
-	break;
-    case kUpHalf:
-	left = (m_pLTopLim->Get() && m_pLMidLim->Get()) ? 1 : 0;
-	right = (m_pRTopLim->Get() && m_pRMidLim->Get()) ? 1 : 0;
-	break;
-    case kDownHalf:
-	left = (m_pLBotLim->Get() && m_pLMidLim->Get()) ? -1 : 0;
-	right = (m_pRBotLim->Get() && m_pRMidLim->Get()) ? -1 : 0;
+	// Set motor directions for upward motion.
+	left = 1;
+	right = 1;
+	// If we're already at the top limit, stop.
+	if (!m_pLTopLim->Get())
+	    left = 0;
+	if (!m_pRTopLim->Get())
+	    right = 0;
+	// If we're already at or above the desired position, stop.
+	if ((m_leftPosition != kUnknown) && (m_leftPosition >= stopAt))
+	    left = 0;
+	if ((m_rightPosition != kUnknown) && (m_rightPosition >= stopAt))
+	    right = 0;
 	break;
     case kDown:
-	left = m_pLBotLim->Get() ? -1 : 0;
-	right = m_pRBotLim->Get() ? -1 : 0;
+	// Set motor directions for downward motion.
+	left = -1;
+	right = -1;
+	// If we're already at the bottom limit, stop.
+	if (!m_pLBotLim->Get())
+	    left = 0;
+	if (!m_pRBotLim->Get())
+	    right = 0;
+	// If we're already at or below the desired position, stop.
+	if ((m_leftPosition != kUnknown) && (m_leftPosition <= stopAt))
+	    left = 0;
+	if ((m_rightPosition != kUnknown) && (m_rightPosition <= stopAt))
+	    right = 0;
 	break;
     case kStop:
-	left = right = 0;
-	break;
+	left = 0;
+	right = 0;
     }
+
     m_pLeftMotor->Set(left * kHookSpeed);
     m_pRightMotor->Set(right * kHookSpeed);
+
     // return true when both hooks are in position (not moving)
     return (left == 0) || (right == 0);
 }
 
 bool ClimberHooks::IsAtTop()
 {
-    return !m_pLTopLim->Get() && !m_pRTopLim->Get();
+    return (m_leftPosition == kTop) && (m_rightPosition == kTop);
 }
 
-bool ClimberHooks::IsAtMiddle()
+bool ClimberHooks::IsAtMidHigh()
 {
-    return !m_pLMidLim->Get() && !m_pRMidLim->Get();
+    return (m_leftPosition == kMidHigh) && (m_rightPosition == kMidHigh);
+}
+
+bool ClimberHooks::IsAtMidLow()
+{
+    return (m_leftPosition == kMidLow) && (m_rightPosition == kMidLow);
 }
 
 bool ClimberHooks::IsAtBottom()
 {
-    return !m_pLBotLim->Get() && !m_pRBotLim->Get();
+    return (m_leftPosition == kBottom) && (m_rightPosition == kBottom);
 }
 

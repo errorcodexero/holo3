@@ -5,15 +5,21 @@
 
 class ClimberClaw : public Subsystem
 {
-private:
-	DoubleSolenoid *m_pClaw;
-	
 public:
 	ClimberClaw( int clawOpen, int clawClose );
 	~ClimberClaw();
 
-	typedef enum { kOpen, kClosed } ClawPosition;
+	typedef enum { kOpen, kClosed, kUnknown } ClawPosition;
 	void Set(ClawPosition);
+	ClawPosition Get();
+	bool IsMoving();
+
+private:
+	DoubleSolenoid *m_pClaw;
+	ClawPosition m_position;
+	bool m_moving;
+	double m_startTime;
+	static const double kGrabTime;
 };
 
 #endif

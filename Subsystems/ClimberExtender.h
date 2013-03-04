@@ -5,15 +5,21 @@
 
 class ClimberExtender : public Subsystem
 {
-private:
-	DoubleSolenoid *m_pExtender;
-	
 public:
 	ClimberExtender( int extendChannel, int retractChannel );
 	~ClimberExtender();
 
-	typedef enum { kRetracted, kExtended } ExtenderPosition;
+	typedef enum { kRetracted, kExtended, kUnknown } ExtenderPosition;
 	void Set(ExtenderPosition);
+	ExtenderPosition Get();
+	bool IsMoving();
+
+private:
+	DoubleSolenoid *m_pExtender;
+	ExtenderPosition m_position;
+	bool m_moving;
+	double m_startTime;
+	static const double kExtendTime;
 };
 
 #endif

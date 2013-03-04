@@ -8,6 +8,10 @@
 
 class ClimbCommand : public Command
 {
+private:
+    double m_startTime;
+    int m_state;
+
 public: 
     ClimbCommand();
     ~ClimbCommand();
