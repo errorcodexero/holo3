@@ -1,9 +1,24 @@
 // First Team 1425 "Error Code Xero"
 // for FRC 2013 game "Ultimate Ascent"
 
+#include <WPILib.h>
 #include "Robot.h"
-#include "OI.h"
 
+// Subsystems
+#include "BlinkyLight.h"
+#include "ClimberExtender.h"
+#include "ClimberHooks.h"
+#include "ClimberClaw.h"
+#include "DriveBase.h"
+#include "RateGyro.h"
+#include "Shooter.h"
+#include "TripleSolenoid.h"
+
+// Commands
+#include "AutoCommand.h"
+
+// Operator Interface
+#include "OI.h"
 
 
 Robot::Robot()
@@ -29,11 +44,16 @@ void Robot::RobotInit()
     m_driveBase = new DriveBase( PWM_DRIVE_LEFT, PWM_DRIVE_RIGHT,
     				 PWM_DRIVE_REAR, ANALOG_GYRO );
 
-    m_climber = new Climber( PWM_CLIMBER_LEFT, PWM_CLIMBER_RIGHT,
+    m_extender = new ClimberExtender( SOLENOID_CLIMBER_EXTEND,
+    				      SOLENOID_CLIMBER_RETRACT );
+
+    m_claw = new ClimberClaw( SOLENOID_CLIMBER_CLAW_OPEN,
+    			      SOLENOID_CLIMBER_CLAW_CLOSE );
+
+    m_climber = new ClimberHooks( PWM_CLIMBER_LEFT, PWM_CLIMBER_RIGHT,
 		    DIGITAL_LIMIT_LEFT_TOP, DIGITAL_LIMIT_RIGHT_TOP,
 		    DIGITAL_LIMIT_LEFT_MIDDLE, DIGITAL_LIMIT_RIGHT_MIDDLE,
-		    DIGITAL_LIMIT_LEFT_BOTTOM, DIGITAL_LIMIT_RIGHT_BOTTOM,
-		    SOLENOID_CLIMBER_EXTEND, SOLENOID_CLIMBER_CLAW_CLOSE );
+		    DIGITAL_LIMIT_LEFT_BOTTOM, DIGITAL_LIMIT_RIGHT_BOTTOM );
 
     m_shooter = new Shooter( CAN_SHOOTER, SOLENOID_SHOOTER_EXTEND,
 			     DIGITAL_SHOOTER_CENTER, SOLENOID_SHOOTER_INJECT );

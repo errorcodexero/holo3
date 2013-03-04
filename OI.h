@@ -9,7 +9,6 @@ class OI;
 #include <WPILib.h>
 #include "Robot.h"
 
-
 class DSAnalogInput {
 private:
     DriverStationEnhancedIO *m_pEIO;
@@ -112,21 +111,38 @@ private:
     DSDigitalOutput* m_pReadyLED;
 
     // aiming
-    Rotate* m_pRotateFwd;
-    Rotate* m_pRotateRev;
+    class TimedDrive* m_pNudgeLeft;
+    class TimedDrive* m_pNudgeRight;
+
+    class Rotate* m_pRotateFwd;
+    class Rotate* m_pRotateRev;
+
+    class AimTrim* m_pTrimLeft;
+    class AimTrim* m_pTrimRight;
 
     // shooting
-    ShootCommand* m_pShootShort;
-    ShootCommand* m_pShootMid;
-    ShootCommand* m_pShootLong;
-    ShootManual*  m_pShootManual;
+    class TargetCommand* m_pTargetCommand;
 
-    TiltCommand* m_pTiltShort;
-    TiltCommand* m_pTiltMid;
-    TiltCommand* m_pTiltLong;
+    class SelectTarget* m_pSelectTargetLeft;
+    class SelectTarget* m_pSelectTargetRight;
+    class SelectTarget* m_pSelectTargetMid;
+
+    class ShootCommand* m_pShootShort;
+    class ShootCommand* m_pShootMid;
+    class ShootCommand* m_pShootLong;
+
+    class ShootManual*  m_pShootManual;
+
+    class TiltCommand* m_pTiltShort;
+    class TiltCommand* m_pTiltMid;
+    class TiltCommand* m_pTiltLong;
+
+    // reset (for pit use!)
+    class ResetRobot* m_pResetRobot;
 
 public:
     OI();
+    ~OI();
     void Initialize();
     DriverStation *getDS() { return m_pDS; }
     Joystick* getStick() { return m_pStick; }

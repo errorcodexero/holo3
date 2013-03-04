@@ -7,29 +7,22 @@ class Robot;
 #define _ROBOT_H
 
 #include <WPILib.h>
-#include "BlinkyLight.h"
-#include "Climber.h"
-#include "DriveBase.h"
-#include "RateGyro.h"
-#include "Shooter.h"
-#include "TripleSolenoid.h"
-#include "AimTrim.h"
-#include "AutoCommand.h"
-#include "BlinkyBreathe.h"
-#include "BlinkyOff.h"
-#include "BlinkyOn.h"
-#include "ClimbCommand.h"
-#include "DriveCommand.h"
-#include "ResetRobot.h"
-#include "Rotate.h"
-#include "SelectTarget.h"
-#include "ShootCommand.h"
-#include "ShootManual.h"
-#include "TargetCommand.h"
-#include "TiltCommand.h"
-#include "TimedDrive.h"
-#include "OI.h"
 
+// Subsystems
+class BlinkyLight;
+class ClimberExtender;
+class ClimberClaw;
+class ClimberHooks;
+class DriveBase;
+class RateGyro;
+class Shooter;
+class TripleSolenoid;
+
+// Commands
+class AutoCommand;
+
+// Operator Interface
+class OI;
 
 ////////////////////////////////////////////////////////////////////
 // Digital Inputs:
@@ -166,7 +159,9 @@ private:
 
     // subsystems
     DriveBase* m_driveBase;
-    Climber* m_climber;
+    ClimberExtender *m_extender;
+    ClimberClaw *m_claw;
+    ClimberHooks* m_climber;
     Shooter* m_shooter;
     BlinkyLight* m_blinkyLight;
     
@@ -180,7 +175,9 @@ public:
 
     // convenience accessors
     static DriveBase* driveBase() { return theRobot().m_driveBase; };
-    static Climber* climber() { return theRobot().m_climber; };
+    static ClimberExtender* extender() { return theRobot().m_extender; };
+    static ClimberClaw* claw() { return theRobot().m_claw; };
+    static ClimberHooks* climber() { return theRobot().m_climber; };
     static BlinkyLight* blinkyLight() { return theRobot().m_blinkyLight; };
     static Shooter* shooter() { return theRobot().m_shooter; };
     static OI* oi() { return theRobot().m_oi; };
