@@ -29,17 +29,20 @@ void ClimbCommand::Initialize()
 void ClimbCommand::Execute()
 {
     // The OI "tip" switch must be on for the climber system to run.
-    // In state 0/1 (before we've really started climbing), turning the
-    // tip switch off retracts the climber.
-    // In all other states, turning the tip switch off simply stops
-    // the climber in its current state/position.
+
+    // In state 0/1 (before we've grabbed the rail or started climbing),
+    // turning the tip switch off retracts the climber.  In all other
+    // states, turning the tip switch off simply stops the climber in
+    // its current state/position.  Turning the switch on again resumes
+    // motion from where it was stopped.
+
     if (!Robot::oi()->GetTip()) {
 	if (m_state == 0 || m_state == 1) {
 	    Robot::claw()->Set(ClimberClaw::kOpen);
 	    Robot::extender()->Set( ClimberExtender::kRetracted );
+	    m_state = 0;
 	}
 	Robot::climber()->Set(ClimberHooks::kStop);
-	m_state = 0;
 	return;
     }
 
@@ -74,7 +77,7 @@ void ClimbCommand::Execute()
     case 2:
 	// climber extended, now close claw
 	Robot::claw()->Set(ClimberClaw::kClosed);
-	// feed watchdog
+	// motor stopped, feed watchdog
 	Robot::climber()->Set(ClimberHooks::kStop);
 
 	// wait for claw to close and driver to set climber switch "up"
@@ -102,7 +105,7 @@ void ClimbCommand::Execute()
 	}
 	break;
 
-    case 5:
+    case 4:
 	// run long hook down to mid-high so hook is in contact with rail,
 	if (Robot::climber()->Set(ClimberHooks::kDown, ClimberHooks::kMidHigh))
 	{
@@ -110,7 +113,7 @@ void ClimbCommand::Execute()
 	}
 	break;
 
-    case 6:
+    case 5:
 	// motor stopped, feed watchdog
 	Robot::climber()->Set(ClimberHooks::kStop);
 	// open the claw to step over the rail
@@ -122,7 +125,7 @@ void ClimbCommand::Execute()
 	}
 	break;
 
-    case 7:
+    case 6:
 	// drive long hook down to mid-low so claw is above rail
 	if (Robot::climber()->Set(ClimberHooks::kDown, ClimberHooks::kMidLow))
 	{
@@ -130,7 +133,7 @@ void ClimbCommand::Execute()
 	}
 	break;
 
-    case 8:
+    case 7:
 	// motor stopped, feed watchdog
 	Robot::climber()->Set(ClimberHooks::kStop);
 	// re-engage the claw
@@ -151,7 +154,7 @@ void ClimbCommand::Execute()
 	}
 	break;
 
-    case 9:
+    case 8:
 	// drive long hook down to bottom so short hook is above rail
 	if (Robot::climber()->Set(ClimberHooks::kDown, ClimberHooks::kBottom))
 	{
@@ -159,7 +162,7 @@ void ClimbCommand::Execute()
 	}
 	break;
 
-    case 10:
+    case 9:
 	// at bottom, motor stopped, feed watchdog
 	Robot::climber()->Set(ClimberHooks::kStop);
 
