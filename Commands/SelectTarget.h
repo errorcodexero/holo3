@@ -8,10 +8,10 @@
 
 class SelectTarget: public Command {
 private:
-    char* m_targetName; 
+    const char* m_targetName; 
 
 public:
-    SelectTarget(char* targetName);
+    SelectTarget(const char* targetName);
     virtual void Initialize();
     virtual void Execute();
     virtual bool IsFinished();

@@ -5,7 +5,7 @@
 #include "Robot.h"
 #include "SelectTarget.h"
 
-SelectTarget::SelectTarget(char* targetName) :
+SelectTarget::SelectTarget(const char* targetName) :
     Command("SelectTarget")
 {
     m_targetName = targetName; 

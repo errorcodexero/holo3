@@ -245,7 +245,7 @@ void Shooter::ReportSpeed()
 bool Shooter::IsInPosition()
 {
     TripleSolenoid::Position position = m_positioner->GetPosition();
-    char *where = "";
+    const char *where = "";
     bool inPosition = false;
 
     switch (position) {

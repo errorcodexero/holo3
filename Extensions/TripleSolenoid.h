@@ -38,8 +38,8 @@ private:
     void Update(void);
     bool Move(void);
 
-    static const double TripleSolenoid::kPollInterval;
-    static const double TripleSolenoid::kTravelTime;
+    static const double kPollInterval;
+    static const double kTravelTime;
 };
 
 #endif
