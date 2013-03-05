@@ -5,6 +5,7 @@
 #include "TimedDrive.h"
 #include "Rotate.h"
 #include "AimTrim.h"
+#include "ClimbCommand.h"
 #include "TargetCommand.h"
 #include "SelectTarget.h"
 #include "ShootCommand.h"
@@ -170,6 +171,9 @@ void OI::Initialize()
 
     m_pTiltLong = new TiltCommand( Shooter::kLong );
     SmartDashboard::PutData("Tilt Long", m_pTiltLong);
+
+    m_pClimbCommand = new ClimbCommand();
+    SmartDashboard::PutData("Climb", m_pClimbCommand);
 
     // m_pBlinkyOn = new BlinkyOn();
     // SmartDashboard::PutData("Blinky On", m_pBlinkyOn);

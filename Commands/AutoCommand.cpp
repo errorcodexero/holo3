@@ -32,7 +32,7 @@ bool AutoCommand::IsFinished()
             !Robot::shooter()->IsInjectorActive());
 }
 
-void AutoCommand::Stop()
+void AutoCommand::End()
 {
 }
 

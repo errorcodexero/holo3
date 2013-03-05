@@ -2,6 +2,7 @@
 // for FRC 2013 game "Ultimate Ascent"
 
 #include "Climber.h"
+#include "ClimbManual.h"
 
 const double Climber::kHookSpeed = 0.995;
 const double Climber::kExtendTime = 1.2;
@@ -58,10 +59,17 @@ Climber::Climber( int leftMotor, int rightMotor,
     m_clawPosition = kClawUnknown;
     m_clawStartTime = 0.0;
     m_clawMoving = false;
+
+    m_defaultCommand = NULL;
 }
 
 Climber::~Climber()
 {
+    SetDefaultCommand(NULL);
+    Scheduler::GetInstance()->Remove(m_defaultCommand);
+    delete m_defaultCommand;
+    m_defaultCommand = NULL;
+
     delete m_pLeftMotor;
     delete m_pRightMotor;
     delete m_pLTopLim;
@@ -74,8 +82,17 @@ Climber::~Climber()
     delete m_pClaw;
 }
 
+void Climber::InitDefaultCommand()
+{
+    if (!m_defaultCommand) {
+	m_defaultCommand = new ClimbManual();
+	SetDefaultCommand(m_defaultCommand);
+    }
+}
+
 void Climber::UpdateHookPosition()
 {
+    HookPosition was = m_leftPosition;
     if (!m_pLBotLim->Get()) {
 	m_leftPosition = kBottom;
     } else if (!m_pLTopLim->Get()) {
@@ -90,6 +107,10 @@ void Climber::UpdateHookPosition()
 	m_leftPosition = kMidHigh;
     } else if (m_hookDirection == kDown && m_leftPosition == kMidHigh) {
 	m_leftPosition = kMidLow;
+    }
+    if (m_leftPosition != was) {
+	printf("left hook position was %u now %u\n",
+	    (unsigned) was, (unsigned) m_leftPosition);
     }
 
     if (!m_pRBotLim->Get()) {
@@ -107,6 +128,7 @@ void Climber::UpdateHookPosition()
     } else if (m_hookDirection == kDown && m_rightPosition == kMidHigh) {
 	m_rightPosition = kMidLow;
     }
+    // printf("right position %u\n", (unsigned) m_rightPosition);
 }
 
 bool Climber::SetHooks( HookDirection direction, HookPosition stopAt )
@@ -131,9 +153,13 @@ bool Climber::SetHooks( HookDirection direction, HookPosition stopAt )
 	if (!m_pRTopLim->Get())
 	    right = 0;
 	// If we're already at or above the desired position, stop.
-	if ((m_leftPosition != kHooksUnknown) && (m_leftPosition >= stopAt))
+	if ((m_leftPosition != kHooksUnknown)
+	 && (stopAt != kHooksUnknown)
+	 && (m_leftPosition >= stopAt))
 	    left = 0;
-	if ((m_rightPosition != kHooksUnknown) && (m_rightPosition >= stopAt))
+	if ((m_rightPosition != kHooksUnknown)
+	 && (stopAt != kHooksUnknown)
+	 && (m_rightPosition >= stopAt))
 	    right = 0;
 	break;
     case kDown:
@@ -146,9 +172,13 @@ bool Climber::SetHooks( HookDirection direction, HookPosition stopAt )
 	if (!m_pRBotLim->Get())
 	    right = 0;
 	// If we're already at or below the desired position, stop.
-	if ((m_leftPosition != kHooksUnknown) && (m_leftPosition <= stopAt))
+	if ((m_leftPosition != kHooksUnknown)
+	 && (stopAt != kHooksUnknown)
+	 && (m_leftPosition <= stopAt))
 	    left = 0;
-	if ((m_rightPosition != kHooksUnknown) && (m_rightPosition <= stopAt))
+	if ((m_rightPosition != kHooksUnknown)
+	 && (stopAt != kHooksUnknown)
+	 && (m_rightPosition <= stopAt))
 	    right = 0;
 	break;
     case kStop:
@@ -257,5 +287,39 @@ bool Climber::ClawIsMoving()
 	m_clawMoving = false;
     }
     return m_clawMoving;
+}
+
+// for debugging
+
+UINT8 Climber::GetLimits()
+{
+    UINT8 limits = 0;
+    // printf("limit:");
+    if (!m_pLTopLim->Get()) {
+	// printf(" left top,");
+	limits |= 0x01;
+    }
+    if (m_pRTopLim->Get()) {
+	// printf(" right top,");
+	limits |= 0x02;
+    }
+    if (m_pLMidLim->Get()) {
+	// printf(" left mid,");
+	limits |= 0x04;
+    }
+    if (m_pRMidLim->Get()) {
+	// printf(" right mid,");
+	limits |= 0x08;
+    }
+    if (m_pLBotLim->Get()) {
+	// printf(" left bot,");
+	limits |= 0x10;
+    }
+    if (m_pRBotLim->Get()) {
+	// printf(" right bot,");
+	limits |= 0x20;
+    }
+    // printf("\n");
+    return limits;
 }
 

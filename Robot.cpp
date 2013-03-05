@@ -21,17 +21,17 @@
 
 Robot::Robot()
 {
-    printf("Robot::Robot() has been called!\n");
+    // printf("Robot::Robot() has been called!\n");
 }
 
 Robot::~Robot()
 {
-    printf("BWA HA HA HA HA!  The Robot cannot be destroyed!\n");
+    // printf("BWA HA HA HA HA!  The Robot cannot be destroyed!\n");
 }
 
 void Robot::RobotInit()
 {
-    printf("Robot::RobotInit()\n");
+    // printf("Robot::RobotInit()\n");
 
     m_oi = new OI();
 
@@ -67,7 +67,7 @@ void Robot::RobotInit()
 
 void Robot::Cancel()
 {
-    printf("Robot::Cancel\n");
+    // printf("Robot::Cancel\n");
     if (m_autonomousCommand->IsRunning()) {
 	m_autonomousCommand->Cancel();
     }
@@ -77,7 +77,7 @@ void Robot::Cancel()
 	
 void Robot::DisabledInit()
 {
-    printf("Robot::DisabledInit\n");
+    // printf("Robot::DisabledInit\n");
     Cancel();
 }
 
@@ -88,7 +88,7 @@ void Robot::DisabledPeriodic()
 
 void Robot::AutonomousInit()
 {
-    printf("Robot::AutonomousInit\n");
+    // printf("Robot::AutonomousInit\n");
     Cancel();
     m_autonomousCommand->Start();
 }
@@ -100,7 +100,7 @@ void Robot::AutonomousPeriodic()
     
 void Robot::TeleopInit()
 {
-    printf("Robot::TeleopInit\n");
+    // printf("Robot::TeleopInit\n");
     Cancel();
 }
     
@@ -111,7 +111,7 @@ void Robot::TeleopPeriodic()
 
 void Robot::TestInit()
 {
-    printf("Robot::TestInit\n");
+    // printf("Robot::TestInit\n");
     Cancel();
 }
 

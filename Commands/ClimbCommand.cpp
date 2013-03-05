@@ -181,7 +181,7 @@ bool ClimbCommand::IsFinished()
     return false;
 }
 
-void ClimbCommand::Stop()
+void ClimbCommand::End()
 {
     ;
 }

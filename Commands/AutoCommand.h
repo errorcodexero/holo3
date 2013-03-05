@@ -19,7 +19,7 @@ public:
     virtual void Initialize();
     virtual void Execute();
     virtual bool IsFinished();
-    virtual void Stop();
+    virtual void End();
     virtual void Interrupted();
 
 private:

@@ -137,6 +137,9 @@ private:
     class TiltCommand* m_pTiltMid;
     class TiltCommand* m_pTiltLong;
 
+    // climber
+    class ClimbCommand* m_pClimbCommand;
+
     // reset (for pit use!)
     class ResetRobot* m_pResetRobot;
 
@@ -149,6 +152,7 @@ public:
     DriverStationEnhancedIO* GetEIO() { return m_pEIO; }
     DriverStationLCD* GetLCD() { return m_pLCD; }
     bool GetTip() { return (m_pTip->GetDigital(2) != 0); }
+    bool GetDump() { return m_pDump->Get(); }
     int GetClimber() { return m_pClimber->GetDigital(3); }
     int GetTarget() { return m_pShooterTarget->GetDigital(3); }
     double GetSpeedAdjust() { return m_pSpeedAdjust->GetAnalog(); }

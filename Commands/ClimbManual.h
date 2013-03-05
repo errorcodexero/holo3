@@ -1,19 +1,17 @@
 // First Team 1425 "Error Code Xero"
 // for FRC 2013 game "Ultimate Ascent"
 
-#ifndef CLIMB_COMMAND_H
-#define CLIMB_COMMAND_H
+#ifndef CLIMB_MANUAL_H
+#define CLIMB_MANUAL_H
 
 #include <Commands/Command.h>
 
-class ClimbCommand : public Command
+class ClimbManual : public Command
 {
 private:
-    double m_startTime;
-    int m_state;
 
 public: 
-    ClimbCommand();
+    ClimbManual();
     virtual void Initialize();
     virtual void Execute();
     virtual bool IsFinished();

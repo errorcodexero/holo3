@@ -18,6 +18,8 @@ public:
 	     int clawOpen, int clawClose );
     ~Climber();
 
+    virtual void InitDefaultCommand();
+
     typedef enum { kExtenderUnknown, kRetracted, kExtended } ExtenderPosition;
 
     void SetExtender(ExtenderPosition);
@@ -25,8 +27,7 @@ public:
     bool ExtenderIsMoving();
 
     typedef enum { kUp, kDown, kStop } HookDirection;
-    typedef enum { kHooksUnknown, kTop, kMidHigh, kMidLow, kBottom } HookPosition;
-
+    typedef enum { kHooksUnknown, kBottom, kMidLow, kMidHigh, kTop } HookPosition;
     // SetHooks returns true when both motors are stopped
     bool SetHooks( HookDirection direction, HookPosition stopAt = kHooksUnknown );
 
@@ -40,6 +41,9 @@ public:
     void SetClaw(ClawPosition);
     ClawPosition GetClaw();
     bool ClawIsMoving();
+
+    // for debugging
+    UINT8 GetLimits();
 
 private:
     Victor *m_pLeftMotor;
@@ -72,6 +76,8 @@ private:
     double m_clawStartTime;
 
     static const double kGrabTime;
+
+    Command *m_defaultCommand;
 };
 
 #endif
