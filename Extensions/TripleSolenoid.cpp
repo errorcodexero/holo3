@@ -24,6 +24,9 @@ TripleSolenoid::TripleSolenoid( int forwardChannel,
     m_position = kUnknown;
     m_direction = DoubleSolenoid::kOff;
     m_howLong = 0;
+    SmartDashboard::PutNumber("position direction", (double)m_direction);
+    SmartDashboard::PutNumber("position time", (double)m_howLong);
+    SmartDashboard::PutBoolean("position center", false);
 }
 
 TripleSolenoid::~TripleSolenoid()
