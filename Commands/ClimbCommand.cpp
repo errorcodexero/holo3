@@ -4,9 +4,7 @@
 #include <WPILib.h>
 #include "Robot.h"
 #include "OI.h"
-#include "ClimberExtender.h"
-#include "ClimberClaw.h"
-#include "ClimberHooks.h"
+#include "Climber.h"
 #include "ClimbCommand.h"
 
 #define	EXTEND_TIME	1.2
@@ -14,15 +12,13 @@
 
 ClimbCommand::ClimbCommand()
 {
-    Requires(Robot::extender());
-    Requires(Robot::claw());
     Requires(Robot::climber());
 }
 
 void ClimbCommand::Initialize()
 {
-    Robot::claw()->Set(ClimberClaw::kOpen);
-    Robot::extender()->Set(ClimberExtender::kRetracted);
+    Robot::climber()->SetClaw(Climber::kOpen);
+    Robot::climber()->SetExtender(Climber::kRetracted);
     m_state = 0;
 }
 
@@ -38,36 +34,36 @@ void ClimbCommand::Execute()
 
     if (!Robot::oi()->GetTip()) {
 	if (m_state == 0 || m_state == 1) {
-	    Robot::claw()->Set(ClimberClaw::kOpen);
-	    Robot::extender()->Set( ClimberExtender::kRetracted );
+	    Robot::climber()->SetClaw(Climber::kOpen);
+	    Robot::climber()->SetExtender( Climber::kRetracted );
 	    m_state = 0;
 	}
-	Robot::climber()->Set(ClimberHooks::kStop);
+	Robot::climber()->SetHooks(Climber::kStop);
 	return;
     }
 
     switch (m_state) {
     case 0:
 	// open claw 
-	Robot::claw()->Set(ClimberClaw::kOpen);
+	Robot::climber()->SetClaw(Climber::kOpen);
 	// motor stopped, feed watchdog
-	Robot::climber()->Set(ClimberHooks::kStop);
+	Robot::climber()->SetHooks(Climber::kStop);
 
 	// wait for claw to open
-	if (Robot::claw()->Get() == ClimberClaw::kOpen) {
+	if (Robot::climber()->GetClaw() == Climber::kOpen) {
 	    ++m_state;
 	}
 	break;
 
     case 1:
 	// claw open, now extend climber
-	Robot::extender()->Set(ClimberExtender::kExtended);
+	Robot::climber()->SetExtender(Climber::kExtended);
 	// motor stopped, feed watchdog
-	Robot::climber()->Set(ClimberHooks::kStop);
+	Robot::climber()->SetHooks(Climber::kStop);
 
 	// wait for extender to finish and driver to move switch
 	//   to middle or up position
-	if (Robot::extender()->Get() == ClimberExtender::kExtended &&
+	if (Robot::climber()->GetExtender() == Climber::kExtended &&
 	    Robot::oi()->GetClimber() > 0)
 	{
 	    ++m_state;
@@ -76,12 +72,12 @@ void ClimbCommand::Execute()
 
     case 2:
 	// climber extended, now close claw
-	Robot::claw()->Set(ClimberClaw::kClosed);
+	Robot::climber()->SetClaw(Climber::kClosed);
 	// motor stopped, feed watchdog
-	Robot::climber()->Set(ClimberHooks::kStop);
+	Robot::climber()->SetHooks(Climber::kStop);
 
 	// wait for claw to close and driver to set climber switch "up"
-	if (Robot::claw()->Get() == ClimberClaw::kClosed &&
+	if (Robot::climber()->GetClaw() == Climber::kClosed &&
 	    Robot::oi()->GetClimber() == 2)
 	{
 	    ++m_state;
@@ -98,7 +94,7 @@ void ClimbCommand::Execute()
 	// climber extended, claw closed
 	// run long hook up to top
 	// wait at top for driver to set climber switch to "middle" or "down"
-	if (Robot::climber()->Set(ClimberHooks::kUp, ClimberHooks::kTop) &&
+	if (Robot::climber()->SetHooks(Climber::kUp, Climber::kTop) &&
 	    Robot::oi()->GetClimber() <= 1)
 	{
 	    ++m_state;
@@ -107,7 +103,7 @@ void ClimbCommand::Execute()
 
     case 4:
 	// run long hook down to mid-high so hook is in contact with rail,
-	if (Robot::climber()->Set(ClimberHooks::kDown, ClimberHooks::kMidHigh))
+	if (Robot::climber()->SetHooks(Climber::kDown, Climber::kMidHigh))
 	{
 	    ++m_state;
 	}
@@ -115,19 +111,19 @@ void ClimbCommand::Execute()
 
     case 5:
 	// motor stopped, feed watchdog
-	Robot::climber()->Set(ClimberHooks::kStop);
+	Robot::climber()->SetHooks(Climber::kStop);
 	// open the claw to step over the rail
-	Robot::claw()->Set(ClimberClaw::kOpen);
+	Robot::climber()->SetClaw(Climber::kOpen);
 
 	// wait for claw to open
-	if (Robot::claw()->Get() == ClimberClaw::kOpen) {
+	if (Robot::climber()->GetClaw() == Climber::kOpen) {
 	    ++m_state;
 	}
 	break;
 
     case 6:
 	// drive long hook down to mid-low so claw is above rail
-	if (Robot::climber()->Set(ClimberHooks::kDown, ClimberHooks::kMidLow))
+	if (Robot::climber()->SetHooks(Climber::kDown, Climber::kMidLow))
 	{
 	    ++m_state;
 	}
@@ -135,13 +131,13 @@ void ClimbCommand::Execute()
 
     case 7:
 	// motor stopped, feed watchdog
-	Robot::climber()->Set(ClimberHooks::kStop);
+	Robot::climber()->SetHooks(Climber::kStop);
 	// re-engage the claw
-	Robot::claw()->Set(ClimberClaw::kClosed);
+	Robot::climber()->SetClaw(Climber::kClosed);
 	
 	// wait for claw to close and driver to verify by setting the
 	//  climber switch to "down"
-	if ((Robot::claw()->Get() == ClimberClaw::kClosed) &&
+	if ((Robot::climber()->GetClaw() == Climber::kClosed) &&
 	    Robot::oi()->GetClimber() == 0)
 	{
 	    ++m_state;
@@ -156,7 +152,7 @@ void ClimbCommand::Execute()
 
     case 8:
 	// drive long hook down to bottom so short hook is above rail
-	if (Robot::climber()->Set(ClimberHooks::kDown, ClimberHooks::kBottom))
+	if (Robot::climber()->SetHooks(Climber::kDown, Climber::kBottom))
 	{
 	    ++m_state;
 	}
@@ -164,7 +160,7 @@ void ClimbCommand::Execute()
 
     case 9:
 	// at bottom, motor stopped, feed watchdog
-	Robot::climber()->Set(ClimberHooks::kStop);
+	Robot::climber()->SetHooks(Climber::kStop);
 
 	// wait for driver to set climb switch back to "mid" or "up"
 	if (Robot::oi()->GetClimber() > 0) {
@@ -175,7 +171,7 @@ void ClimbCommand::Execute()
     default:
 	// "can't happen"
 	// stop and wait here for driver to reset the robot
-	Robot::climber()->Set(ClimberHooks::kStop);
+	Robot::climber()->SetHooks(Climber::kStop);
 	break;
     }
 }

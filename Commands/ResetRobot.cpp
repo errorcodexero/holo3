@@ -5,9 +5,7 @@
 #include "Robot.h"
 #include "DriveBase.h"
 #include "Shooter.h"
-#include "ClimberExtender.h"
-#include "ClimberClaw.h"
-#include "ClimberHooks.h"
+#include "Climber.h"
 #include "ResetRobot.h"
 
 ResetRobot::ResetRobot()
@@ -16,8 +14,6 @@ ResetRobot::ResetRobot()
     // eg. Requires(chassis);
     Requires(Robot::driveBase());
     Requires(Robot::shooter());
-    Requires(Robot::extender());
-    Requires(Robot::claw());
     Requires(Robot::climber());
 }
 
@@ -25,9 +21,9 @@ ResetRobot::ResetRobot()
 void ResetRobot::Initialize()
 {
     Robot::driveBase()->Stop();
-    Robot::claw()->Set(ClimberClaw::kOpen);
-    Robot::extender()->Set(ClimberExtender::kRetracted);
-    Robot::climber()->Set(ClimberHooks::kDown);
+    Robot::climber()->SetClaw(Climber::kOpen);
+    Robot::climber()->SetExtender(Climber::kRetracted);
+    Robot::climber()->SetHooks(Climber::kDown);
     Robot::shooter()->SetAngle(Shooter::kShort);
     Robot::shooter()->SetSpeed(0.0);
     Robot::shooter()->Start();
@@ -36,13 +32,13 @@ void ResetRobot::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void ResetRobot::Execute()
 {
-    Robot::climber()->Set(ClimberHooks::kDown);
+    Robot::climber()->SetHooks(Climber::kDown);
 }
 
 // Make this return true when this Command no longer needs to run execute()
 bool ResetRobot::IsFinished()
 {
-    return (Robot::shooter()->IsInPosition() && Robot::climber()->IsAtBottom());
+    return (Robot::shooter()->IsInPosition() && Robot::climber()->HooksAtBottom());
 }
 
 // Called once after isFinished returns true
@@ -56,5 +52,5 @@ void ResetRobot::End()
 void ResetRobot::Interrupted()
 {
     Robot::shooter()->Stop();
-    Robot::climber()->Set(ClimberHooks::kStop);
+    Robot::climber()->SetHooks(Climber::kStop);
 }
