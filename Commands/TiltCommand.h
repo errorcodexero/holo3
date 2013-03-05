@@ -10,6 +10,8 @@
 class TiltCommand: public Command {
 private:
 	Shooter::TargetDistance m_targetDistance;
+	Shooter::TargetDistance m_currentDistance;
+	bool m_needToGoToMid;
 
 public:
 	TiltCommand( Shooter::TargetDistance targetDistance );
