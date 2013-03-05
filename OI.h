@@ -1,6 +1,8 @@
 // First Team 1425 "Error Code Xero"
 // for FRC 2013 game "Ultimate Ascent"
 
+class OI;
+
 #ifndef OI_H
 #define OI_H
 
@@ -114,16 +116,14 @@ private:
     Rotate* m_pRotateRev;
 
     // shooting
-    ShootCommand* m_shootShort;
-    ShootCommand* m_shootMid;
-    ShootCommand* m_shootLong;
+    ShootCommand* m_pShootShort;
+    ShootCommand* m_pShootMid;
+    ShootCommand* m_pShootLong;
     ShootManual*  m_pShootManual;
 
-    //Tilting
-    TiltCommand* m_tiltShort;
-    TiltCommand* m_tiltLong;
-    TiltCommand* m_tiltMid;
-
+    TiltCommand* m_pTiltShort;
+    TiltCommand* m_pTiltMid;
+    TiltCommand* m_pTiltLong;
 
 public:
     OI();

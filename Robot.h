@@ -1,11 +1,14 @@
 // First Team 1425 "Error Code Xero"
 // for FRC 2013 game "Ultimate Ascent"
 
+class Robot;
+
 #ifndef _ROBOT_H
 #define _ROBOT_H
 
 #include <WPILib.h>
 #include "BlinkyLight.h"
+#include "Climber.h"
 #include "DriveBase.h"
 #include "RateGyro.h"
 #include "Shooter.h"
@@ -15,6 +18,7 @@
 #include "BlinkyBreathe.h"
 #include "BlinkyOff.h"
 #include "BlinkyOn.h"
+#include "ClimbCommand.h"
 #include "DriveCommand.h"
 #include "ResetRobot.h"
 #include "Rotate.h"
@@ -22,9 +26,10 @@
 #include "ShootCommand.h"
 #include "ShootManual.h"
 #include "TargetCommand.h"
-#include "TimedDrive.h"
 #include "TiltCommand.h"
+#include "TimedDrive.h"
 #include "OI.h"
+
 
 ////////////////////////////////////////////////////////////////////
 // Digital Inputs:
@@ -33,21 +38,25 @@
 
 #define	DIGITAL_PRESSURE_SWITCH		1
 
-// 2 - climber left bottom limit switch
-// 3 - climber left top limit switch
-// 4 - climber right bottom limit switch
-// 5 - climber right top limit switch
+// 2 - climber left top limit switch
+// 3 - climber right top limit switch
+// 4 - climber left middle limit switch
+// 5 - climber right middle limit switch
+// 6 - climber left bottom limit switch
+// 7 - climber right bottom limit switch
 //     limit switches are normally-open switches to ground
 //     so normally true, switch to false = at limit
 
-#define DIGITAL_LIMIT_LEFT_BOTTOM	2
-#define DIGITAL_LIMIT_LEFT_TOP		3
-#define DIGITAL_LIMIT_RIGHT_BOTTOM	4
-#define DIGITAL_LIMIT_RIGHT_TOP		5
+#define DIGITAL_LIMIT_LEFT_TOP		2
+#define DIGITAL_LIMIT_RIGHT_TOP		3
+#define DIGITAL_LIMIT_LEFT_MIDDLE	4
+#define DIGITAL_LIMIT_RIGHT_MIDDLE	5
+#define DIGITAL_LIMIT_LEFT_BOTTOM	6
+#define DIGITAL_LIMIT_RIGHT_BOTTOM	7
 
-// 6 - shooter mid-range position
+// 8 - shooter mid-range position
 
-#define DIGITAL_SHOOTER_CENTER		6
+#define DIGITAL_SHOOTER_CENTER		8
 
 ////////////////////////////////////////////////////////////////////
 // Analog Inputs:
@@ -85,6 +94,13 @@
 
 #define SOLENOID_SHOOTER_INJECT		5
 
+// 6,7 - climber claw
+//     6 = retract (close)
+//     7 = extend (open)
+
+#define	SOLENOID_CLIMBER_CLAW_CLOSE	6
+#define	SOLENOID_CLIMBER_CLAW_OPEN	7
+
 ////////////////////////////////////////////////////////////////////
 // PWM Outputs:
 // 1 - blinky light (not used)
@@ -101,6 +117,12 @@
 #define PWM_DRIVE_RIGHT			5
 #define PWM_DRIVE_REAR			6
 
+// 7 - climber left
+// 8 - climber right
+
+#define PWM_CLIMBER_LEFT		7
+#define PWM_CLIMBER_RIGHT		8
+
 // CAN (CANJaguar) channels:
 // 6 - shooter motor
 
@@ -113,8 +135,6 @@
 #define	SPEED_LONG	3200	// shooting at high goal from feeder station
 
 ////////////////////////////////////////////////////////////////////
-
-class OI;
 
 class Robot : public IterativeRobot {
 private:
@@ -146,6 +166,7 @@ private:
 
     // subsystems
     DriveBase* m_driveBase;
+    Climber* m_climber;
     Shooter* m_shooter;
     BlinkyLight* m_blinkyLight;
     
@@ -159,6 +180,7 @@ public:
 
     // convenience accessors
     static DriveBase* driveBase() { return theRobot().m_driveBase; };
+    static Climber* climber() { return theRobot().m_climber; };
     static BlinkyLight* blinkyLight() { return theRobot().m_blinkyLight; };
     static Shooter* shooter() { return theRobot().m_shooter; };
     static OI* oi() { return theRobot().m_oi; };

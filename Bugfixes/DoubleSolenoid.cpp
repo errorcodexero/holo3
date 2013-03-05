@@ -18,31 +18,31 @@ void DoubleSolenoid::InitSolenoid()
     char buf[64];
     if (!CheckSolenoidModule(m_moduleNumber))
     {
-	snprintf(buf, 64, "Solenoid Module %d", m_moduleNumber);
+	snprintf(buf, 64, "Solenoid Module %lu", m_moduleNumber);
 	wpi_setWPIErrorWithContext(ModuleIndexOutOfRange, buf);
 	return;
     }
     if (!CheckSolenoidChannel(m_forwardChannel))
     {
-	snprintf(buf, 64, "Solenoid Channel %d", m_forwardChannel);
+	snprintf(buf, 64, "Solenoid Channel %lu", m_forwardChannel);
 	wpi_setWPIErrorWithContext(ChannelIndexOutOfRange, buf);
 	return;
     }
     if (!CheckSolenoidChannel(m_reverseChannel))
     {
-	snprintf(buf, 64, "Solenoid Channel %d", m_reverseChannel);
+	snprintf(buf, 64, "Solenoid Channel %lu", m_reverseChannel);
 	wpi_setWPIErrorWithContext(ChannelIndexOutOfRange, buf);
 	return;
     }
     Resource::CreateResourceObject(&m_allocated, tSolenoid::kNumDO7_0Elements * kSolenoidChannels);
 
-    snprintf(buf, 64, "Solenoid %d (Module %d)", m_forwardChannel, m_moduleNumber);
+    snprintf(buf, 64, "Solenoid %lu (Module %lu)", m_forwardChannel, m_moduleNumber);
     if (m_allocated->Allocate((m_moduleNumber - 1) * kSolenoidChannels + m_forwardChannel - 1, buf) == ~0ul)
     {
 	CloneError(m_allocated);
 	return;
     }
-    snprintf(buf, 64, "Solenoid %d (Module %d)", m_reverseChannel, m_moduleNumber);
+    snprintf(buf, 64, "Solenoid %lu (Module %lu)", m_reverseChannel, m_moduleNumber);
     if (m_allocated->Allocate((m_moduleNumber - 1) * kSolenoidChannels + m_reverseChannel - 1, buf) == ~0ul)
     {
 	CloneError(m_allocated);
@@ -54,12 +54,12 @@ void DoubleSolenoid::InitSolenoid()
     nUsageReporting::report(nUsageReporting::kResourceType_Solenoid, m_forwardChannel, m_moduleNumber - 1);
     nUsageReporting::report(nUsageReporting::kResourceType_Solenoid, m_reverseChannel, m_moduleNumber - 1);
 
-    LiveWindow::GetInstance()->AddActuator("DoubleSolenoid", m_moduleNumber, m_forwardChannel, this);
+    LiveWindow::GetInstance()->AddActuator("Double Solenoid", m_moduleNumber, m_forwardChannel, this);
 }
 
 /**
  * Constructor.
- * 
+ *
  * @param forwardChannel The forward channel on the module to control.
  * @param reverseChannel The reverse channel on the module to control.
  */
@@ -73,7 +73,7 @@ DoubleSolenoid::DoubleSolenoid(UINT32 forwardChannel, UINT32 reverseChannel)
 
 /**
  * Constructor.
- * 
+ *
  * @param moduleNumber The solenoid module (1 or 2).
  * @param forwardChannel The forward channel on the module to control.
  * @param reverseChannel The reverse channel on the module to control.
@@ -100,7 +100,7 @@ DoubleSolenoid::~DoubleSolenoid()
 
 /**
  * Set the value of a solenoid.
- * 
+ *
  * @param value Move the solenoid to forward, reverse, or don't move it.
  */
 void DoubleSolenoid::Set(Value value)
@@ -130,7 +130,7 @@ void DoubleSolenoid::Set(Value value)
 
 /**
  * Read the current value of the solenoid.
- * 
+ *
  * @return The current value of the solenoid.
  */
 DoubleSolenoid::Value DoubleSolenoid::Get()

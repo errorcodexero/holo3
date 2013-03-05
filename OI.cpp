@@ -11,6 +11,17 @@ OI::OI()
     m_pLCD = DriverStationLCD::GetInstance();
 
     m_pStick = new Joystick(1);
+#if 1	// using gamepad rather than joystick
+    // left stick L/R 1  -> X
+    // left stick U/D 2  -> 
+    // Z buttons L/R 3   -> throttle
+    // right stick L/R 4 -> twist
+    // right stick U/D 5 -> Y
+    m_pStick->SetAxisChannel( Joystick::kXAxis, 1 );
+    m_pStick->SetAxisChannel( Joystick::kThrottleAxis, 3 );
+    m_pStick->SetAxisChannel( Joystick::kTwistAxis, 4 );
+    m_pStick->SetAxisChannel( Joystick::kYAxis, 5 );
+#endif
     m_pGamepadButtonA     = new JoystickButton(m_pStick, 1);
     m_pGamepadButtonB     = new JoystickButton(m_pStick, 2);
     m_pGamepadButtonX     = new JoystickButton(m_pStick, 3);
@@ -63,32 +74,31 @@ void OI::Initialize()
     m_pGamepadStart->WhenPressed(new AimTrim(false));
 
     m_pRotateFwd = new Rotate(1);
-       SmartDashboard::PutData("Rotate Fwd", m_pRotateFwd);
+    SmartDashboard::PutData("Rotate Fwd", m_pRotateFwd);
 
     m_pRotateRev = new Rotate(-1);
     SmartDashboard::PutData("Rotate Rev", m_pRotateRev);
-       
-    m_shootShort = new ShootCommand( Shooter::kShort );
-    SmartDashboard::PutData("Shoot Short", m_shootShort);
 
-    m_shootMid = new ShootCommand( Shooter::kMid );
-    SmartDashboard::PutData("Shoot Mid", m_shootMid);
+    m_pShootShort = new ShootCommand( Shooter::kShort );
+    SmartDashboard::PutData("Shoot Short", m_pShootShort);
 
-    m_shootLong = new ShootCommand( Shooter::kLong );
-    SmartDashboard::PutData("Shoot Long", m_shootLong);
-    
+    m_pShootMid = new ShootCommand( Shooter::kMid );
+    SmartDashboard::PutData("Shoot Mid", m_pShootMid);
+
+    m_pShootLong = new ShootCommand( Shooter::kLong );
+    SmartDashboard::PutData("Shoot Long", m_pShootLong);
+
     m_pShootManual = new ShootManual();
     m_pManualOverride->WhileHeld(m_pShootManual);
 
-    m_tiltShort = new TiltCommand( Shooter::kShort );
-    SmartDashboard::PutData("Tilt Short", m_tiltShort);
+    m_pTiltShort = new TiltCommand( Shooter::kShort );
+    SmartDashboard::PutData("Tilt Short", m_pTiltShort);
 
-    m_tiltMid = new TiltCommand( Shooter::kMid );
-    SmartDashboard::PutData("Tilt Mid", m_tiltMid);
+    m_pTiltMid = new TiltCommand( Shooter::kMid );
+    SmartDashboard::PutData("Tilt Mid", m_pTiltMid);
 
-    m_tiltLong = new TiltCommand( Shooter::kLong );
-    SmartDashboard::PutData("Tilt Long", m_tiltLong);
-
+    m_pTiltLong = new TiltCommand( Shooter::kLong );
+    SmartDashboard::PutData("Tilt Long", m_pTiltLong);
 
     // m_pBlinkyOn = new BlinkyOn();
     // SmartDashboard::PutData("Blinky On", m_pBlinkyOn);
