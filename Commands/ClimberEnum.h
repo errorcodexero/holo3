@@ -2,6 +2,7 @@
 #define CLIMBERENUM_H
 
 enum ClimberState {
+	InitIdle,
 	BothTillLim,
 	LTillLim,
 	RTillLim,

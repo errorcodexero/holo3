@@ -34,7 +34,8 @@ void print(ClimberOutput n) {
 
 const char* getString (ClimberState variName) {
     switch (variName) {
-           case BothTillLim: return "BothTillLim";       
+    	   case InitIdle: return "InitIdle"; 
+    	   case BothTillLim: return "BothTillLim";       
            case LTillLim: return "LTillLim";
            case RTillLim: return "RTillLim";
            case UpIdle: return "UpIdle";

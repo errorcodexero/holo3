@@ -8,6 +8,7 @@
 
 ClimberOutput climberReturnOut (ClimberState climberInput) {
 	switch (climberInput ){
+		case InitIdle: return ClimberOutput (0,0);
 		case BothTillLim: return ClimberOutput(1,1);
 		case LTillLim: return ClimberOutput(1,0);
 		case RTillLim: return ClimberOutput(0,1);
@@ -31,7 +32,10 @@ ClimberOutput climberReturnOut (ClimberState climberInput) {
 ClimberState nextState (ClimberState currentState, bool rTopLim, bool lTopLim, bool rBotLim, bool lBotLim, bool btn, bool errorBtnUp, bool errorBtnDwn) {
 	if ((lTopLim && lBotLim) || (rTopLim && rBotLim)) return ErrorState;
     switch (currentState){
-		case BothTillLim: 
+    	case InitIdle:
+    		if (btn) return BothTillLim;
+    		return currentState;
+    	case BothTillLim: 
 			if (lTopLim && rTopLim) return DwnIdle;
 			if (rTopLim) return LTillLim;
 			if (lTopLim) return RTillLim;
