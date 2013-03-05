@@ -1,3 +1,6 @@
+// FIRST Team 1425 "Error Code Xero"
+// for FRC 2013 game "Ultimate Ascent"
+
 #include "Robot.h"
 #include "BlinkyLight.h"
 
