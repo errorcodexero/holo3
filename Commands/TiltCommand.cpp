@@ -43,6 +43,7 @@ void TiltCommand::Initialize()
     default:
 	break;
     }
+    Robot::shooter()->SetSpeed( 0.0 );
     Robot::shooter()->Start();
 }
 

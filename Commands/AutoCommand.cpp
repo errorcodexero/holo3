@@ -20,7 +20,7 @@ AutoCommand::AutoCommand()
 
     AddParallel(m_blinky);
     AddSequential(m_tilt);
-    AddSequential(m_target);
+    //AddSequential(m_target);
     AddSequential(m_shoot);
 }
 
