@@ -18,6 +18,7 @@ class ShootCommand;
 class AutoCommand: public CommandGroup {
 public:	
     AutoCommand();
+    virtual ~AutoCommand();
     virtual void Initialize();
     virtual void Execute();
     virtual bool IsFinished();

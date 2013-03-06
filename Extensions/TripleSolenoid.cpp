@@ -10,7 +10,7 @@
 const double TripleSolenoid::kPollInterval = 0.053;
 
 // end-to-end travel time
-const double TripleSolenoid::kTravelTime = 4.00;
+const double TripleSolenoid::kTravelTime = 2.00;
 
 TripleSolenoid::TripleSolenoid( int forwardChannel,
 			        int reverseChannel,
