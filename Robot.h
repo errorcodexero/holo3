@@ -123,7 +123,7 @@ class OI;
 ////////////////////////////////////////////////////////////////////
 
 #define	SPEED_SHORT	1600	// shooting at tower from base of tower
-#define	SPEED_MID	2800	// shooting at high goal from back of tower
+#define	SPEED_MID	2500	// shooting at high goal from back of tower
 #define	SPEED_LONG	3200	// shooting at high goal from feeder station
 
 ////////////////////////////////////////////////////////////////////
