@@ -32,7 +32,7 @@ public:
     bool IsReadyToShoot(void);
 
     void Inject();
-    void SetInjector(DoubleSolenoid::Value state);
+    void SetInjector(bool state);
 	
 private:
     CANJaguar* m_motor;

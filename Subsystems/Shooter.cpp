@@ -325,10 +325,10 @@ void Shooter::Inject()
 }
 
 /*
- * kForward is the ready (extended) position,
- * kReverse is the inject position (retracted)
+ * false is the ready (extended) position,
+ * true is the inject (retracted) position
  */
-void Shooter::SetInjector( DoubleSolenoid::Value state )
+void Shooter::SetInjector( bool state )
 {
-    m_injector->Set(state);
+    m_injector->Set(state ? DoubleSolenoid::kReverse : DoubleSolenoid::kForward );
 }

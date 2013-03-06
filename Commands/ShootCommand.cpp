@@ -35,6 +35,7 @@ void ShootCommand::Initialize()
     default:
 	break;
     }
+    Robot::shooter()->SetInjector(false);
     Robot::shooter()->Start();
 }
 
