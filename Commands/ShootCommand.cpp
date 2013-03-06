@@ -6,10 +6,12 @@
 #include "Shooter.h"
 #include "ShootCommand.h"
 
-ShootCommand::ShootCommand( Shooter::TargetDistance targetDistance )
+ShootCommand::ShootCommand( Shooter::TargetDistance targetDistance,
+			    int num_disks )
 {
     Requires(Robot::shooter());
     m_targetDistance = targetDistance;
+    m_numDisks = num_disks;
     m_launched = 0;
     SmartDashboard::PutNumber("ShootCommand Launched", (double) m_launched);
 }
@@ -39,9 +41,11 @@ void ShootCommand::Initialize()
 void ShootCommand::Execute()
 {
     if (Robot::shooter()->IsReadyToShoot()) {
-	Robot::shooter()->Inject();
-	m_launched++;
-	SmartDashboard::PutNumber("ShootCommand Launched", (double) m_launched);
+	if (m_launched < m_numDisks) {
+	    Robot::shooter()->Inject();
+	    m_launched++;
+	    SmartDashboard::PutNumber("ShootCommand Launched", (double) m_launched);
+	}
     }
 }
 
@@ -52,8 +56,7 @@ int ShootCommand::GetLaunched()
 
 bool ShootCommand::IsFinished()
 {
-    // keep running until canceled by caller
-    return false;
+    return (Robot::shooter()->IsReadyToShoot() && m_launched >= m_numDisks);
 }
 
 void ShootCommand::End()

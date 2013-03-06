@@ -7,33 +7,21 @@
 #include "Shooter.h"
 #include "AutoCommand.h"
 #include "BlinkyBreathe.h"
+#include "TiltCommand.h"
+#include "TargetCommand.h"
 #include "ShootCommand.h"
 
 AutoCommand::AutoCommand()
 {
     m_blinky = new BlinkyBreathe(3.0);
-    m_shoot = new ShootCommand(Shooter::kMid);
+    m_tilt = new TiltCommand(Shooter::kMid);
+    m_target = new TargetCommand();
+    m_shoot = new ShootCommand(Shooter::kMid, 3);
 
     AddParallel(m_blinky);
+    AddSequential(m_tilt);
+    AddSequential(m_target);
     AddSequential(m_shoot);
-}
-
-void AutoCommand::Initialize()
-{
-}
-
-void AutoCommand::Execute()
-{
-}
-
-bool AutoCommand::IsFinished()
-{
-    return (m_shoot->IsRunning() && (m_shoot->GetLaunched() >= 3) &&
-            !Robot::shooter()->IsInjectorActive());
-}
-
-void AutoCommand::End()
-{
 }
 
 void AutoCommand::Interrupted()
