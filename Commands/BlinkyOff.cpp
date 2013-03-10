@@ -6,7 +6,8 @@
 #include "BlinkyLight.h"
 #include "BlinkyOff.h"
 
-BlinkyOff::BlinkyOff()
+BlinkyOff::BlinkyOff() :
+    Command("BlinkyOff")
 {
     // Use Requires() here to declare subsystem dependencies
     // eg. Requires(chassis);
@@ -17,6 +18,7 @@ BlinkyOff::BlinkyOff()
 void BlinkyOff::Initialize()
 {
     printf("Robot: Turn blinky light off NOW!\n");
+    printf("BlinkyOff::Initialize\n");
     Robot::blinkyLight()->Set(0.0);
 }
 
@@ -29,18 +31,19 @@ void BlinkyOff::Execute()
 // Make this return true when this Command no longer needs to run execute()
 bool BlinkyOff::IsFinished()
 {
+    printf("BlinkyOff::IsFinished\n");
     return true;
 }
 
 // Called once after isFinished returns true
 void BlinkyOff::End()
 {
-    ;
+    printf("BlinkyOff::End\n");
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void BlinkyOff::Interrupted()
 {
-    ;
+    printf("BlinkyOff::Interrupted\n");
 }

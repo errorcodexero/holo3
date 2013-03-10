@@ -8,7 +8,8 @@
 #include "Climber.h"
 #include "ResetRobot.h"
 
-ResetRobot::ResetRobot()
+ResetRobot::ResetRobot() :
+    Command("ResetRobot")
 {
     // Use Requires() here to declare subsystem dependencies
     // eg. Requires(chassis);
@@ -20,12 +21,14 @@ ResetRobot::ResetRobot()
 // Called just before this Command runs the first time
 void ResetRobot::Initialize()
 {
+    printf("ResetRobot::Initialize\n");
     Robot::driveBase()->Stop();
     Robot::climber()->SetClaw(Climber::kOpen);
     Robot::climber()->SetExtender(Climber::kRetracted);
     Robot::climber()->SetHooks(Climber::kDown);
     Robot::shooter()->SetAngle(Shooter::kShort);
     Robot::shooter()->SetSpeed(0.0);
+    Robot::shooter()->SetInjector(true);
     Robot::shooter()->Start();
 }
 
@@ -38,12 +41,16 @@ void ResetRobot::Execute()
 // Make this return true when this Command no longer needs to run execute()
 bool ResetRobot::IsFinished()
 {
-    return (Robot::shooter()->IsInPosition() && Robot::climber()->HooksAtBottom());
+    bool finished = (Robot::shooter()->IsInPosition() &&
+    		     Robot::climber()->HooksAtBottom());
+    if (finished) printf("RobotReset::IsFinished\n");
+    return finished;
 }
 
 // Called once after isFinished returns true
 void ResetRobot::End()
 {
+    printf("ResetRobot::End\n");
     Robot::shooter()->Stop();
 }
 
@@ -51,6 +58,7 @@ void ResetRobot::End()
 // subsystems is scheduled to run
 void ResetRobot::Interrupted()
 {
+    printf("ResetRobot::Interrupted\n");
     Robot::shooter()->Stop();
     Robot::climber()->SetHooks(Climber::kStop);
 }

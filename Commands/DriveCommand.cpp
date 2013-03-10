@@ -12,16 +12,16 @@ static UINT32 then;
 // Identify resources required by this command.
 // Other commands that are using these resources will be Canceled
 // when this command is Started.
-DriveCommand::DriveCommand()
+DriveCommand::DriveCommand() :
+    Command("DriveCommand")
 {
-//  printf("DriveCommand::DriveCommand\n");
     Requires(Robot::driveBase());
 }
 
 // Called just before this Command runs the first time
 void DriveCommand::Initialize()
 {
-//  printf("DriveCommand::Initialize\n");
+    printf("DriveCommand::Initialize\n");
     then = GetFPGATime();
 }
 
@@ -53,13 +53,13 @@ bool DriveCommand::IsFinished()
 // Called once after isFinished returns true
 void DriveCommand::End()
 {
-//  printf("DriveCommand::End (can't happen)\n");
+    printf("DriveCommand::End\n");
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void DriveCommand::Interrupted()
 {
-//  printf("DriveCommand::Interrupted\n");
+    printf("DriveCommand::Interrupted\n");
     Robot::driveBase()->Stop();
 }

@@ -11,7 +11,8 @@
 #define	M_PI	3.1415926535
 #endif
 
-BlinkyBreathe::BlinkyBreathe( float seconds )
+BlinkyBreathe::BlinkyBreathe( float seconds ) :
+    Command("BlinkyBreathe")
 {
     // Use Requires() here to declare subsystem dependencies
     // eg. Requires(chassis);
@@ -24,6 +25,7 @@ BlinkyBreathe::BlinkyBreathe( float seconds )
 // Called just before this Command runs the first time
 void BlinkyBreathe::Initialize()
 {
+    printf("BlinkyBreathe::Initialize\n");
     m_startTime = Timer::GetFPGATimestamp();
     Robot::blinkyLight()->Set(0.0);
 }
@@ -46,12 +48,13 @@ bool BlinkyBreathe::IsFinished()
 // Called once after isFinished returns true
 void BlinkyBreathe::End()
 {
-    ;
+    printf("BlinkyBreathe::End\n");
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void BlinkyBreathe::Interrupted()
 {
+    printf("BlinkyBreathe::Interrupted\n");
     Robot::blinkyLight()->Set(0.0);
 }

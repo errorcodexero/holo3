@@ -10,13 +10,15 @@
 #define	EXTEND_TIME	1.2
 #define	GRAB_TIME	1.2
 
-ClimbManual::ClimbManual()
+ClimbManual::ClimbManual() :
+    Command("ClimbManual")
 {
     Requires(Robot::climber());
 }
 
 void ClimbManual::Initialize()
 {
+    printf("ClimbManual::Initialize\n");
 }
 
 void ClimbManual::Execute()
@@ -62,12 +64,12 @@ bool ClimbManual::IsFinished()
 
 void ClimbManual::End()
 {
-    ;
+    printf("ClimbManual::End\n");
 }
 
 void ClimbManual::Interrupted()
 {
-    ;
+    printf("ClimbManual::Interrupted\n");
 }
 
 

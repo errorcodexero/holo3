@@ -7,14 +7,15 @@
 #include "Shooter.h"
 #include "ShootManual.h"
 
-ShootManual::ShootManual()
+ShootManual::ShootManual() :
+    Command("ShootManual")
 {
     Requires(Robot::shooter());
 }
 
 void ShootManual::Initialize()
 {
-//  printf("ShootManual::Initialize\n");
+    printf("ShootManual::Initialize\n");
 
     Robot::shooter()->SetAngle(Shooter::kUnknown);
     Robot::shooter()->SetSpeed(0.0);
@@ -69,12 +70,12 @@ bool ShootManual::IsFinished()
 
 void ShootManual::End()
 {
-//  printf("ShootManual::End\n");
+    printf("ShootManual::End\n");
     Robot::shooter()->Stop();
 }
 
 void ShootManual::Interrupted()
 {
-//  printf("ShootManual::Interrupted\n");
+    printf("ShootManual::Interrupted\n");
     Robot::shooter()->Stop();
 }

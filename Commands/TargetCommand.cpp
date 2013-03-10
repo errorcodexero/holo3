@@ -115,6 +115,7 @@ void TargetCommand::Initialize()
 // Called once after IsFinished returns true
 void TargetCommand::End() 
 {
+    printf("TargetCommand::End\n");
     ReadCamera();  // one last time, just to report 
 
     int aimFrames = m_cameraFrame - m_cameraStartFrame;

@@ -6,7 +6,8 @@
 #include "Shooter.h"
 #include "TiltCommand.h"
 
-TiltCommand::TiltCommand( Shooter::TargetDistance targetDistance )
+TiltCommand::TiltCommand( Shooter::TargetDistance targetDistance ) :
+    Command("TiltCommand")
 {
     Requires(Robot::shooter());
     m_targetDistance = targetDistance;
@@ -16,7 +17,7 @@ TiltCommand::TiltCommand( Shooter::TargetDistance targetDistance )
 
 void TiltCommand::Initialize()
 {
-//  printf("TiltCommand::Initialize\n");
+    printf("TiltCommand::Initialize\n");
     m_currentDistance = Robot::shooter()->GetAngle();
     
     switch(m_targetDistance) {
@@ -56,25 +57,23 @@ bool TiltCommand::IsFinished()
 {
     // keep running until canceled by caller
     bool isInPosition = Robot::shooter()->IsInPosition();
-    if (isInPosition) {
-	if (m_needToGoToMid) {
-	    m_needToGoToMid = false;
-	    Robot::shooter()->SetAngle(m_targetDistance);
-	} else {
-	    return isInPosition;
-	}
+    if (isInPosition && m_needToGoToMid) {
+	m_needToGoToMid = false;
+	Robot::shooter()->SetAngle(m_targetDistance);
+	isInPosition = false;
     }
-    return false;
+    if (isInPosition) printf("TiltCommand::IsFinished\n");
+    return isInPosition;
 }
 
 void TiltCommand::End()
 {
-//  printf("ShootCommand::End\n");
+    printf("TiltCommand::End\n");
     Robot::shooter()->Stop();
 }
 
 void TiltCommand::Interrupted()
 {
-//  printf("ShootCommand::Interrupted\n");
+    printf("TiltCommand::Interrupted\n");
     Robot::shooter()->Stop();
 }

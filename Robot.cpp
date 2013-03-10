@@ -49,8 +49,10 @@ void Robot::RobotInit()
 		    SOLENOID_CLIMBER_EXTEND, SOLENOID_CLIMBER_RETRACT,
 		    SOLENOID_CLIMBER_CLAW_OPEN, SOLENOID_CLIMBER_CLAW_CLOSE );
 
-    m_shooter = new Shooter( CAN_SHOOTER, SOLENOID_SHOOTER_EXTEND,
-			     DIGITAL_SHOOTER_CENTER, SOLENOID_SHOOTER_INJECT );
+    m_shooter = new Shooter( CAN_SHOOTER,
+			     SOLENOID_SHOOTER_EXTEND,
+			     DIGITAL_SHOOTER_CENTER,
+			     SOLENOID_SHOOTER_LOAD );
     
     m_blinkyLight = new BlinkyLight( PWM_BLINKY );
 
@@ -63,11 +65,13 @@ void Robot::RobotInit()
 
     // Now that everything else is set up, start the compressor
     m_compressor->Start();
+
+    SmartDashboard::PutData("scheduler", Scheduler::GetInstance());
 }
 
 void Robot::Cancel()
 {
-    // printf("Robot::Cancel\n");
+    printf("Robot::Cancel\n");
     if (m_autonomousCommand->IsRunning()) {
 	m_autonomousCommand->Cancel();
     }
@@ -77,7 +81,7 @@ void Robot::Cancel()
 	
 void Robot::DisabledInit()
 {
-    // printf("Robot::DisabledInit\n");
+    printf("Robot::DisabledInit\n");
     Cancel();
 }
 
@@ -88,7 +92,7 @@ void Robot::DisabledPeriodic()
 
 void Robot::AutonomousInit()
 {
-    // printf("Robot::AutonomousInit\n");
+    printf("Robot::AutonomousInit\n");
     Cancel();
     m_autonomousCommand->Start();
 }
@@ -100,7 +104,7 @@ void Robot::AutonomousPeriodic()
     
 void Robot::TeleopInit()
 {
-    // printf("Robot::TeleopInit\n");
+    printf("Robot::TeleopInit\n");
     Cancel();
 }
     
@@ -111,7 +115,7 @@ void Robot::TeleopPeriodic()
 
 void Robot::TestInit()
 {
-    // printf("Robot::TestInit\n");
+    printf("Robot::TestInit\n");
     Cancel();
 }
 
