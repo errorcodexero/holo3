@@ -10,13 +10,15 @@
 #define	EXTEND_TIME	1.2
 #define	GRAB_TIME	1.2
 
-ClimbCommand::ClimbCommand()
+ClimbCommand::ClimbCommand() :
+    Command("ClimbCommand")
 {
     Requires(Robot::climber());
 }
 
 void ClimbCommand::Initialize()
 {
+    printf("ClimbCommand::Initialize\n");
     Robot::climber()->SetClaw(Climber::kOpen);
     Robot::climber()->SetExtender(Climber::kRetracted);
     m_state = 0;
@@ -183,12 +185,12 @@ bool ClimbCommand::IsFinished()
 
 void ClimbCommand::End()
 {
-    ;
+    printf("ClimbCommand::End\n");
 }
 
 void ClimbCommand::Interrupted()
 {
-    ;
+    printf("ClimbCommand::Interrupted\n");
 }
 
 

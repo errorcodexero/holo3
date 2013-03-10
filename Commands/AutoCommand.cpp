@@ -11,7 +11,8 @@
 #include "TargetCommand.h"
 #include "ShootCommand.h"
 
-AutoCommand::AutoCommand()
+AutoCommand::AutoCommand() :
+    CommandGroup("AutoCommand")
 {
     m_blinky = new BlinkyBreathe(3.0);
     m_tilt = new TiltCommand(Shooter::kLong);
@@ -32,6 +33,7 @@ AutoCommand::~AutoCommand()
 
 void AutoCommand::Initialize()
 {
+    printf("AutoCommand::Initialize\n");
 }
 
 void AutoCommand::Execute()
@@ -46,10 +48,12 @@ bool AutoCommand::IsFinished()
 
 void AutoCommand::End()
 {
+    printf("AutoCommand::End\n");
 }
 
 void AutoCommand::Interrupted()
 {
+    printf("AutoCommand::Interrupted\n");
     Robot::blinkyLight()->Set(0.0);
 }
 
