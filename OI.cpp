@@ -55,7 +55,7 @@ OI::OI()
     m_pCameraPosition     = new DSDigitalInput(m_pEIO, 3,
 				    DriverStationEnhancedIO::kInputPullUp,
 				    false);	// switch mounted backwards
-    m_pQueryButton        = new DSDigitalInput(m_pEIO, 4,
+    m_pLearnButton        = new DSDigitalInput(m_pEIO, 4,
 				    DriverStationEnhancedIO::kInputPullUp,
 				    false);	// active-low pushbutton
     m_pManualOverride     = new DSDigitalInput(m_pEIO, 5,
@@ -90,7 +90,7 @@ OI::~OI()
     delete m_pDump;
     delete m_pCameraLight;
     delete m_pCameraPosition;
-    delete m_pQueryButton;
+    delete m_pLearnButton;
     delete m_pManualOverride;
     delete m_pLaunch;
     delete m_pKey;

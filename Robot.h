@@ -123,9 +123,12 @@ class OI;
 
 ////////////////////////////////////////////////////////////////////
 
-#define	SPEED_SHORT	1600	// shooting at tower from base of tower
-#define	SPEED_MID	2500	// shooting at high goal from back of tower
-#define	SPEED_LONG	3200	// shooting at high goal from feeder station
+#define	KEY_SPEED_SHORT	"ShooterSpeedShort"
+#define	DEFAULT_SPEED_SHORT 1600 // shooting at tower from base of tower
+#define	KEY_SPEED_MID	"ShooterSpeedMid"
+#define	DEFAULT_SPEED_MID   2500 // shooting at high goal from back of tower
+#define	KEY_SPEED_LONG	"ShooterSpeedLong"
+#define	DEFAULT_SPEED_LONG  3200 // shooting at high goal from feeder station
 
 ////////////////////////////////////////////////////////////////////
 
@@ -166,6 +169,11 @@ private:
 public:
     // commands
     AutoCommand* m_autonomousCommand;
+
+    // shared variables
+    double m_speed_short;
+    double m_speed_mid;
+    double m_speed_long;
 
 public:
     // singleton accessor

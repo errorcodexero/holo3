@@ -103,7 +103,7 @@ private:
     DSDigitalInput* m_pDump;
     DSDigitalInput* m_pCameraLight;
     DSDigitalInput* m_pCameraPosition;
-    DSDigitalInput* m_pQueryButton;
+    DSDigitalInput* m_pLearnButton;
     DSDigitalInput* m_pManualOverride;
     DSDigitalInput* m_pLaunch;
     DSDigitalInput* m_pKey;
@@ -158,6 +158,7 @@ public:
     double GetSpeedAdjust() { return m_pSpeedAdjust->GetAnalog(); }
     void SetReadyLED( bool value ) { m_pReadyLED->Set(value); }
     bool GetLaunch() { return m_pLaunch->Get(); }
+    bool GetLearn() { return ! m_pLearnButton->Get(); }
 };
 
 #endif
