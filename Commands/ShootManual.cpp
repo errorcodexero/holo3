@@ -20,6 +20,7 @@ void ShootManual::Initialize()
 
     Robot::shooter()->SetAngle(Shooter::kUnknown);
     Robot::shooter()->SetSpeed(0.0);
+    Robot::shooter()->SetInjector(false);
     Robot::shooter()->Start();
 
     m_learn = false;
@@ -57,16 +58,23 @@ void ShootManual::Execute()
 
     if (Robot::oi()->GetLearn()) {
 	if (!m_learn) {
+	    printf("Shooter Learn\n");
 	    Preferences *pref = Preferences::GetInstance();
 	    switch (target) {
 	    case Shooter::kShort:
+		printf("saving %s = %g\n", KEY_SPEED_SHORT, speed);
 		pref->PutDouble(KEY_SPEED_SHORT, speed);
+		Robot::theRobot().m_speed_short = speed;
 		break;
 	    case Shooter::kMid:
+		printf("saving %s = %g\n", KEY_SPEED_MID, speed);
 		pref->PutDouble(KEY_SPEED_MID,   speed);
+		Robot::theRobot().m_speed_mid = speed;
 		break;
 	    case Shooter::kLong:
+		printf("saving %s = %g\n", KEY_SPEED_LONG, speed);
 		pref->PutDouble(KEY_SPEED_LONG,  speed);
+		Robot::theRobot().m_speed_long = speed;
 		break;
 	    default: // "can't happen"
 		break;
@@ -75,7 +83,10 @@ void ShootManual::Execute()
 	    m_learn = true;
 	}
     } else {
-	m_learn = false;
+	if (m_learn) {
+	    printf("Shooter !Learn\n");
+	    m_learn = false;
+	}
     }
 
     if (Robot::shooter()->IsReadyToShoot()) {
