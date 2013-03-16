@@ -21,6 +21,12 @@ private:
 	INT32 m_gyroZero;
 	Command * m_defaultCommand;
 	bool m_started;
+	float m_ForgetMeNotX;
+	float m_ForgetMeNotY;
+	float m_ForgetMeNotTwist;
+	double m_MovementThreshold;
+	double m_MovementScale;
+	bool IsPositive(float XYT);
 
 
 public:

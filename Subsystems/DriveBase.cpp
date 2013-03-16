@@ -2,7 +2,10 @@
 // for FRC 2013 game "Ultimate Ascent"
 
 #include "DriveBase.h"
-
+bool IsPositive(float XYT)
+{
+	return XYT >= 0;
+}
 DriveBase::DriveBase( int leftMotorChannel,
 		      int rightMotorChannel,
 		      int rearMotorChannel,
@@ -16,7 +19,13 @@ DriveBase::DriveBase( int leftMotorChannel,
     m_defaultCommand(NULL),
     m_started(false)
 {
-    LiveWindow *lw = LiveWindow::GetInstance();
+    m_MovementThreshold = 0.75;
+    //SmartDashboard::PutNumber("Speed Threshold", m_MovementThreshold);
+    
+    m_MovementScale = 0.5;
+    SmartDashboard::PutNumber("Speed Scale", m_MovementScale);
+    
+	LiveWindow *lw = LiveWindow::GetInstance();
 
     // Just to make things interesting (and because we
     // didn't have enough motor controllers of either type),
@@ -105,7 +114,30 @@ printf("DriveBase::Start\n");
 void DriveBase::Drive3( float x, float y, float twist )
 {
     if (!m_started) Start();
+    
+    //m_MovementThreshold = SmartDashboard::GetNumber("Speed Threshold");
 
+    //float distance_squared = (x - m_ForgetMeNotX)^2 + (y - m_ForgetMeNotY)^2;
+    
+    m_MovementScale = SmartDashboard::GetNumber("Speed Scale");
+    
+    bool SavedXPositive = IsPositive(m_ForgetMeNotX);
+    bool XPositive = IsPositive(x);
+    bool SavedYPositive = IsPositive(m_ForgetMeNotY);
+    bool YPositive = IsPositive(y);
+    
+    
+    if (SavedXPositive != XPositive){
+    	x = m_MovementScale * x + m_ForgetMeNotX;
+    }
+    
+    if (SavedYPositive != YPositive){
+       	y = m_MovementScale * y + m_ForgetMeNotY;
+    }
+    
+    m_ForgetMeNotX = x;
+    m_ForgetMeNotY = y;
+    
     // Reduce the sensitivity to the "twist" control.
     // Add gyro compensation (adjust the "500" for best PID response).
     // Also reverse the direction, since our drive base is a mirror
@@ -116,6 +148,7 @@ void DriveBase::Drive3( float x, float y, float twist )
     if (twist < -1.0) twist = -1.0;
     if (twist > 1.0) twist = 1.0;
 
+    
     m_drive3->HolonomicDrive_Cartesian( x, y, twist );
 }
 
