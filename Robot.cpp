@@ -18,6 +18,9 @@
 // Operator Interface
 #include "OI.h"
 
+const char *KEY_SPEED_SHORT = "ShooterSpeedShort";
+const char *KEY_SPEED_MID = "ShooterSpeedMid";
+const char *KEY_SPEED_LONG = "ShooterSpeedLong";
 
 Robot::Robot()
 {

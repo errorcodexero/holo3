@@ -123,11 +123,13 @@ class OI;
 
 ////////////////////////////////////////////////////////////////////
 
-#define	KEY_SPEED_SHORT	"ShooterSpeedShort"
+extern const char *KEY_SPEED_SHORT;
 #define	DEFAULT_SPEED_SHORT 1600 // shooting at tower from base of tower
-#define	KEY_SPEED_MID	"ShooterSpeedMid"
+
+extern const char *KEY_SPEED_MID;
 #define	DEFAULT_SPEED_MID   2500 // shooting at high goal from back of tower
-#define	KEY_SPEED_LONG	"ShooterSpeedLong"
+
+extern const char *KEY_SPEED_LONG;
 #define	DEFAULT_SPEED_LONG  3200 // shooting at high goal from feeder station
 
 ////////////////////////////////////////////////////////////////////

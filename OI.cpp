@@ -54,7 +54,7 @@ OI::OI()
 				    true);
     m_pCameraPosition     = new DSDigitalInput(m_pEIO, 3,
 				    DriverStationEnhancedIO::kInputPullUp,
-				    false);	// switch mounted backwards
+				    true);
     m_pLearnButton        = new DSDigitalInput(m_pEIO, 4,
 				    DriverStationEnhancedIO::kInputPullUp,
 				    false);	// active-low pushbutton
@@ -64,11 +64,8 @@ OI::OI()
     m_pLaunch             = new DSDigitalInput(m_pEIO, 6,
 				    DriverStationEnhancedIO::kInputPullDown,
 				    true);	// active-high pushbutton
-    m_pKey                = new DSDigitalInput(m_pEIO, 7,
-				    DriverStationEnhancedIO::kInputPullUp,
-				    true);
 
-    m_pReadyLED           = new DSDigitalOutput(m_pEIO, 8);
+    m_pReadyLED           = new DSDigitalOutput(m_pEIO, 16);
 }
 
 OI::~OI()
@@ -93,7 +90,6 @@ OI::~OI()
     delete m_pLearnButton;
     delete m_pManualOverride;
     delete m_pLaunch;
-    delete m_pKey;
     delete m_pReadyLED;
 
     // initialized in Initialize()

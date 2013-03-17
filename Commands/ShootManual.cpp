@@ -79,6 +79,13 @@ void ShootManual::Execute()
 	    default: // "can't happen"
 		break;
 	    }
+
+	    std::vector<std::string> keys = pref->GetKeys();
+	    for (std::vector<std::string>::iterator it = keys.begin(); it != keys.end(); it++)
+	    {
+		printf("Shooter Preferences key = %s\n", it->c_str());
+	    }
+
 	    pref->Save();
 	    m_learn = true;
 	}
