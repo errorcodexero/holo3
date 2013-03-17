@@ -28,7 +28,6 @@ private:
 	double m_MovementScale;
 	bool IsPositive(float XYT);
 
-
 public:
 	DriveBase( int leftMotorChannel,
 		   int rightMotorChannel,
