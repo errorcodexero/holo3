@@ -1,33 +1,42 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Speed Scale" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="16" y="40"/>
+	</widget>
 	<widget field="scheduler" type="Scheduler" class="edu.wpi.first.smartdashboard.gui.elements.Scheduler">
-		<location x="496" y="411"/>
+		<location x="496" y="434"/>
 	</widget>
 	<widget field="Shooter Tolerance (%)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="4" y="420"/>
+		<property name="Background" value="255.255.153.255"/>
 	</widget>
 	<widget field="Shooter Stable Time" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="18" y="440"/>
+		<property name="Background" value="255.255.153.255"/>
 	</widget>
 	<widget field="Shooter P" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="227" y="420"/>
 		<height>20</height>
+		<property name="Background" value="255.255.153.255"/>
 	</widget>
 	<widget field="Shooter Injection Time" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="6" y="460"/>
+		<property name="Background" value="255.255.153.255"/>
 	</widget>
 	<widget field="Shooter I" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="229" y="440"/>
+		<property name="Background" value="255.255.153.255"/>
 	</widget>
 	<widget field="Shooter D" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="226" y="460"/>
+		<property name="Background" value="255.255.153.255"/>
 	</widget>
 	<widget field="Shooter RPM" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.SimpleDial">
 		<location x="360" y="140"/>
 		<width>265</width>
 		<height>182</height>
 		<property name="Upper Limit" value="3500.0"/>
-		<property name="Lower Limit" value="1200.0"/>
+		<property name="Lower Limit" value="900.0"/>
 		<property name="Tick Interval" value="100.0"/>
 	</widget>
 	<widget field="position center" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
@@ -37,7 +46,7 @@
 		<location x="22" y="0"/>
 	</widget>
 	<widget field="Climb" type="Command" class="edu.wpi.first.smartdashboard.gui.elements.Command">
-		<location x="537" y="380"/>
+		<location x="537" y="400"/>
 	</widget>
 	<widget field="position time" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="374" y="60"/>
@@ -60,29 +69,29 @@
 		<location x="540" y="86"/>
 	</widget>
 	<widget field="aiming" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="100" y="60"/>
+		<location x="100" y="80"/>
 	</widget>
 	<widget field="width" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="48" y="120"/>
+		<location x="48" y="140"/>
 		<property name="Editable" value="false"/>
 	</widget>
 	<widget field="trim" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="56" y="160"/>
+		<location x="56" y="180"/>
 	</widget>
 	<widget field="offset" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="45" y="140"/>
+		<location x="45" y="160"/>
 		<property name="Editable" value="false"/>
 	</widget>
 	<widget field="height" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="44" y="100"/>
+		<location x="44" y="120"/>
 		<property name="Editable" value="false"/>
 	</widget>
 	<widget field="frameNum" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="25" y="80"/>
+		<location x="25" y="100"/>
 		<property name="Editable" value="false"/>
 	</widget>
 	<widget field="aimFrames" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="23" y="180"/>
+		<location x="23" y="200"/>
 		<height>20</height>
 		<property name="Editable" value="false"/>
 	</widget>
@@ -141,25 +150,30 @@
 	</widget>
 </dashboard>
 <live-window>
-	<widget field="DriverStation" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<widget field="Battery" type="Analog Input" class="edu.wpi.first.smartdashboard.livewindow.elements.SingleNumberDisplay">
-			<location x="6" y="16"/>
-			<height>20</height>
-			<width>130</width>
-		</widget>
-		<location x="5" y="2"/>
-		<width>142</width>
-		<height>43</height>
-	</widget>
-	<widget field="BlinkyLight" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<widget field="PWM" type="Speed Controller" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
+	<widget field="DriveBase" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<widget field="Left" type="Speed Controller" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
 			<location x="6" y="16"/>
 			<height>46</height>
 			<width>293</width>
 		</widget>
-		<location x="351" y="3"/>
+		<widget field="Right" type="Speed Controller" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
+			<location x="6" y="62"/>
+			<height>46</height>
+			<width>293</width>
+		</widget>
+		<widget field="Rear" type="Speed Controller" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
+			<location x="6" y="108"/>
+			<height>46</height>
+			<width>293</width>
+		</widget>
+		<widget field="Gyro" type="Analog Input" class="edu.wpi.first.smartdashboard.livewindow.elements.SingleNumberDisplay">
+			<location x="6" y="154"/>
+			<height>20</height>
+			<width>293</width>
+		</widget>
+		<location x="16" y="68"/>
 		<width>305</width>
-		<height>69</height>
+		<height>181</height>
 	</widget>
 	<widget field="Shooter" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
 		<widget field="Injector" type="Double Solenoid" class="edu.wpi.first.smartdashboard.livewindow.elements.RelayController">
@@ -236,31 +250,6 @@
 		<width>305</width>
 		<height>275</height>
 	</widget>
-	<widget field="DriveBase" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<widget field="Left" type="Speed Controller" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
-			<location x="6" y="16"/>
-			<height>46</height>
-			<width>293</width>
-		</widget>
-		<widget field="Right" type="Speed Controller" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
-			<location x="6" y="62"/>
-			<height>46</height>
-			<width>293</width>
-		</widget>
-		<widget field="Rear" type="Speed Controller" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
-			<location x="6" y="108"/>
-			<height>46</height>
-			<width>293</width>
-		</widget>
-		<widget field="Gyro" type="Analog Input" class="edu.wpi.first.smartdashboard.livewindow.elements.SingleNumberDisplay">
-			<location x="6" y="154"/>
-			<height>20</height>
-			<width>293</width>
-		</widget>
-		<location x="16" y="68"/>
-		<width>305</width>
-		<height>181</height>
-	</widget>
 	<widget field="Compressor" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
 		<widget field="PressureSwitch" type="Digital Input" class="edu.wpi.first.smartdashboard.livewindow.elements.DigitalInputDisplay">
 			<location x="6" y="16"/>
@@ -275,6 +264,26 @@
 		<location x="155" y="1"/>
 		<width>179</width>
 		<height>63</height>
+	</widget>
+	<widget field="DriverStation" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<widget field="Battery" type="Analog Input" class="edu.wpi.first.smartdashboard.livewindow.elements.SingleNumberDisplay">
+			<location x="6" y="16"/>
+			<height>20</height>
+			<width>130</width>
+		</widget>
+		<location x="5" y="2"/>
+		<width>142</width>
+		<height>43</height>
+	</widget>
+	<widget field="BlinkyLight" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<widget field="PWM" type="Speed Controller" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
+			<location x="6" y="16"/>
+			<height>46</height>
+			<width>293</width>
+		</widget>
+		<location x="351" y="3"/>
+		<width>305</width>
+		<height>69</height>
 	</widget>
 </live-window>
 	<hidden field="Shooter RampRate"/>
