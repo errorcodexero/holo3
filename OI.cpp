@@ -46,7 +46,7 @@ OI::OI()
     m_pSpeedAdjust        = new DSAnalogInput(m_pEIO, 3);
     m_pShooterTarget      = new DSAnalogInput(m_pEIO, 4);
 
-    m_pDump               = new DSDigitalInput(m_pEIO, 1,
+    m_pClaw               = new DSDigitalInput(m_pEIO, 1,
 				    DriverStationEnhancedIO::kInputPullUp,
 				    true);
     m_pCameraLight        = new DSDigitalInput(m_pEIO, 2,
@@ -84,7 +84,7 @@ OI::~OI()
     delete m_pTip;
     delete m_pSpeedAdjust;
     delete m_pShooterTarget;
-    delete m_pDump;
+    delete m_pClaw;
     delete m_pCameraLight;
     delete m_pCameraPosition;
     delete m_pLearnButton;

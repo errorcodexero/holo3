@@ -37,7 +37,7 @@ void ClimbManual::Execute()
 
     // The OI "dump" switch controls the claw.
     Robot::climber()->SetClaw(
-	Robot::oi()->GetDump() ? Climber::kOpen : Climber::kClosed
+	Robot::oi()->GetClaw() ? Climber::kOpen : Climber::kClosed
     );
 
     // The OI "climb" switch controls the hooks.
