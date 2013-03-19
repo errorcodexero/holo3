@@ -89,11 +89,11 @@ RobotDrive3::RobotDrive3(SpeedController &frontMotor,
 // @param rotation The rate of rotation for the robot, completely independent
 // of the translation. [-1.0..1.0], positive rotation is to the right.
 
-static const float kFast = 0.25; // if applied power is less than this,
-				 //   we aren't really moving
+static const float kFast = 0.15;  // if applied power is less than this,
+				  //   we aren't really moving
 
-static const float kDecay = 0.8; // tune this for best match to actual
-				 //   robot drag and inertia
+static const float kDecay = 0.95; // tune this for best match to actual
+				  //   robot drag and inertia
 
 static int Sign(float x) { return (x < -kFast) ? -1 : (x >  kFast) ?  1 : 0; }
 
@@ -128,6 +128,7 @@ void RobotDrive3::HolonomicDrive_Cartesian( float x, float y, float rotation )
     // immediately increase to that value.
     // This may be a bad assumption!
 
+
     if (Sign(wheelSpeeds[kFrontLeftMotor]) *
 	Sign(m_lastSpeeds[kFrontLeftMotor]) == -1)
     {
@@ -142,6 +143,38 @@ void RobotDrive3::HolonomicDrive_Cartesian( float x, float y, float rotation )
     else
     {
 	m_lastSpeeds[kFrontLeftMotor] = wheelSpeeds[kFrontLeftMotor];
+    }
+
+    if (Sign(wheelSpeeds[kRearLeftMotor]) *
+	Sign(m_lastSpeeds[kRearLeftMotor]) == -1)
+    {
+	wheelSpeeds[kRearLeftMotor] = 0.0;
+    }
+
+    if (fabs(wheelSpeeds[kRearLeftMotor]) <
+	fabs(m_lastSpeeds[kRearLeftMotor]) * kDecay)
+    {
+	m_lastSpeeds[kRearLeftMotor] *= kDecay;
+    }
+    else
+    {
+	m_lastSpeeds[kRearLeftMotor] = wheelSpeeds[kRearLeftMotor];
+    }
+
+    if (Sign(wheelSpeeds[kRearRightMotor]) *
+	Sign(m_lastSpeeds[kRearRightMotor]) == -1)
+    {
+	wheelSpeeds[kRearRightMotor] = 0.0;
+    }
+
+    if (fabs(wheelSpeeds[kRearRightMotor]) <
+	fabs(m_lastSpeeds[kRearRightMotor]) * kDecay)
+    {
+	m_lastSpeeds[kRearRightMotor] *= kDecay;
+    }
+    else
+    {
+	m_lastSpeeds[kRearRightMotor] = wheelSpeeds[kRearRightMotor];
     }
 
     UINT8 syncGroup = 0x80;

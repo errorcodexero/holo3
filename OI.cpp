@@ -169,7 +169,9 @@ void OI::Initialize()
     SmartDashboard::PutData("Tilt Long", m_pTiltLong);
 
     m_pClimbCommand = new ClimbCommand();
+#if HAVE_CLIMB
     SmartDashboard::PutData("Climb", m_pClimbCommand);
+#endif
 
     // m_pBlinkyOn = new BlinkyOn();
     // SmartDashboard::PutData("Blinky On", m_pBlinkyOn);
