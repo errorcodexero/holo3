@@ -90,13 +90,24 @@ void DriveBase::Start()
 {
     if (!m_started) {
 printf("DriveBase::Start\n");
+	// set the watchdog timers to something long enough to
+	// avoid panic in the presence of short-term network dropouts
+	m_drive3->SetExpiration(2.0);
+	dynamic_cast<MotorSafety*>(m_rear)->SetExpiration(2.0);
+	dynamic_cast<MotorSafety*>(m_right)->SetExpiration(2.0);
+	dynamic_cast<MotorSafety*>(m_left)->SetExpiration(2.0);
+
 	// set all motors to 0.0 in order to feed their watchdogs
 	m_drive3->SetLeftRightMotorOutputs(0.0, 0.0);
+
 	// now enable the watchdogs
 	m_drive3->SetSafetyEnabled(true);
+#if 0 // we don't really need watchdogs on the individual motors
 	dynamic_cast<MotorSafety*>(m_rear)->SetSafetyEnabled(true);
 	dynamic_cast<MotorSafety*>(m_right)->SetSafetyEnabled(true);
 	dynamic_cast<MotorSafety*>(m_left)->SetSafetyEnabled(true);
+#endif
+
 	// remember that we're started
 	m_started = true;
     }

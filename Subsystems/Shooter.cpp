@@ -141,11 +141,11 @@ void Shooter::Start()
     // Enable Jaguar control:
     m_motor->EnableControl();
 
-    // Increase motor safety timer to match status reporting interval
+    // Increase motor safety timer to something suitably long
     // Poke the motor speed to reset the watchdog, then enable the watchdog
     m_speed = SmartDashboard::GetNumber("Shooter Speed");
+    m_motor->SetExpiration(2.0);
     m_motor->Set(m_speed);
-    m_motor->SetExpiration(kReportInterval);
     m_motor->SetSafetyEnabled(true);
 
     // Start run timer
