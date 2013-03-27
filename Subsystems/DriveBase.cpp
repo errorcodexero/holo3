@@ -39,7 +39,6 @@ DriveBase::DriveBase( int leftMotorChannel,
 
     Stop();
 }
-
 DriveBase::~DriveBase()
 {
     SetDefaultCommand(NULL);
@@ -84,6 +83,7 @@ printf("DriveBase::Stop\n");
     dynamic_cast<MotorSafety*>(m_left)->SetSafetyEnabled(false);
     // remember that we're stopped
     m_started = false;
+    printf("DriveBase::StopComplete\n");
 }
 
 void DriveBase::Start()

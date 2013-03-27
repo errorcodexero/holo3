@@ -11,9 +11,11 @@
 // and canceled when the robot enters any other mode.
 
 class BlinkyBreathe;
+/*
 class TiltCommand;
 class TargetCommand;
 class ShootCommand;
+*/
 
 class AutoCommand: public CommandGroup {
 public:	
@@ -27,9 +29,11 @@ public:
 
 private:
     BlinkyBreathe *m_blinky;
+/*
     TiltCommand *m_tilt;
     TargetCommand *m_target;
     ShootCommand *m_shoot;
+*/
 };
 
 #endif

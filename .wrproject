@@ -257,9 +257,9 @@
         </mapAttribute>
     </attributes>
     <buildtargets>
-        <buildtarget buildtool="Linker" name="holo3" passed="false" targetname="holo3">
+        <buildtarget buildtool="Linker" name="D_Bot" passed="false" targetname="D_Bot">
             <contents>
-                <folder name="/holo3" recursive="true"/>
+                <folder name="/D_Bot" recursive="true"/>
             </contents>
         </buildtarget>
     </buildtargets>
