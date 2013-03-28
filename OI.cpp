@@ -45,6 +45,8 @@ OI::OI()
 
     m_pSpeedAdjust        = new DSAnalogInput(m_pEIO, 3);
     m_pShooterTarget      = new DSAnalogInput(m_pEIO, 4);
+    m_pShooterTilt        = new DSAnalogInput(m_pEIO, 5);
+    m_pAutoSelect         = new DSAnalogInput(m_pEIO, 6);
 
     // digital input 1 was 2-position claw control
     // now used for climber control
@@ -87,6 +89,8 @@ OI::~OI()
     delete m_pGamepadStart;
     delete m_pSpeedAdjust;
     delete m_pShooterTarget;
+    delete m_pShooterTilt;
+    delete m_pAutoSelect;
     delete m_pClimber;
     delete m_pCameraLight;
     delete m_pCameraPosition;

@@ -97,6 +97,8 @@ private:
 
     DSAnalogInput* m_pSpeedAdjust;
     DSAnalogInput* m_pShooterTarget;
+    DSAnalogInput* m_pShooterTilt;
+    DSAnalogInput* m_pAutoSelect;
 
     DSDigitalInput* m_pClimber;
     DSDigitalInput* m_pCameraLight;
@@ -149,7 +151,9 @@ public:
     DriverStationEnhancedIO* GetEIO() { return m_pEIO; }
     DriverStationLCD* GetLCD() { return m_pLCD; }
     bool GetClimber() { return m_pClimber->Get(); }
-    int GetTarget() { return m_pShooterTarget->GetDigital(3); }
+    int GetTilt() { return m_pShooterTilt->GetDigital(3); }
+    int GetTarget() { return m_pShooterTarget->GetDigital(3) + 1; }
+    int GetAuto() { return m_pAutoSelect->GetDigital(10); }
     double GetSpeedAdjust() { return m_pSpeedAdjust->GetAnalog(); }
     void SetReadyLED( bool value ) { m_pReadyLED->Set(value); }
     bool GetLaunch() { return m_pLaunch->Get(); }

@@ -3,6 +3,7 @@
 
 #include <WPILib.h>
 #include "Robot.h"
+#include "OI.h"
 #include "BlinkyLight.h"
 #include "Shooter.h"
 #include "AutoCommand.h"
@@ -17,7 +18,8 @@ AutoCommand::AutoCommand() :
     m_blinky = new BlinkyBreathe(3.0);
     m_tilt = new TiltCommand(Shooter::kLong);
     m_target = new TargetCommand();
-    m_shoot = new ShootCommand(Shooter::kMid, 3);
+    // default setting: shoot 3 disks for 3/6 points each from mid-field
+    m_shoot = new ShootCommand(Shooter::kMid, 3, 3);
 
     AddParallel(m_blinky);
     AddSequential(m_tilt);
@@ -34,6 +36,18 @@ AutoCommand::~AutoCommand()
 void AutoCommand::Initialize()
 {
     printf("AutoCommand::Initialize\n");
+
+    m_shoot->SetDistance(Shooter::kMid);
+
+    // TBD: We can do this based on the "AutoSelect" rotary switch or on
+    // the gunner's target height selector.  Figure out which the drive
+    // team prefers!
+
+    // For now, use the AutoSelect.  When set to "2", shoot for the 2-point
+    // goal, else for the 3-point goal.
+
+    m_shoot->SetTarget( (Robot::oi()->GetAuto() == 2) ? 2 : 3 );
+    m_shoot->SetNumDisks(3);
 }
 
 void AutoCommand::Execute()
