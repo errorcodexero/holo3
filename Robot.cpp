@@ -37,7 +37,7 @@ void Robot::RobotInit()
     // printf("Robot::RobotInit()\n");
 
     m_oi = new OI();
-
+    printf("%s (%s:%d)\n", __FUNCTION__, __FILE__, __LINE__);
     // subsystems
 
     //m_compressor = new Compressor( DIGITAL_PRESSURE_SWITCH, RELAY_COMPRESSOR );
@@ -128,6 +128,7 @@ void Robot::TestInit()
 
 void Robot::TestPeriodic()
 {
+	
     LiveWindow::GetInstance()->Run();
 }
 

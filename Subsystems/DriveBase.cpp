@@ -16,7 +16,8 @@ DriveBase::DriveBase( int leftMotorChannel,
     m_defaultCommand(NULL),
     m_started(false)
 {
-    LiveWindow *lw = LiveWindow::GetInstance();
+	printf("%s (%s:%d)\n", __FUNCTION__, __FILE__, __LINE__);
+	LiveWindow *lw = LiveWindow::GetInstance();
 
     // Just to make things interesting (and because we
     // didn't have enough motor controllers of either type),
@@ -41,11 +42,12 @@ DriveBase::DriveBase( int leftMotorChannel,
 }
 DriveBase::~DriveBase()
 {
-    SetDefaultCommand(NULL);
+	printf("DriveBase::~DriveBase()\n");
+	SetDefaultCommand(NULL);
     Scheduler::GetInstance()->Remove(m_defaultCommand);
     delete m_defaultCommand;
     m_defaultCommand = NULL;
-
+    
     Stop();
 
     delete m_gyro;
@@ -57,10 +59,14 @@ DriveBase::~DriveBase()
     
 void DriveBase::InitDefaultCommand()
 {
-    if (!m_defaultCommand) {
+    printf("%s (%s:%d)\n", __FUNCTION__, __FILE__, __LINE__);
+	if (!m_defaultCommand) {
 	m_defaultCommand = new DriveCommand();
+	printf("new DriveCommand\n");
 	SetDefaultCommand(m_defaultCommand);
+	printf("SetDefaultCommand\n");
     }
+	printf("InitDefaultCommand Complete\n");
 }
 
 void DriveBase::Stop()
@@ -88,8 +94,9 @@ printf("DriveBase::Stop\n");
 
 void DriveBase::Start()
 {
+	printf("%s (%s:%d)\n", __FUNCTION__, __FILE__, __LINE__);
     if (!m_started) {
-printf("DriveBase::Start\n");
+    printf("DriveBase::Start\n");
 	// set all motors to 0.0 in order to feed their watchdogs
 	m_drive3->SetLeftRightMotorOutputs(0.0, 0.0);
 	// now enable the watchdogs
@@ -104,6 +111,7 @@ printf("DriveBase::Start\n");
 
 void DriveBase::Drive3( float x, float y, float twist )
 {
+	printf("%s (%s:%d)\n", __FUNCTION__, __FILE__, __LINE__);
     if (!m_started) Start();
 
     // Reduce the sensitivity to the "twist" control.

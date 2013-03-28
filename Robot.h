@@ -168,7 +168,7 @@ public:
     static Robot& theRobot() { return (Robot&) RobotBase::getInstance(); };
 
     // convenience accessors
-    static DriveBase* driveBase() { return theRobot().m_driveBase; };
+    static DriveBase* driveBase() { return theRobot().m_driveBase; printf("%s (%s:%d) %p\n", __FUNCTION__, __FILE__, __LINE__, theRobot().m_driveBase); };
     //static Climber* climber() { return theRobot().m_climber; };
     static BlinkyLight* blinkyLight() { return theRobot().m_blinkyLight; };
     //static Shooter* shooter() { return theRobot().m_shooter; };
