@@ -12,7 +12,7 @@
             <stringAttribute key="BLD::Info|GlobalMacro|DEFINES" value=""/>
             <stringAttribute key="BLD::Info|GlobalMacro|EXPAND_DBG" value="0"/>
             <stringAttribute key="BLD::Info|GlobalMacro|PROJECT_TYPE" value="DKM"/>
-            <stringAttribute key="BLD::Info|GlobalMacro|WS_DIR" value="C:/WindRiver/workspace/holo3"/>
+            <stringAttribute key="BLD::Info|GlobalMacro|WS_DIR" value="C:/WindRiver/workspace/dbot"/>
             <listAttribute key="BLD::Info|Incl|PPC32diab">
                 <stringAttribute value="-I$(WIND_BASE)/target/h/WPILib"/>
                 <stringAttribute value="-I$(WIND_BASE)/target/h"/>
@@ -257,9 +257,9 @@
         </mapAttribute>
     </attributes>
     <buildtargets>
-        <buildtarget buildtool="Linker" name="D_Bot" passed="false" targetname="D_Bot">
+        <buildtarget buildtool="Linker" name="dbot" passed="false" targetname="dbot">
             <contents>
-                <folder name="/D_Bot" recursive="true"/>
+                <folder name="/dbot" recursive="true"/>
             </contents>
         </buildtarget>
     </buildtargets>
