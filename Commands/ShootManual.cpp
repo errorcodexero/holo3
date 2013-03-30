@@ -50,8 +50,8 @@ void ShootManual::Execute()
 	break;
     }
 
-    // adjust base speed +/- 16.67%
-    speed *= (1.0 + (Robot::oi()->GetSpeedAdjust() - 0.5) / 3.0);
+    // adjust base speed +/- 10%
+    speed *= (1.0 + (Robot::oi()->GetSpeedAdjust() - 0.5) / 5.0);
 
     Robot::shooter()->SetAngle(target);
     Robot::shooter()->SetSpeed(speed);
@@ -116,10 +116,12 @@ void ShootManual::End()
 {
     printf("ShootManual::End\n");
     Robot::shooter()->Stop();
+    Robot::oi()->SetReadyLED(false);
 }
 
 void ShootManual::Interrupted()
 {
     printf("ShootManual::Interrupted\n");
     Robot::shooter()->Stop();
+    Robot::oi()->SetReadyLED(false);
 }
