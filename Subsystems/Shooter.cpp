@@ -33,7 +33,7 @@ Shooter::Shooter( int motorChannel, int positionerChannel, int switchChannel,
     SmartDashboard::PutNumber("Shooter Voltage", 0.0);
     SmartDashboard::PutNumber("Shooter RPM", 0.0);
 
-    m_speedTolerance = 4.0;  // +/- 4% speed tolerance
+    m_speedTolerance = 0.25;  // +/- 0.25% speed tolerance
     SmartDashboard::PutNumber("Shooter Tolerance (%)", m_speedTolerance);
 
     m_speedStable = 0.9; // must remain in tolerance at least this long
@@ -163,6 +163,8 @@ void Shooter::Stop()
     // stop motor
     m_motor->StopMotor();
     m_motor->SetSafetyEnabled(false);
+    SmartDashboard::PutNumber("Shooter Voltage", 0.0);
+    SmartDashboard::PutNumber("Shooter RPM", 0.0);
 
     // stop positioner
     m_positioner->Stop();

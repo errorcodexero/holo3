@@ -132,10 +132,12 @@ void ShootManual::End()
 {
     printf("ShootManual::End\n");
     Robot::shooter()->Stop();
+    Robot::oi()->SetReadyLED(false);
 }
 
 void ShootManual::Interrupted()
 {
     printf("ShootManual::Interrupted\n");
     Robot::shooter()->Stop();
+    Robot::oi()->SetReadyLED(false);
 }
