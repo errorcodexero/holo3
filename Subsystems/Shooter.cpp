@@ -163,6 +163,8 @@ void Shooter::Stop()
     // stop motor
     m_motor->StopMotor();
     m_motor->SetSafetyEnabled(false);
+    SmartDashboard::PutNumber("Shooter Voltage", 0.0);
+    SmartDashboard::PutNumber("Shooter RPM", 0.0);
 
     // stop positioner
     m_positioner->Stop();
