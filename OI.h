@@ -114,27 +114,6 @@ private:
     class Rotate* m_pRotateFwd;
     class Rotate* m_pRotateRev;
 
-    // shooting
-    /*
-    class TargetCommand* m_pTargetCommand;
-
-    class SelectTarget* m_pSelectTargetLeft;
-    class SelectTarget* m_pSelectTargetRight;
-    class SelectTarget* m_pSelectTargetMid;
-
-    class ShootCommand* m_pShootShort;
-    class ShootCommand* m_pShootMid;
-    class ShootCommand* m_pShootLong;
-
-    class ShootManual*  m_pShootManual;
-
-    class TiltCommand* m_pTiltShort;
-    class TiltCommand* m_pTiltMid;
-    class TiltCommand* m_pTiltLong;
-	*/
-    // climber
-    //class ClimbCommand* m_pClimbCommand;
-
 public:
     OI();
     ~OI();
@@ -143,12 +122,6 @@ public:
     Joystick* GetStick() { return m_pStick; }
     DriverStationEnhancedIO* GetEIO() { return m_pEIO; }
     DriverStationLCD* GetLCD() { return m_pLCD; }
-    //bool GetClimber() { return m_pClimber->Get(); }
-    //int GetTarget() { return m_pShooterTarget->GetDigital(3); }
-    //double GetSpeedAdjust() { return m_pSpeedAdjust->GetAnalog(); }
-    //void SetReadyLED( bool value ) { m_pReadyLED->Set(value); }
-    //bool GetLaunch() { return m_pLaunch->Get(); }
-    //bool GetLearn() { return m_pLearnButton->Get(); }
 };
 
 #endif

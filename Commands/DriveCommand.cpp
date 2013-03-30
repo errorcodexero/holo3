@@ -15,7 +15,6 @@ static UINT32 then;
 DriveCommand::DriveCommand() :
     Command("DriveCommand")
 {
-	printf("%s (%s:%d)\n", __FUNCTION__, __FILE__, __LINE__);
     Requires(Robot::driveBase());
 }
 

@@ -8,34 +8,18 @@ class Robot;
 
 #include <WPILib.h>
 
+// Sensors & Actuators
+class RateGyro;
+
 // Subsystems
 class BlinkyLight;
-//class Climber;
 class DriveBase;
-class RateGyro;
-//class Shooter;
-//class TripleSolenoid;
 
 // Commands
 class AutoCommand;
 
 // Operator Interface
 class OI;
-
-////////////////////////////////////////////////////////////////////
-// Digital Inputs:
-// 1 - pneumatics pressure switch
-//     (polarity handled by Compressor class)
-
-//#define	DIGITAL_PRESSURE_SWITCH		1
-
-// 2-5 - not used
-
-// 6 - shooter mid-range position
-
-//#define DIGITAL_SHOOTER_CENTER		6
-
-// 7-8 - not used
 
 ////////////////////////////////////////////////////////////////////
 // Analog Inputs:
@@ -47,41 +31,6 @@ class OI;
 // 2-7 - not used
 
 // 8 - battery (from analog bumper)
-
-////////////////////////////////////////////////////////////////////
-// Relay (Spike) Outputs:
-// 1 - compressor
-
-//#define	RELAY_COMPRESSOR		1
-
-////////////////////////////////////////////////////////////////////
-// Solenoid Outputs:
-//
-
-// 1,2 - not used
-
-// 3,4 - shooter position
-//     3 = extend (deploy for long range)
-//     4 = retract (for shooting at tower goal)
-
-//#define SOLENOID_SHOOTER_EXTEND		3
-//#define SOLENOID_SHOOTER_RETRACT	4
-
-// 5,6 - shooter injector
-//     5 = extend (to let a disk drop into firing position)
-//     6 = retract (idle)
-
-//#define SOLENOID_SHOOTER_LOAD		5
-//#define SOLENOID_SHOOTER_SHOOT		6
-
-// 7   - climber
-//     true = extend
-//     false = retract
-//     retracts when robot is disabled
-
-//#define	SOLENOID_CLIMBER_EXTEND		7
-
-// 8   - not used
 
 ////////////////////////////////////////////////////////////////////
 // PWM Outputs:
@@ -101,23 +50,6 @@ class OI;
 
 // 7,8 - not used
 
-////////////////////////////////////////////////////////////////////
-// CAN (CANJaguar) channels:
-// 6 - shooter motor
-
-#define CAN_SHOOTER			6
-
-////////////////////////////////////////////////////////////////////
-#if 0
-extern const char *KEY_SPEED_SHORT;
-#define	DEFAULT_SPEED_SHORT 1600 // shooting at tower from base of tower
-
-extern const char *KEY_SPEED_MID;
-#define	DEFAULT_SPEED_MID   2500 // shooting at high goal from back of tower
-
-extern const char *KEY_SPEED_LONG;
-#define	DEFAULT_SPEED_LONG  3200 // shooting at high goal from feeder station
-#endif
 ////////////////////////////////////////////////////////////////////
 
 class Robot : public IterativeRobot {
@@ -142,26 +74,16 @@ private:
     //   then the OI,
     //   then any other commands
 
-    // global sensors
-    //Compressor* m_compressor;
-
     // OI
     OI* m_oi;
 
     // subsystems
     DriveBase* m_driveBase;
-    //Climber* m_climber;
-    //Shooter* m_shooter;
     BlinkyLight* m_blinkyLight;
     
 public:
     // commands
     AutoCommand* m_autonomousCommand;
-
-    // shared variables
-    //double m_speed_short;
-    //double m_speed_mid;
-    //double m_speed_long;
 
 public:
     // singleton accessor
@@ -169,9 +91,7 @@ public:
 
     // convenience accessors
     static DriveBase* driveBase() { return theRobot().m_driveBase; printf("%s (%s:%d) %p\n", __FUNCTION__, __FILE__, __LINE__, theRobot().m_driveBase); };
-    //static Climber* climber() { return theRobot().m_climber; };
     static BlinkyLight* blinkyLight() { return theRobot().m_blinkyLight; };
-    //static Shooter* shooter() { return theRobot().m_shooter; };
     static OI* oi() { return theRobot().m_oi; };
 
     void Cancel();
