@@ -110,14 +110,12 @@ private:
     // aiming
     class TimedDrive* m_pNudgeLeft;
     class TimedDrive* m_pNudgeRight;
-
+    
     class Rotate* m_pRotateFwd;
     class Rotate* m_pRotateRev;
 
-    class AimTrim* m_pTrimLeft;
-    class AimTrim* m_pTrimRight;
-
     // shooting
+    /*
     class TargetCommand* m_pTargetCommand;
 
     class SelectTarget* m_pSelectTargetLeft;
@@ -133,12 +131,9 @@ private:
     class TiltCommand* m_pTiltShort;
     class TiltCommand* m_pTiltMid;
     class TiltCommand* m_pTiltLong;
-
+	*/
     // climber
-    class ClimbCommand* m_pClimbCommand;
-
-    // reset (for pit use!)
-    class ResetRobot* m_pResetRobot;
+    //class ClimbCommand* m_pClimbCommand;
 
 public:
     OI();
@@ -148,12 +143,12 @@ public:
     Joystick* GetStick() { return m_pStick; }
     DriverStationEnhancedIO* GetEIO() { return m_pEIO; }
     DriverStationLCD* GetLCD() { return m_pLCD; }
-    bool GetClimber() { return m_pClimber->Get(); }
-    int GetTarget() { return m_pShooterTarget->GetDigital(3); }
-    double GetSpeedAdjust() { return m_pSpeedAdjust->GetAnalog(); }
-    void SetReadyLED( bool value ) { m_pReadyLED->Set(value); }
-    bool GetLaunch() { return m_pLaunch->Get(); }
-    bool GetLearn() { return m_pLearnButton->Get(); }
+    //bool GetClimber() { return m_pClimber->Get(); }
+    //int GetTarget() { return m_pShooterTarget->GetDigital(3); }
+    //double GetSpeedAdjust() { return m_pSpeedAdjust->GetAnalog(); }
+    //void SetReadyLED( bool value ) { m_pReadyLED->Set(value); }
+    //bool GetLaunch() { return m_pLaunch->Get(); }
+    //bool GetLearn() { return m_pLearnButton->Get(); }
 };
 
 #endif

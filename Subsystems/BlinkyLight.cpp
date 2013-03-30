@@ -17,7 +17,7 @@ BlinkyLight::BlinkyLight( int pwmChannel )
     
 void BlinkyLight::InitDefaultCommand()
 {
-    // SetDefaultCommand(new BlinkyOn());
+    SetDefaultCommand(new BlinkyOn());
 }
 
 // Put methods for controlling this subsystem

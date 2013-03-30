@@ -39,14 +39,14 @@ DriveBase::DriveBase( int leftMotorChannel,
 
     Stop();
 }
-
 DriveBase::~DriveBase()
 {
+    printf("DriveBase::~DriveBase()\n");
     SetDefaultCommand(NULL);
     Scheduler::GetInstance()->Remove(m_defaultCommand);
     delete m_defaultCommand;
     m_defaultCommand = NULL;
-
+    
     Stop();
 
     delete m_gyro;
@@ -60,8 +60,11 @@ void DriveBase::InitDefaultCommand()
 {
     if (!m_defaultCommand) {
 	m_defaultCommand = new DriveCommand();
+	printf("new DriveCommand\n");
 	SetDefaultCommand(m_defaultCommand);
+	printf("SetDefaultCommand\n");
     }
+    printf("InitDefaultCommand Complete\n");
 }
 
 void DriveBase::Stop()
@@ -84,12 +87,13 @@ printf("DriveBase::Stop\n");
     dynamic_cast<MotorSafety*>(m_left)->SetSafetyEnabled(false);
     // remember that we're stopped
     m_started = false;
+    printf("DriveBase::StopComplete\n");
 }
 
 void DriveBase::Start()
 {
     if (!m_started) {
-printf("DriveBase::Start\n");
+	printf("DriveBase::Start\n");
 	// set the watchdog timers to something long enough to
 	// avoid panic in the presence of short-term network dropouts
 	m_drive3->SetExpiration(2.0);
