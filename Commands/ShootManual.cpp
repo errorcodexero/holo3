@@ -112,7 +112,7 @@ void ShootManual::Execute()
 	}
     }
 
-    if (Robot::shooter()->IsReadyToShoot()) {
+    if (Robot::shooter()->IsReadyToShoot() || Robot::oi()->GetOverride()) {
 	Robot::oi()->SetReadyLED(true);
 	if (Robot::oi()->GetLaunch()) {
 	    Robot::shooter()->Inject();

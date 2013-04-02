@@ -161,6 +161,7 @@ public:
     double GetSpeedAdjust() { return m_pSpeedAdjust->GetAnalog(); }
     void SetReadyLED( bool value ) { m_pReadyLED->Set(value); }
     bool GetLaunch() { return m_pLaunch->Get(); }
+    bool GetOverride() { return m_pShooterOverride->Get(); }
     bool GetLearn() { return m_pLearn->Get(); }
 }; 
 #endif
