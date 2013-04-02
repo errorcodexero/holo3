@@ -14,18 +14,11 @@ OI::OI()
     m_pLCD = DriverStationLCD::GetInstance();
 
     m_pStick = new Joystick(1);
-#if 1	// using gamepad rather than joystick
-    // left stick L/R 1  -> X 
-    // left stick U/D 2  -> Y
-    // Z buttons L/R 3   -> throttle
-    // right stick L/R 4 -> twist 
-    // right stick U/D 5 -> Nothing
-    m_pStick->SetAxisChannel( Joystick::kXAxis, 1 );
-    m_pStick->SetAxisChannel( Joystick::kYAxis, 2 );
-    m_pStick->SetAxisChannel( Joystick::kThrottleAxis, 3 );
-    m_pStick->SetAxisChannel( Joystick::kTwistAxis, 4 );
-    //m_pStick->SetAxisChannel( Joystick::kYAxis, 5 );
-#endif
+    // gamepad axis 1 -> left stick X
+    // gamepad axis 2 -> left stick Y
+    // gamepad axis 3 -> Z/throttle buttons
+    // gamepad axis 4 -> right stick X
+    // gamepad axis 5 -> right stick Y
     m_pGamepadButtonA     = new JoystickButton(m_pStick, 1);
     m_pGamepadButtonB     = new JoystickButton(m_pStick, 2);
     m_pGamepadButtonX     = new JoystickButton(m_pStick, 3);
