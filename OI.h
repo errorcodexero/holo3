@@ -101,11 +101,12 @@ private:
     DSAnalogInput* m_pAutoSelect;
 
     DSDigitalInput* m_pClimber;
-    DSDigitalInput* m_pCameraLight;
-    DSDigitalInput* m_pCameraPosition;
-    DSDigitalInput* m_pLearnButton;
-    DSDigitalInput* m_pManualOverride;
+    DSDigitalInput* m_pLightsOn;
+    DSDigitalInput* m_pDriverSelect;
+    DSDigitalInput* m_pShooterOverride;
+    DSDigitalInput* m_pShooterOn;
     DSDigitalInput* m_pLaunch;
+    DSDigitalInput* m_pLearn;
 
     DSDigitalOutput* m_pReadyLED;
 
@@ -147,9 +148,12 @@ public:
     ~OI();
     void Initialize();
     DriverStation *GetDS() { return m_pDS; }
-    Joystick* GetStick() { return m_pStick; }
     DriverStationEnhancedIO* GetEIO() { return m_pEIO; }
     DriverStationLCD* GetLCD() { return m_pLCD; }
+    float GetX() { return m_pStick->GetRawAxis( 1 ); } 
+    float GetY() { return m_pStick->GetRawAxis( m_pDriverSelect->Get() ? 5 : 2 ); } 
+    float GetThrottle() { return m_pStick->GetRawAxis( 3 ); } 
+    float GetTwist() { return m_pStick->GetRawAxis( 4 ); } 
     bool GetClimber() { return m_pClimber->Get(); }
     int GetTilt() { return m_pShooterTilt->GetDigital(3); }
     int GetTarget() { return m_pShooterTarget->GetDigital(3) + 1; }
@@ -157,7 +161,6 @@ public:
     double GetSpeedAdjust() { return m_pSpeedAdjust->GetAnalog(); }
     void SetReadyLED( bool value ) { m_pReadyLED->Set(value); }
     bool GetLaunch() { return m_pLaunch->Get(); }
-    bool GetLearn() { return m_pLearnButton->Get(); }
-};
-
+    bool GetLearn() { return m_pLearn->Get(); }
+}; 
 #endif
