@@ -34,6 +34,12 @@ DriveBase::DriveBase( int leftMotorChannel,
     // expect (left-)front, left-rear and right-rear motors.
     m_drive3 = new RobotDrive3(m_rear, m_right, m_left);
 
+    // The motors/transmissions on dbot (Patrick) rotate the opposite
+    // direction from the motors on the competition bot (Gary).
+    m_drive3->SetInvertedMotor(kFrontLeftMotor, true);
+    m_drive3->SetInvertedMotor(kRearLeftMotor,  true);
+    m_drive3->SetInvertedMotor(kRearRightMotor, true);
+
     m_gyro = new RateGyro(1, gyroAnalogChannel);
     lw->AddSensor("DriveBase", "Gyro", m_gyro);
 
