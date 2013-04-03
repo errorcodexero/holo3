@@ -107,6 +107,7 @@ private:
     DSDigitalInput* m_pShooterOn;
     DSDigitalInput* m_pLaunch;
     DSDigitalInput* m_pLearn;
+    DSDigitalInput* m_pControllerMapping;
 
     DSDigitalOutput* m_pReadyLED;
 
@@ -150,10 +151,6 @@ public:
     DriverStation *GetDS() { return m_pDS; }
     DriverStationEnhancedIO* GetEIO() { return m_pEIO; }
     DriverStationLCD* GetLCD() { return m_pLCD; }
-    float GetX() { return m_pStick->GetRawAxis( 1 ); } 
-    float GetY() { return m_pStick->GetRawAxis( m_pDriverSelect->Get() ? 5 : 2 ); } 
-    float GetThrottle() { return m_pStick->GetRawAxis( 3 ); } 
-    float GetTwist() { return m_pStick->GetRawAxis( 4 ); } 
     bool GetClimber() { return m_pClimber->Get(); }
     int GetTilt() { return m_pShooterTilt->GetDigital(3); }
     int GetTarget() { return m_pShooterTarget->GetDigital(3) + 1; }
@@ -162,5 +159,6 @@ public:
     void SetReadyLED( bool value ) { m_pReadyLED->Set(value); }
     bool GetLaunch() { return m_pLaunch->Get(); }
     bool GetLearn() { return m_pLearn->Get(); }
+    Joystick* GetStick();
 }; 
 #endif
