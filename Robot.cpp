@@ -50,6 +50,7 @@ void Robot::RobotInit()
     m_climber = new Climber( SOLENOID_CLIMBER_EXTEND );
 
     m_shooter = new Shooter( CAN_SHOOTER,
+			     CAN_SHOOTER2,
 			     SOLENOID_SHOOTER_EXTEND,
 			     DIGITAL_SHOOTER_CENTER,
 			     SOLENOID_SHOOTER_LOAD );
