@@ -132,10 +132,10 @@ void OI::Initialize()
     m_pSelectTargetMid = new SelectTarget("mid");
     m_pGamepadButtonY->WhenPressed(m_pSelectTargetMid);
 
-    m_pNudgeLeft = new TimedDrive( 0.0, 0.0, -.35, 0.20 );
+    m_pNudgeLeft = new TimedDrive( 0.0, 0.0, -.20, 0.20 );
     m_pGamepadLeftBumper->WhenPressed(m_pNudgeLeft);
 
-    m_pNudgeRight = new TimedDrive( 0.0, 0.0, .35, 0.20 );
+    m_pNudgeRight = new TimedDrive( 0.0, 0.0, .20, 0.20 );
     m_pGamepadRightBumper->WhenPressed(m_pNudgeRight);
 
     m_pTrimLeft = new AimTrim(true);
