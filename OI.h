@@ -110,6 +110,8 @@ private:
     DSDigitalInput* m_pControllerMapping;
 
     DSDigitalOutput* m_pReadyLED;
+    
+    bool m_controllerMappingState;
 
     // aiming
     class TimedDrive* m_pNudgeLeft;

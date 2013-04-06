@@ -187,7 +187,7 @@ Joystick* OI::GetStick()
 {
     if (m_pControllerMapping->Get() != m_controllerMappingState)
     {
-        m_controllerMappingState != m_controllerMappingState;
+        m_controllerMappingState = !m_controllerMappingState;
 
         if (m_controllerMappingState)  // True  == Tristan's mapping
         {
