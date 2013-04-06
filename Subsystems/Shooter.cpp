@@ -219,8 +219,10 @@ void Shooter::Run()
     }
 
     m_speed = SmartDashboard::GetNumber("Shooter Speed");
-    m_motor->Set(m_speed, 0);
-    m_motor2->Set(m_speed, 0);
+    m_motor->Set(m_speed, 0x40);
+    m_motor2->Set(m_speed, 0x40);
+    UpdateSyncGroup(0x40);
+
     if (++m_report * kPollInterval >= kReportInterval) {
 	ReportSpeed();
 
