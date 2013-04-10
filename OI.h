@@ -110,6 +110,7 @@ private:
 
     DSDigitalOutput* m_pReadyLED;
 
+  
     // aiming
     class TimedDrive* m_pNudgeLeft;
     class TimedDrive* m_pNudgeRight;
@@ -163,5 +164,6 @@ public:
     bool GetLaunch() { return m_pLaunch->Get(); }
     bool GetOverride() { return m_pShooterOverride->Get(); }
     bool GetLearn() { return m_pLearn->Get(); }
+    
 }; 
 #endif
