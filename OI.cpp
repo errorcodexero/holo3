@@ -55,6 +55,10 @@ OI::OI()
 				    DriverStationEnhancedIO::kInputPullUp,
 				    false);	// active-low pushbutton
 
+    m_pControllerMapping  = new DSDigitalInput(m_pEIO, 3,
+                                    DriverStationEnhancedIO::kInputPullUp,
+                                    false);     // switch mounted backwards
+
     m_pShooterOn          = new DSDigitalInput(m_pEIO, 5,
 				    DriverStationEnhancedIO::kInputPullUp,
 				    true);	// active-high toggle
@@ -177,5 +181,29 @@ void OI::Initialize()
 
     m_pResetRobot = new ResetRobot();
     SmartDashboard::PutData("Reset Robot", m_pResetRobot);
+}
+
+Joystick* OI::GetStick()
+{
+    if (m_pControllerMapping->Get() != m_controllerMappingState)
+    {
+        m_controllerMappingState = !m_controllerMappingState;
+
+        if (m_controllerMappingState)  // True  == Tristan's mapping
+        {
+                m_pStick->SetAxisChannel( Joystick::kXAxis, 1 );
+                m_pStick->SetAxisChannel( Joystick::kYAxis, 2 );
+                m_pStick->SetAxisChannel( Joystick::kThrottleAxis, 3 );
+                m_pStick->SetAxisChannel( Joystick::kTwistAxis, 4 );
+        }
+        else                          // False == Chance's mapping
+        {
+                m_pStick->SetAxisChannel( Joystick::kXAxis, 1 );
+                m_pStick->SetAxisChannel( Joystick::kThrottleAxis, 3 );
+                m_pStick->SetAxisChannel( Joystick::kTwistAxis, 4 );
+                m_pStick->SetAxisChannel( Joystick::kYAxis, 5 );
+        }
+    }
+    return m_pStick;
 }
 

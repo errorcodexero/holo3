@@ -10,7 +10,7 @@ const double Shooter::kReportInterval = 0.300;
 #define SYNC_GROUP 0x40
 
 // Constructor
-Shooter::Shooter( int motorChannel, int positionerChannel, int switchChannel,
+Shooter::Shooter( int motorChannel, int motor2Channel, int positionerChannel, int switchChannel,
 			int injectorChannel )
     : Subsystem("Shooter")
 {
@@ -19,6 +19,7 @@ Shooter::Shooter( int motorChannel, int positionerChannel, int switchChannel,
     m_motor = new CANJaguar( motorChannel );
     lw->AddActuator("Shooter", "Motor1", m_motor);
     m_motor->SetSafetyEnabled(false);	// motor safety off while configuring
+    m_motor2->SetSafetyEnabled(false);	// motor safety off while configuring
 
     m_motor2 = new CANJaguar( motorChannel+1 );
     lw->AddActuator("Shooter", "Motor2", m_motor2);

@@ -9,7 +9,7 @@
 
 class Shooter : public Subsystem {
 public:
-    Shooter( int motorChannel, int positionerChannel,
+    Shooter( int motorChannel, int motor2Channel, int positionerChannel,
     	     int switchChannel, int injectorChannel );
     ~Shooter();
 
