@@ -41,15 +41,15 @@ private:
     TiltCommand *m_tilt;
     TargetCommand *m_target;
     ShootCommand *m_shoot;
-    TimedDrive *m_left;
-    TimedDrive *m_right;
-    TimedDrive *m_back;
-    TimedDrive *m_brake;
-    TimedDrive *m_halfBack;
-    TimedDrive *m_longLeft;
-    TimedDrive *m_longRight;
-    TimedDrive *m_shortLeft;
-    TimedDrive *m_shortRight;
+	
+    TimedDrive *m_firstMove;
+    TimedDrive *m_secondMove;
+    TimedDrive *m_thirdMove;
+    TimedDrive *m_fourthMove;
+    TimedDrive *m_fifthMove;
+    TimedDrive *m_sixthMove;
+
+    int m_autoModeKnob;
 };
 
 #endif

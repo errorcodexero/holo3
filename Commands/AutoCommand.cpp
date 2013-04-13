@@ -13,6 +13,10 @@
 #include "ShootCommand.h"
 #include "TimedDrive.h"
 
+void PrintDebug(char* stringToPrint){
+	printf("\n##########\n%s\n##########\n", stringToPrint);
+}
+
 AutoCommand::AutoCommand() :
     CommandGroup("AutoCommand")
 {
@@ -21,94 +25,33 @@ AutoCommand::AutoCommand() :
     m_target = new TargetCommand();
     // default setting: shoot 3 disks for 3/6 points each from mid-field
     m_shoot = new ShootCommand(Shooter::kMid, 3, 3);
-    
-    int autoModeKnob = Robot::oi()->GetAuto(); 
-    m_left = new TimedDrive(-0.8,0.0,-0.1,1.3);
-    m_right = new TimedDrive(0.8,0.0,0.1,1.3);
-    m_brake = new TimedDrive(0,0,0,.5);
-    m_back = new TimedDrive(0.0,0.8,0.05,1.5);
-    m_halfBack = new TimedDrive(0.0,0.8,0.05,0.75);
-    m_longLeft = new TimedDrive(-0.8,0.0,-0.1,1.6);
-    m_longRight = new TimedDrive(0.8,0.0,0.1,1.6);
-    m_shortLeft = new TimedDrive(-0.8,0.0,-0.1,0.6);
-    m_shortRight = new TimedDrive(-0.8,0.0,-0.1,0.6);
+
+    m_autoModeKnob = Robot::oi()->GetAuto();
+
+    m_firstMove = new TimedDrive(0.0,0.0,0.0,0.0);
+    m_secondMove = new TimedDrive(0.0,0.0,0.0,0.0);
+    m_thirdMove = new TimedDrive(0.0,0.0,0.0,0.0);
+    m_fourthMove = new TimedDrive(0.0,0.0,0.0,0.0);
+    m_fifthMove = new TimedDrive(0.0,0.0,0.0,0.0);
+    m_sixthMove = new TimedDrive(0.0,0.0,0.0,0.0);
     
     AddParallel(m_blinky);
-    AddSequential(m_tilt);
-    //AddSequential(m_target);
-    AddSequential(m_shoot);
-    /*
-     PRIGHT_FRIGHT 1
- 	 PRIGHT_FMID   2
-	 PRIGHT_FLEFT  3
-	 PMID_FRIGHT   4
- 	 PMID_FMID     5
- 	 PMID_FLEFT    6
-	 PLEFT_FRIGHT  7
-	 PLEFT_FMID    8
-	 PLEFT_FLEFT   9
-     */
-    switch(autoModeKnob) {
-    	case PRIGHT_FRIGHT:
-    	    AddSequential(m_right);
-    	    AddSequential(m_brake);
-    	    AddSequential(m_back);
-    		break;
-    	case PRIGHT_FMID:
-    		AddSequential(m_halfBack);
-    		AddSequential(m_brake);
-    		AddSequential(m_shortLeft);
-    		AddSequential(m_brake);
-    		AddSequential(m_halfBack);
-    	    break;
-    	case PRIGHT_FLEFT:
-    	    AddSequential(m_halfBack);
-    	    AddSequential(m_brake);
-    	    AddSequential(m_longLeft);
-    	    AddSequential(m_brake);
-    	    AddSequential(m_halfBack);
-    	    break;
-    	case PLEFT_FRIGHT:
-			AddSequential(m_halfBack);
-			AddSequential(m_brake);
-			AddSequential(m_longRight);
-			AddSequential(m_brake);
-			AddSequential(m_halfBack);
-			break;
-    	case PLEFT_FMID:
-			AddSequential(m_halfBack);
-			AddSequential(m_brake);
-			AddSequential(m_shortRight);
-			AddSequential(m_brake);
-			AddSequential(m_halfBack);
-			break;
-    	case PLEFT_FLEFT:
-			AddSequential(m_left);
-			AddSequential(m_brake);
-			AddSequential(m_back);
-			break;
-    	case PMID_FRIGHT:
-			AddSequential(m_halfBack);
-			AddSequential(m_brake);
-			AddSequential(m_shortRight);
-			AddSequential(m_right);
-			AddSequential(m_brake);
-			AddSequential(m_halfBack);
-			break;
-    	case PMID_FMID:
-    		AddSequential(m_back);
-    	    AddSequential(m_brake);
-    	    break;
-    	case PMID_FLEFT:
-			AddSequential(m_halfBack);
-			AddSequential(m_brake);
-			AddSequential(m_shortLeft);
-			AddSequential(m_left);
-			AddSequential(m_brake);
-			AddSequential(m_halfBack);
-			break;
-    }
-        
+	PrintDebug("m_blinky");
+
+	AddSequential(m_tilt);
+	PrintDebug("m_tilt");
+
+	////AddSequential(m_target);
+
+	//AddSequential(m_shoot);
+	PrintDebug("m_shoot");
+
+	AddSequential(m_firstMove);
+	AddSequential(m_secondMove);
+	AddSequential(m_thirdMove);
+	AddSequential(m_fourthMove);
+	AddSequential(m_fifthMove);
+	AddSequential(m_sixthMove);
 }
 
 AutoCommand::~AutoCommand()
@@ -120,7 +63,7 @@ AutoCommand::~AutoCommand()
 void AutoCommand::Initialize()
 {
     printf("AutoCommand::Initialize\n");
-
+    
     m_shoot->SetDistance(Shooter::kMid);
 
     // TBD: We can do this based on the "AutoSelect" rotary switch or on
@@ -132,9 +75,95 @@ void AutoCommand::Initialize()
     m_shoot->SetTarget( 3 );
     m_shoot->SetNumDisks(3);
     
-    
+    m_autoModeKnob = Robot::oi()->GetAuto();
+    switch(m_autoModeKnob) {
+		case PRIGHT_FRIGHT:
+			PrintDebug("PRIGHT_FRIGHT");
+			m_firstMove->Set(0.8,0.0,0.1,1.3);
+			m_secondMove->Set(0,0,0,0.5);
+			m_thirdMove->Set(0.0,0.8,0.05,1.5);
+			m_fourthMove->Set(0.0,0.0,0.0,0.0);
+			m_fifthMove->Set(0.0,0.0,0.0,0.0);
+			m_sixthMove->Set(0.0,0.0,0.0,0.0);
+			break;
+		case PRIGHT_FMID:
+			PrintDebug("PRIGHT_FMID");
+			m_firstMove->Set(0.0,0.8,0.05,0.75);
+			m_secondMove->Set(0,0,0,0.5);
+			m_thirdMove->Set(-0.8,0.0,-0.1,0.6);
+			m_fourthMove->Set(0,0,0,0.5);
+			m_fifthMove->Set(0.0,0.8,0.05,0.75);
+			m_sixthMove->Set(0.0,0.0,0.0,0.0);
+			break;
+		case PRIGHT_FLEFT:
+			PrintDebug("PRIGHT_FLEFT");
+			m_firstMove->Set(0.0,0.8,0.05,0.75);
+			m_secondMove->Set(0,0,0,0.5);
+			m_thirdMove->Set(-0.8,0.0,-0.1,1.6);
+			m_fourthMove->Set(0,0,0,0.5);
+			m_fifthMove->Set(0.0,0.8,0.05,0.75);
+			m_sixthMove->Set(0.0,0.0,0.0,0.0);
+			break;
+		case PLEFT_FRIGHT:
+			PrintDebug("PLEFT_FRIGHT");
+			m_firstMove->Set(0.0,0.8,0.05,0.75);
+			m_secondMove->Set(0,0,0,0.5);
+			m_thirdMove->Set(0.8,0.0,0.1,1.6);
+			m_fourthMove->Set(0,0,0,0.5);
+			m_fifthMove->Set(0.0,0.8,0.05,0.75);
+			m_sixthMove->Set(0.0,0.0,0.0,0.0);
+			break;
+		case PLEFT_FMID:
+			PrintDebug("PLEFT_FMID");
+			m_firstMove->Set(0.0,0.8,0.05,0.75);
+			m_secondMove->Set(0,0,0,0.5);
+			m_thirdMove->Set(0.8,0.0,0.1,0.6);
+			m_fourthMove->Set(0,0,0,0.5);
+			m_fifthMove->Set(0.0,0.8,0.05,0.75);
+			m_sixthMove->Set(0.0,0.0,0.0,0.0);
+			break;
+		case PLEFT_FLEFT:
+			PrintDebug("PLEFT_FLEFT");
+			m_firstMove->Set(-0.8,0.0,-0.1,1.3);
+			m_secondMove->Set(0,0,0,0.5);
+			m_thirdMove->Set(0.0,0.8,0.05,1.5);
+			m_fourthMove->Set(0.0,0.0,0.0,0.0);
+			m_fifthMove->Set(0.0,0.0,0.0,0.0);
+			m_sixthMove->Set(0.0,0.0,0.0,0.0);
+			break;
+		case PMID_FRIGHT:
+			PrintDebug("PMID_FRIGHT");
+			m_firstMove->Set(0.0,0.8,0.05,0.75);
+			m_secondMove->Set(0,0,0,0.5);
+			m_thirdMove->Set(0.8,0.0,0.1,0.6);
+			m_fourthMove->Set(0.8,0.0,0.1,1.3);
+			m_fifthMove->Set(0,0,0,0.5);
+			m_sixthMove->Set(0.0,0.8,0.05,0.75);
+			break;
+		case PMID_FMID:
+			PrintDebug("PMID_FMID");
+			m_firstMove->Set(0.0,0.8,0.05,1.5);
+			m_secondMove->Set(0,0,0,0.5);
+			m_thirdMove->Set(0.0,0.0,0.0,0.0);
+			m_fourthMove->Set(0.0,0.0,0.0,0.0);
+			m_fifthMove->Set(0.0,0.0,0.0,0.0);
+			m_sixthMove->Set(0.0,0.0,0.0,0.0);
+			break;
+		case PMID_FLEFT:
+			PrintDebug("PMID_FLEFT");
+			m_firstMove->Set(0.0,0.8,0.05,0.75);
+			m_secondMove->Set(0,0,0,0.5);
+			m_thirdMove->Set(-0.8,0.0,-0.1,0.6);
+			m_fourthMove->Set(-0.8,0.0,-0.1,1.3);
+			m_fifthMove->Set(0,0,0,0.5);
+			m_sixthMove->Set(0.0,0.8,0.05,0.75);
+			break;
+		default:
+			PrintDebug("default");
+			break;
+	   }
 }
-
+    
 void AutoCommand::Execute()
 {
 }
