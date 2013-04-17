@@ -43,7 +43,8 @@ AutoCommand::AutoCommand() :
     CommandGroup("AutoCommand")
 {
 	char* names[] = {"x","y","twist","time", NULL};
-	for (int i;i<6;i++){
+	//for (int i;i<6;i++){
+	for (int i = 0;i<5;i++){
 		for (char** s = names;*s;s++){
 			char characters[20];
 			sprintf(characters, "%s%d", *s, i);
