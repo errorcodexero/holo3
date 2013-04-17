@@ -17,6 +17,7 @@
 #define PLEFT_FMID    8
 #define PLEFT_FLEFT   9
 
+
 // This command group is started whenever the robot enters autonomous mode
 // and canceled when the robot enters any other mode.
 
@@ -49,6 +50,7 @@ private:
     TimedDrive *m_fifthMove;
     TimedDrive *m_sixthMove;
 
+    
     int m_autoModeKnob;
 };
 

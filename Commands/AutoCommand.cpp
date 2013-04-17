@@ -13,6 +13,28 @@
 #include "ShootCommand.h"
 #include "TimedDrive.h"
 
+struct TimedDriveVariables {
+	double x,y,twist,time;
+	TimedDriveVariables(){
+		x = 0;
+		y = 0;
+		twist = 0;
+		time = 0;
+	}
+	TimedDriveVariables(double xtdv, double ytdv, double twisttdv, double timetdv){
+		x = xtdv;
+		y = ytdv;
+		twist = twisttdv;
+		time = timetdv;
+	}
+};
+void SetTimedDrive(TimedDrive* td, TimedDriveVariables tdv){
+	td->Set(tdv.x, tdv.y, tdv.twist, tdv.time);
+}
+struct AutoProgram {
+	TimedDriveVariables move[6];
+};
+
 void PrintDebug(char* stringToPrint){
 	printf("\n##########\n%s\n##########\n", stringToPrint);
 }
@@ -20,6 +42,15 @@ void PrintDebug(char* stringToPrint){
 AutoCommand::AutoCommand() :
     CommandGroup("AutoCommand")
 {
+	char* names[] = {"x","y","twist","time", NULL};
+	for (int i;i<6;i++){
+		for (char** s = names;*s;s++){
+			char characters[20];
+			sprintf(characters, "%s%d", *s, i);
+			SmartDashboard::PutNumber(characters, 0);
+		}
+	}
+	
     m_blinky = new BlinkyBreathe(3.0);
     m_tilt = new TiltCommand(Shooter::kLong);
     m_target = new TargetCommand();
@@ -52,6 +83,8 @@ AutoCommand::AutoCommand() :
 	AddSequential(m_fourthMove);
 	AddSequential(m_fifthMove);
 	AddSequential(m_sixthMove);
+	
+	
 }
 
 AutoCommand::~AutoCommand()
@@ -75,16 +108,28 @@ void AutoCommand::Initialize()
     m_shoot->SetTarget( 3 );
     m_shoot->SetNumDisks(3);
     
+    AutoProgram moveValues;
+    
     m_autoModeKnob = Robot::oi()->GetAuto();
     switch(m_autoModeKnob) {
 		case PRIGHT_FRIGHT:
 			PrintDebug("PRIGHT_FRIGHT");
+			
+			moveValues.move[0] = TimedDriveVariables(0.8,0.0,0.1,1.3);
+			moveValues.move[1] = TimedDriveVariables(0.0,0.0,0.0,0.5);
+			moveValues.move[2] = TimedDriveVariables(0.0,0.8,0.05,1.5);
+			moveValues.move[3] = TimedDriveVariables(0.0,0.0,0.0,0.0);
+			moveValues.move[4] = TimedDriveVariables(0.0,0.0,0.0,0.0);
+			moveValues.move[5] = TimedDriveVariables(0.0,0.0,0.0,0.0);
+			
+			/*
 			m_firstMove->Set(0.8,0.0,0.1,1.3);
 			m_secondMove->Set(0,0,0,0.5);
 			m_thirdMove->Set(0.0,0.8,0.05,1.5);
 			m_fourthMove->Set(0.0,0.0,0.0,0.0);
 			m_fifthMove->Set(0.0,0.0,0.0,0.0);
 			m_sixthMove->Set(0.0,0.0,0.0,0.0);
+			*/
 			break;
 		case PRIGHT_FMID:
 			PrintDebug("PRIGHT_FMID");
