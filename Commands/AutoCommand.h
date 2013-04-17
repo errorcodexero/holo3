@@ -50,6 +50,7 @@ private:
     TimedDrive *m_fifthMove;
     TimedDrive *m_sixthMove;
 
+    char* m_SDLabels[24];
     
     int m_autoModeKnob;
 };
