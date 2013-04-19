@@ -13,6 +13,7 @@
 #include "ShootCommand.h"
 #include "TimedDrive.h"
 
+
 struct TimedDriveVariables {
 	double x,y,twist,time;
 	TimedDriveVariables(){
@@ -35,6 +36,7 @@ struct AutoProgram {
 	TimedDriveVariables move[6];
 };
 
+
 void PrintDebug(char* stringToPrint){
 	printf("\n##########\n%s\n##########\n", stringToPrint);
 }
@@ -42,17 +44,26 @@ void PrintDebug(char* stringToPrint){
 AutoCommand::AutoCommand() :
     CommandGroup("AutoCommand")
 {
+	Preferences *pref = Preferences::GetInstance();
+	double tempValue = 0.0;
 	char* names[] = {"x","y","twist","time", NULL};
-	for (int i = 0;i<6;i++){
-		for (int j = 0;j<4;j++){
-			char characters[20];
-			sprintf(characters, "%s%d", names[j], i);
-			m_SDLabels[(6 * j) + i] = characters;
-			SmartDashboard::PutNumber(characters, 0);
+		
+	for (int i = 0;i<NUM_MODES;i++){
+		for (int j = 0;j<NUM_MOVES;j++){
+			for (int k = 0;k<NUM_VALUES;k++){
+				char characters[20];
+				sprintf(characters, "Md.%d_Mv.%d_%s",  i, j, names[k]);
+				m_SDLabels[i][j][k] = characters;
+				SmartDashboard::PutNumber(characters, tempValue);
+				m_modes[i][j][k] = tempValue;
+				}
+			}
 		}
-	}
 	
-    m_blinky = new BlinkyBreathe(3.0);
+	
+	printf("Printing m_modes[4][6][2]: %f\n", m_modes[4][6][2]);
+
+	m_blinky = new BlinkyBreathe(3.0);
     m_tilt = new TiltCommand(Shooter::kLong);
     m_target = new TargetCommand();
     // default setting: shoot 3 disks for 3/6 points each from mid-field
@@ -119,25 +130,24 @@ void AutoCommand::Initialize()
 			double temp[4];
 			for (int i = 0;i<6;i++){
 				for (int j = 0;j<4;j++){
-					temp[j] = SmartDashboard::GetNumber(m_SDLabels[j]);
+					temp[j] = SmartDashboard::GetNumber(m_SDLabels[PRIGHT_FRIGHT - 1][i][j]);
 				}
 				moveValues.move[i] = TimedDriveVariables(temp[0],temp[1],temp[2],temp[3]);
 				printf("Values have been read!\n");
 			}
 			
-		    /*
-		     * 
+		    
 		    moveValues.move[0] = TimedDriveVariables(
-		    	SmartDashboard::GetNumber(m_SDLabels[0],
-		    	SmartDashboard::GetNumber(m_SDLabels[1],
-				SmartDashboard::GetNumber(m_SDLabels[2],
-				SmartDashboard::GetNumber(m_SDLabels[3] 0.8,0.0,0.1,1.3);
+		    	SmartDashboard::GetNumber(m_SDLabels[0][0][0]),
+		    	SmartDashboard::GetNumber(m_SDLabels[0][0][1]),
+				SmartDashboard::GetNumber(m_SDLabels[0][0][2]),
+				SmartDashboard::GetNumber(m_SDLabels[0][0][3])); // 0.8,0.0,0.1,1.3);
 			moveValues.move[1] = TimedDriveVariables(0.0,0.0,0.0,0.5);
 			moveValues.move[2] = TimedDriveVariables(0.0,0.8,0.05,1.5);
 			moveValues.move[3] = TimedDriveVariables(0.0,0.0,0.0,0.0);
 			moveValues.move[4] = TimedDriveVariables(0.0,0.0,0.0,0.0);
 			moveValues.move[5] = TimedDriveVariables(0.0,0.0,0.0,0.0);
-			*/
+			
 			/*
 			m_firstMove->Set(0.8,0.0,0.1,1.3);
 			m_secondMove->Set(0,0,0,0.5);
