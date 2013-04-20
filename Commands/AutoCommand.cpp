@@ -45,20 +45,6 @@ AutoCommand::AutoCommand() :
     CommandGroup("AutoCommand")
 {
 	Preferences *pref = Preferences::GetInstance();
-	double tempValue = 0.0;
-	char* names[] = {"x","y","twist","time", NULL};
-		
-	for (int i = 0;i<NUM_MODES;i++){
-		for (int j = 0;j<NUM_MOVES;j++){
-			for (int k = 0;k<NUM_VALUES;k++){
-				char characters[20];
-				sprintf(characters, "Md.%d_Mv.%d_%s",  i, j, names[k]);
-				m_SDLabels[i][j][k] = characters;
-				SmartDashboard::PutNumber(characters, tempValue);
-				m_modes[i][j][k] = tempValue;
-			}
-		}
-	}
 	m_blinky = new BlinkyBreathe(3.0);
     m_tilt = new TiltCommand(Shooter::kLong);
     m_target = new TargetCommand();
@@ -361,6 +347,20 @@ AutoCommand::AutoCommand() :
 	m_defaultValues[8][5][1] = 0.0;
 	m_defaultValues[8][5][2] = 0.0;
 	m_defaultValues[8][5][3] = 0.0;
+	
+	double tempValue = 0.0;
+	char* names[] = {"x","y","twist","time", NULL};
+	for (int i = 0;i<NUM_MODES;i++){
+		for (int j = 0;j<NUM_MOVES;j++){
+			for (int k = 0;k<NUM_VALUES;k++){
+				char characters[20];
+				sprintf(characters, "Md.%d_Mv.%d_%s",  i, j, names[k]);
+				m_SDLabels[i][j][k] = characters;
+				SmartDashboard::PutNumber(characters, tempValue);
+				m_modes[i][j][k] = tempValue;
+			}
+		}
+	}
 }
 
 AutoCommand::~AutoCommand()
