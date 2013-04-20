@@ -59,5 +59,6 @@ private:
     int m_autoModeKnob;
     
     double m_defaultValues[NUM_MODES][NUM_MOVES][NUM_VALUES];
-    //PRIGHT_FRIGHT
+
+};   
 #endif
