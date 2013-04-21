@@ -7,15 +7,15 @@
 #include <Commands/Command.h>
 #include <Commands/CommandGroup.h>
 
-#define PRIGHT_FRIGHT 1
-#define PRIGHT_FMID   2
-#define PRIGHT_FLEFT  3
-#define PMID_FRIGHT   4
-#define PMID_FMID     5
-#define PMID_FLEFT    6
-#define PLEFT_FRIGHT  7
-#define PLEFT_FMID    8
-#define PLEFT_FLEFT   9
+#define PRIGHT_FRIGHT 0
+#define PRIGHT_FMID   1
+#define PRIGHT_FLEFT  2
+#define PMID_FRIGHT   3
+#define PMID_FMID     4
+#define PMID_FLEFT    5
+#define PLEFT_FRIGHT  6
+#define PLEFT_FMID    7
+#define PLEFT_FLEFT   8
 
 
 #define NUM_MODES 9

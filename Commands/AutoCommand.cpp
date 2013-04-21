@@ -41,6 +41,9 @@ void PrintDebug(char* stringToPrint){
 	printf("\n##########\n%s\n##########\n", stringToPrint);
 }
 
+int GetKnob(){
+	return Robot::oi()->GetAuto() - 1;
+}
 AutoCommand::AutoCommand() :
     CommandGroup("AutoCommand")
 {
@@ -89,7 +92,14 @@ AutoCommand::AutoCommand() :
 		}
 	}
 	//SmartDashboard::PutNumber(characters, tempValue);
-	m_autoModeKnob = Robot::oi()->GetAuto();
+	
+	m_autoModeKnob = GetKnob();
+	for (int i = 0;i<NUM_MOVES;i++){
+		for (int j = 0;j<NUM_VALUES;j++){
+			SmartDashboard::PutNumber(m_SDLabels[m_autoModeKnob][i][j], m_currentValues[m_autoModeKnob][i][j]);
+		}
+	}
+
 }
 
 AutoCommand::~AutoCommand()
@@ -115,7 +125,7 @@ void AutoCommand::Initialize()
     
     AutoProgram moveValues;
     
-    m_autoModeKnob = Robot::oi()->GetAuto();
+    m_autoModeKnob = GetKnob();
     
     switch(m_autoModeKnob) {
 		case PRIGHT_FRIGHT:
