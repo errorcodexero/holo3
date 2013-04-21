@@ -55,10 +55,10 @@ private:
     TimedDrive *m_sixthMove;
 
     char* m_SDLabels[NUM_MODES][NUM_MOVES][NUM_VALUES];
-    double m_modes[NUM_MODES][NUM_MOVES][NUM_VALUES];
     int m_autoModeKnob;
-    
+    double m_currentValues[NUM_MODES][NUM_MOVES][NUM_VALUES];
     double m_defaultValues[NUM_MODES][NUM_MOVES][NUM_VALUES];
+    void InitDefaultValues();
 
 };   
 #endif
