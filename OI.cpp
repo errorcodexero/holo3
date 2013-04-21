@@ -11,6 +11,14 @@
 #include "ShootManual.h"
 #include "TiltCommand.h"
 #include "ResetRobot.h"
+#include "SaveAutoMove.h"
+
+double*** OI::GetCurrentValues(int SwitchPos){
+	if (SwitchPos < 0 || SwitchPos > 8){
+		return NULL;
+	}
+	return (double***)(m_pSaveAutoMove->GetCurrentValues(SwitchPos));
+}
 
 OI::OI() 
 {
@@ -19,6 +27,8 @@ OI::OI()
     m_pEIO = &m_pDS->GetEnhancedIO();
     m_pLCD = DriverStationLCD::GetInstance();
 
+    m_pSaveAutoMove = new SaveAutoMove();
+    
     m_pStick = new Joystick(1);
     m_pGamepadButtonA     = new JoystickButton(m_pStick, 1);
     m_pGamepadButtonB     = new JoystickButton(m_pStick, 2);
@@ -177,5 +187,9 @@ void OI::Initialize()
 
     m_pResetRobot = new ResetRobot();
     SmartDashboard::PutData("Reset Robot", m_pResetRobot);
+    
+    m_pSaveAutoMove = new SaveAutoMove();
+	SmartDashboard::PutData("Save AutoMove", m_pSaveAutoMove);
+
 }
 

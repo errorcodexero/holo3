@@ -17,7 +17,6 @@
 #define PLEFT_FMID    7
 #define PLEFT_FLEFT   8
 
-
 #define NUM_MODES 9
 #define NUM_MOVES 6
 #define NUM_VALUES 4
@@ -53,11 +52,8 @@ private:
     TimedDrive *m_fourthMove;
     TimedDrive *m_fifthMove;
     TimedDrive *m_sixthMove;
-
-    char* m_SDLabels[NUM_MODES][NUM_MOVES][NUM_VALUES];
+   
     int m_autoModeKnob;
-    double m_currentValues[NUM_MODES][NUM_MOVES][NUM_VALUES];
-    double m_defaultValues[NUM_MODES][NUM_MOVES][NUM_VALUES];
     void InitDefaultValues();
 
 };   

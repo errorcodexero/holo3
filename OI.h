@@ -110,7 +110,9 @@ private:
 
     DSDigitalOutput* m_pReadyLED;
 
-  
+    //Auto
+    class SaveAutoMove* m_pSaveAutoMove;
+    
     // aiming
     class TimedDrive* m_pNudgeLeft;
     class TimedDrive* m_pNudgeRight;
@@ -151,6 +153,7 @@ public:
     DriverStation *GetDS() { return m_pDS; }
     DriverStationEnhancedIO* GetEIO() { return m_pEIO; }
     DriverStationLCD* GetLCD() { return m_pLCD; }
+    double*** GetCurrentValues(int SwitchPos);
     float GetX() { return m_pStick->GetRawAxis( 1 ); } 
     float GetY() { return m_pStick->GetRawAxis( m_pDriverSelect->Get() ? 5 : 2 ); } 
     float GetThrottle() { return m_pStick->GetRawAxis( 3 ); } 

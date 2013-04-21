@@ -47,7 +47,6 @@ int GetKnob(){
 AutoCommand::AutoCommand() :
     CommandGroup("AutoCommand")
 {
-	Preferences *pref = Preferences::GetInstance();
 	m_blinky = new BlinkyBreathe(3.0);
     m_tilt = new TiltCommand(Shooter::kLong);
     m_target = new TargetCommand();
@@ -80,26 +79,8 @@ AutoCommand::AutoCommand() :
 	AddSequential(m_sixthMove);
     InitDefaultValues();
 	
-	char* names[] = {"x","y","twist","time", NULL};
-	for (int i = 0;i<NUM_MODES;i++){
-		for (int j = 0;j<NUM_MOVES;j++){
-			for (int k = 0;k<NUM_VALUES;k++){
-				char characters[20];
-				sprintf(characters, "Md.%d_Mv.%d_%s",  i, j, names[k]);
-				m_SDLabels[i][j][k] = characters;
-				m_currentValues[i][j][k] = pref->GetFloat(m_SDLabels[i][j][k], m_defaultValues[i][j][k]); 
-			}
-		}
-	}
 	//SmartDashboard::PutNumber(characters, tempValue);
 	
-	m_autoModeKnob = GetKnob();
-	for (int i = 0;i<NUM_MOVES;i++){
-		for (int j = 0;j<NUM_VALUES;j++){
-			SmartDashboard::PutNumber(m_SDLabels[m_autoModeKnob][i][j], m_currentValues[m_autoModeKnob][i][j]);
-		}
-	}
-
 }
 
 AutoCommand::~AutoCommand()
@@ -126,25 +107,33 @@ void AutoCommand::Initialize()
     AutoProgram moveValues;
     
     m_autoModeKnob = GetKnob();
-    
+    double*** localValues = Robot::oi()->GetCurrentValues(m_autoModeKnob);
     switch(m_autoModeKnob) {
 		case PRIGHT_FRIGHT:
 			PrintDebug("PRIGHT_FRIGHT");
-			double temp[4];
+			for (int i = 0;i<6;i++){
+				for (int j = 0;j<4;j++){
+					printf("%f\t", localValues[m_autoModeKnob][i][j]);
+				}
+				printf("\n");
+			}
+			//double temp[4];
+			/*
 			for (int i = 0;i<6;i++){
 				for (int j = 0;j<4;j++){
 					temp[j] = SmartDashboard::GetNumber(m_SDLabels[PRIGHT_FRIGHT - 1][i][j]);
 				}
 				moveValues.move[i] = TimedDriveVariables(temp[0],temp[1],temp[2],temp[3]);
 				printf("Values have been read!\n");
-			}
+			} 
+			*/   
 			
-		    
 		    moveValues.move[0] = TimedDriveVariables(
+		    	/*
 		    	SmartDashboard::GetNumber(m_SDLabels[0][0][0]),
 		    	SmartDashboard::GetNumber(m_SDLabels[0][0][1]),
 				SmartDashboard::GetNumber(m_SDLabels[0][0][2]),
-				SmartDashboard::GetNumber(m_SDLabels[0][0][3])); // 0.8,0.0,0.1,1.3);
+				SmartDashboard::GetNumber(m_SDLabels[0][0][3])); */0.8,0.0,0.1,1.3);
 			moveValues.move[1] = TimedDriveVariables(0.0,0.0,0.0,0.5);
 			moveValues.move[2] = TimedDriveVariables(0.0,0.8,0.05,1.5);
 			moveValues.move[3] = TimedDriveVariables(0.0,0.0,0.0,0.0);
@@ -257,277 +246,4 @@ void AutoCommand::Interrupted()
 {
     printf("AutoCommand::Interrupted\n");
     Robot::blinkyLight()->Set(0.0);
-}
-
-void AutoCommand::InitDefaultValues()
-{
-    m_defaultValues[0][0][0] = 0.8;
-    m_defaultValues[0][0][1] = 0.0;
-    m_defaultValues[0][0][2] = 0.1;
-    m_defaultValues[0][0][3] = 1.3;
-    //
-    m_defaultValues[0][1][0] = 0.0;
-    m_defaultValues[0][1][1] = 0.0;
-    m_defaultValues[0][1][2] = 0.0;
-    m_defaultValues[0][1][3] = 0.5;
-    //
-    m_defaultValues[0][2][0] = 0.0;
-    m_defaultValues[0][2][1] = 0.8;
-    m_defaultValues[0][2][2] = 0.05;
-    m_defaultValues[0][2][3] = 1.5;
-    //
-    m_defaultValues[0][3][0] = 0.0;
-    m_defaultValues[0][3][1] = 0.0;
-    m_defaultValues[0][3][2] = 0.0;
-    m_defaultValues[0][3][3] = 0.0;
-    //
-    m_defaultValues[0][4][0] = 0.0;
-    m_defaultValues[0][4][1] = 0.0;
-    m_defaultValues[0][4][2] = 0.0;
-    m_defaultValues[0][4][3] = 0.0;
-    //
-    m_defaultValues[0][5][0] = 0.0;
-    m_defaultValues[0][5][1] = 0.0;
-    m_defaultValues[0][5][2] = 0.0;
-    m_defaultValues[0][5][3] = 0.0;
-    //PRIGHT_FMID/////////////////
-    m_defaultValues[1][0][0] = 0.0;
-    m_defaultValues[1][0][1] = 0.8;
-    m_defaultValues[1][0][2] = 0.05;
-    m_defaultValues[1][0][3] = 0.75;
-    //
-    m_defaultValues[1][1][0] = 0.0;
-    m_defaultValues[1][1][1] = 0.0;
-    m_defaultValues[1][1][2] = 0.0;
-    m_defaultValues[1][1][3] = 0.5;
-    //
-    m_defaultValues[1][2][0] = -0.8;
-    m_defaultValues[1][2][1] = 0.0;
-    m_defaultValues[1][2][2] = -0.1;
-    m_defaultValues[1][2][3] = 0.6;
-    //
-    m_defaultValues[1][3][0] = 0.0;
-    m_defaultValues[1][3][1] = 0.0;
-    m_defaultValues[1][3][2] = 0.0;
-    m_defaultValues[1][3][3] = 0.5;
-    //
-    m_defaultValues[1][4][0] = 0.0;
-    m_defaultValues[1][4][1] = 0.8;
-    m_defaultValues[1][4][2] = 0.05;
-    m_defaultValues[1][4][3] = 0.75;
-    //
-    m_defaultValues[1][5][0] = 0.0;
-    m_defaultValues[1][5][1] = 0.0;
-    m_defaultValues[1][5][2] = 0.0;
-    m_defaultValues[1][5][3] = 0.0;
-    //PRIGHT_FLEFT/////////////////
-    m_defaultValues[2][0][0] = 0.0;
-    m_defaultValues[2][0][1] = 0.8;
-    m_defaultValues[2][0][2] = 0.05;
-    m_defaultValues[2][0][3] = 0.75;
-    //
-    m_defaultValues[2][1][0] = 0.0;
-    m_defaultValues[2][1][1] = 0.0;
-    m_defaultValues[2][1][2] = 0.0;
-    m_defaultValues[2][1][3] = 0.5;
-    //
-    m_defaultValues[2][2][0] = -0.8;
-    m_defaultValues[2][2][1] = 0.0;
-    m_defaultValues[2][2][2] = -0.1;
-    m_defaultValues[2][2][3] = 1.6;
-    //
-    m_defaultValues[2][3][0] = 0.0;
-    m_defaultValues[2][3][1] = 0.0;
-    m_defaultValues[2][3][2] = 0.0;
-    m_defaultValues[2][3][3] = 0.5;
-    //
-    m_defaultValues[2][4][0] = 0.0;
-    m_defaultValues[2][4][1] = 0.0;
-    m_defaultValues[2][4][2] = 0.0;
-    m_defaultValues[2][4][3] = 0.5;
-    //
-    m_defaultValues[2][5][0] = 0.0;
-    m_defaultValues[2][5][1] = 0.0;
-    m_defaultValues[2][5][2] = 0.0;
-    m_defaultValues[2][5][3] = 0.0;
-    //PMID_FRIGHT///////////////
-    m_defaultValues[3][0][0] = 0.0;
-    m_defaultValues[3][0][1] = 0.8;
-    m_defaultValues[3][0][2] = 0.05;
-    m_defaultValues[3][0][3] = 0.75;
-    //
-    m_defaultValues[3][1][0] = 0.0;
-    m_defaultValues[3][1][1] = 0.0;
-    m_defaultValues[3][1][2] = 0.0;
-    m_defaultValues[3][1][3] = 0.5;
-    //
-    m_defaultValues[3][2][0] = 0.8;
-    m_defaultValues[3][2][1] = 0.0;
-    m_defaultValues[3][2][2] = 0.1;
-    m_defaultValues[3][2][3] = 0.6;
-    //
-    m_defaultValues[3][3][0] = 0.8;
-    m_defaultValues[3][3][1] = 0.0;
-    m_defaultValues[3][3][2] = 0.1;
-    m_defaultValues[3][3][3] = 1.3;
-    //
-    m_defaultValues[3][4][0] = 0.0;
-    m_defaultValues[3][4][1] = 0.0;
-    m_defaultValues[3][4][2] = 0.0;
-    m_defaultValues[3][4][3] = 0.5;
-    //
-    m_defaultValues[3][5][0] = 0.0;
-    m_defaultValues[3][5][1] = 0.8;
-    m_defaultValues[3][5][2] = 0.05;
-    m_defaultValues[3][5][3] = 0.75;
-    //PMID_FMID////////////////
-    m_defaultValues[4][0][0] = 0.0;
-    m_defaultValues[4][0][1] = 0.8;
-    m_defaultValues[4][0][2] = 0.05;
-    m_defaultValues[4][0][3] = 1.5;
-    //
-    m_defaultValues[4][1][0] = 0.0;
-    m_defaultValues[4][1][1] = 0.0;
-    m_defaultValues[4][1][2] = 0.0;
-    m_defaultValues[4][1][3] = 0.5;
-    //
-    m_defaultValues[4][2][0] = 0.0;
-    m_defaultValues[4][2][1] = 0.0;
-    m_defaultValues[4][2][2] = 0.0;
-    m_defaultValues[4][2][3] = 0.0;
-    //
-    m_defaultValues[4][3][0] = 0.0;
-    m_defaultValues[4][3][1] = 0.0;
-    m_defaultValues[4][3][2] = 0.0;
-    m_defaultValues[4][3][3] = 0.0;
-    //
-    m_defaultValues[4][4][0] = 0.0;
-    m_defaultValues[4][4][1] = 0.0;
-    m_defaultValues[4][4][2] = 0.0;
-    m_defaultValues[4][4][3] = 0.0;
-    //
-    m_defaultValues[4][5][0] = 0.0;
-    m_defaultValues[4][5][1] = 0.0;
-    m_defaultValues[4][5][2] = 0.0;
-    m_defaultValues[4][5][3] = 0.0;
-    //PMID_FLEFT///////////////////////////
-    m_defaultValues[5][0][0] = 0.0;
-    m_defaultValues[5][0][1] = 0.8;
-    m_defaultValues[5][0][2] = 0.05;
-    m_defaultValues[5][0][3] = 0.75;
-    //
-    m_defaultValues[5][1][0] = 0.0;
-    m_defaultValues[5][1][1] = 0.0;
-    m_defaultValues[5][1][2] = 0.0;
-    m_defaultValues[5][1][3] = 0.5;
-    //
-    m_defaultValues[5][2][0] = -0.8;
-    m_defaultValues[5][2][1] = 0.0;
-    m_defaultValues[5][2][2] = -0.1;
-    m_defaultValues[5][2][3] = 0.6;
-    //
-    m_defaultValues[5][3][0] = -0.8;
-    m_defaultValues[5][3][1] = 0.0;
-    m_defaultValues[5][3][2] = -0.1;
-    m_defaultValues[5][3][3] = 1.3;
-    //
-    m_defaultValues[5][4][0] = 0.0;
-    m_defaultValues[5][4][1] = 0.0;
-    m_defaultValues[5][4][2] = 0.0;
-    m_defaultValues[5][4][3] = 0.5;
-    //
-    m_defaultValues[5][5][0] = 0.0;
-    m_defaultValues[5][5][1] = 0.8;
-    m_defaultValues[5][5][2] = 0.05;
-    m_defaultValues[5][5][3] = 0.75;
-    //PRIGHT_FRIGHT/////////////////////////
-    m_defaultValues[6][0][0] = 0.0;
-    m_defaultValues[6][0][1] = 0.8;
-    m_defaultValues[6][0][2] = 0.05;
-    m_defaultValues[6][0][3] = 0.75;
-    //
-    m_defaultValues[6][1][0] = 0.0;
-    m_defaultValues[6][1][1] = 0.0;
-    m_defaultValues[6][1][2] = 0.0;
-    m_defaultValues[6][1][3] = 0.5;
-    //
-    m_defaultValues[6][2][0] = 0.8;
-    m_defaultValues[6][2][1] = 0.0;
-    m_defaultValues[6][2][2] = 0.1;
-    m_defaultValues[6][2][3] = 1.6;
-    //
-    m_defaultValues[6][3][0] = 0.0;
-    m_defaultValues[6][3][1] = 0.0;
-    m_defaultValues[6][3][2] = 0.0;
-    m_defaultValues[6][3][3] = 0.5;
-    //
-    m_defaultValues[6][4][0] = 0.0;
-    m_defaultValues[6][4][1] = 0.8;
-    m_defaultValues[6][4][2] = 0.05;
-    m_defaultValues[6][4][3] = 0.75;
-    //
-    m_defaultValues[6][5][0] = 0.0;
-    m_defaultValues[6][5][1] = 0.0;
-    m_defaultValues[6][5][2] = 0.0;
-    m_defaultValues[6][5][3] = 0.0;
-    //PRIGHT_FMID//////////////////////////
-    m_defaultValues[7][0][0] = 0.0;
-    m_defaultValues[7][0][1] = 0.8;
-    m_defaultValues[7][0][2] = 0.05;
-    m_defaultValues[7][0][3] = 0.75;
-    //
-    m_defaultValues[7][1][0] = 0.0;
-    m_defaultValues[7][1][1] = 0.0;
-    m_defaultValues[7][1][2] = 0.0;
-    m_defaultValues[7][1][3] = 0.5;
-    //
-    m_defaultValues[7][2][0] = 0.8;
-    m_defaultValues[7][2][1] = 0.0;
-    m_defaultValues[7][2][2] = 0.1;
-    m_defaultValues[7][2][3] = 0.6;
-    //
-    m_defaultValues[7][3][0] = 0.0;
-    m_defaultValues[7][3][1] = 0.0;
-    m_defaultValues[7][3][2] = 0.0;
-    m_defaultValues[7][3][3] = 0.5;
-    //
-    m_defaultValues[7][4][0] = 0.0;
-    m_defaultValues[7][4][1] = 0.8;
-    m_defaultValues[7][4][2] = 0.05;
-    m_defaultValues[7][4][3] = 0.75;
-    //
-    m_defaultValues[7][5][0] = 0.0;
-    m_defaultValues[7][5][1] = 0.0;
-    m_defaultValues[7][5][2] = 0.0;
-    m_defaultValues[7][5][3] = 0.0;
-    //PRIGHT_FLEFT//////////////////
-    m_defaultValues[8][0][0] = -0.8;
-    m_defaultValues[8][0][1] = 0.0;
-    m_defaultValues[8][0][2] = -0.1;
-    m_defaultValues[8][0][3] = 1.3;
-    //
-    m_defaultValues[8][1][0] = 0.0;
-    m_defaultValues[8][1][1] = 0.0;
-    m_defaultValues[8][1][2] = 0.0;
-    m_defaultValues[8][1][3] = 0.5;
-    //
-    m_defaultValues[8][2][0] = 0.0;
-    m_defaultValues[8][2][1] = 0.8;
-    m_defaultValues[8][2][2] = 0.05;
-    m_defaultValues[8][2][3] = 1.5;
-    //
-    m_defaultValues[8][3][0] = 0.0;
-    m_defaultValues[8][3][1] = 0.0;
-    m_defaultValues[8][3][2] = 0.0;
-    m_defaultValues[8][3][3] = 0.0;
-    //
-    m_defaultValues[8][4][0] = 0.0;
-    m_defaultValues[8][4][1] = 0.0;
-    m_defaultValues[8][4][2] = 0.0;
-    m_defaultValues[8][4][3] = 0.0;
-    //
-    m_defaultValues[8][5][0] = 0.0;
-    m_defaultValues[8][5][1] = 0.0;
-    m_defaultValues[8][5][2] = 0.0;
-    m_defaultValues[8][5][3] = 0.0;
 }
