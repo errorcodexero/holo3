@@ -22,7 +22,8 @@ public:
 	virtual bool IsFinished();
 	virtual void End();
 	virtual void Interrupted();
-	double*** GetCurrentValues(int SwitchPos);
+	void GetCurrentValues(int SwitchPos, double (*outp)[6][4]);
+	double GetCurrentValueAt(int i, int j, int k);
 private:
 	char* m_SDLabels[NUM_MODES][NUM_MOVES][NUM_VALUES];
 	int m_autoModeKnob;

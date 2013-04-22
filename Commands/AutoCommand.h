@@ -54,7 +54,6 @@ private:
     TimedDrive *m_sixthMove;
    
     int m_autoModeKnob;
-    void InitDefaultValues();
 
 };   
 #endif

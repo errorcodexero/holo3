@@ -13,21 +13,23 @@
 #include "ResetRobot.h"
 #include "SaveAutoMove.h"
 
-double*** OI::GetCurrentValues(int SwitchPos){
-	if (SwitchPos < 0 || SwitchPos > 8){
-		return NULL;
-	}
-	return (double***)(m_pSaveAutoMove->GetCurrentValues(SwitchPos));
+double OI::GetCurrentValueAt(int i, int j, int k){
+	return m_pSaveAutoMove->GetCurrentValueAt(i,j,k);
 }
-
+void OI::GetCurrentValues(int SwitchPos, double (*outp)[6][4]){
+	if (SwitchPos < 0 || SwitchPos > 8){
+		outp =  NULL;
+	}
+	else{
+	(m_pSaveAutoMove->GetCurrentValues(SwitchPos, outp));
+	}
+}
 OI::OI() 
 {
     // Instantiate operator controls
     m_pDS = DriverStation::GetInstance();
     m_pEIO = &m_pDS->GetEnhancedIO();
     m_pLCD = DriverStationLCD::GetInstance();
-
-    m_pSaveAutoMove = new SaveAutoMove();
     
     m_pStick = new Joystick(1);
     m_pGamepadButtonA     = new JoystickButton(m_pStick, 1);
@@ -124,6 +126,7 @@ OI::~OI()
     if (m_pTiltMid) delete m_pTiltMid;
     if (m_pTiltLong) delete m_pTiltLong;
     if (m_pResetRobot) delete m_pResetRobot;
+    if (m_pSaveAutoMove) delete m_pSaveAutoMove;
 }
 
 

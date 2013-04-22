@@ -153,7 +153,8 @@ public:
     DriverStation *GetDS() { return m_pDS; }
     DriverStationEnhancedIO* GetEIO() { return m_pEIO; }
     DriverStationLCD* GetLCD() { return m_pLCD; }
-    double*** GetCurrentValues(int SwitchPos);
+    void GetCurrentValues(int SwitchPos, double (*outp)[6][4]);
+    double GetCurrentValueAt(int i, int j, int k);
     float GetX() { return m_pStick->GetRawAxis( 1 ); } 
     float GetY() { return m_pStick->GetRawAxis( m_pDriverSelect->Get() ? 5 : 2 ); } 
     float GetThrottle() { return m_pStick->GetRawAxis( 3 ); } 

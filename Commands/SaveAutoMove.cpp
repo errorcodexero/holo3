@@ -7,14 +7,19 @@
 #include "SaveAutoMove.h"
 #include "OI.h"
 
+double SaveAutoMove::GetCurrentValueAt(int i, int j, int k){
+	return m_currentValues[i][j][k];
+}
 int SaveAutoMove::GetKnob(){
 	return Robot::oi()->GetAuto() - 1;
 }
-double*** SaveAutoMove::GetCurrentValues(int SwitchPos){
+void SaveAutoMove::GetCurrentValues(int SwitchPos, double (*outp)[6][4]){
 	if (SwitchPos < 0 || SwitchPos > 8){
-		return NULL;
+		outp = NULL;
 	}
-	return (double***)(m_currentValues[SwitchPos]);
+	else {
+		outp = &m_currentValues[SwitchPos];
+	}
 }
 
 SaveAutoMove::SaveAutoMove() :
@@ -33,18 +38,24 @@ SaveAutoMove::SaveAutoMove() :
 	for (int i = 0;i<NUM_MODES;i++){
 		for (int j = 0;j<NUM_MOVES;j++){
 			for (int k = 0;k<NUM_VALUES;k++){
-				char characters[20];
+				char* characters = (char*)malloc(20*sizeof(char));
 				sprintf(characters, "Md.%d_Mv.%d_%s",  i, j, names[k]);
 				m_SDLabels[i][j][k] = characters;
 				m_currentValues[i][j][k] = pref->GetFloat(m_SDLabels[i][j][k], m_defaultValues[i][j][k]); 
+				printf("%s\t %s\n", m_SDLabels[i][j][k], characters);
 			}
 		}
 	}
 	m_autoModeKnob = GetKnob();
+	printf("m_autoModeKnob = %d\n", m_autoModeKnob);
 	for (int i = 0;i<NUM_MOVES;i++){
+		//printf("i = %d\n", i);
 		for (int j = 0;j<NUM_VALUES;j++){
+			//printf("j = %d\n", j);
 			SmartDashboard::PutNumber(m_SDLabels[m_autoModeKnob][i][j], m_currentValues[m_autoModeKnob][i][j]);
+			//printf("%s\t", m_SDLabels[m_autoModeKnob][i][j]);
 		}
+		printf("\n");
 	}
 
 }
@@ -58,8 +69,9 @@ void SaveAutoMove::Initialize()
 	m_autoModeKnob = GetKnob();
 	for (int i = 0;i<NUM_MOVES;i++){
 		for (int j = 0;j<NUM_VALUES;j++){
-			SmartDashboard::PutNumber(m_SDLabels[m_autoModeKnob][i][j], m_currentValues[m_autoModeKnob][i][j]);
+			//SmartDashboard::PutNumber(m_SDLabels[m_autoModeKnob][i][j], m_currentValues[m_autoModeKnob][i][j]);
 			m_currentValues[m_autoModeKnob][i][j] = SmartDashboard::GetNumber(m_SDLabels[m_autoModeKnob][i][j]);
+			printf("Saving %s: %f\n", m_SDLabels[m_autoModeKnob][i][j],  m_currentValues[m_autoModeKnob][i][j]);
 			pref->PutFloat(m_SDLabels[m_autoModeKnob][i][j],  m_currentValues[m_autoModeKnob][i][j]);
 		}
 	}
@@ -83,6 +95,13 @@ bool SaveAutoMove::IsFinished()
 void SaveAutoMove::End()
 {
     printf("SaveAutoMove::End\n");
+	for (int i = 0;i<NUM_MODES;i++){
+		for (int j = 0;j<NUM_MOVES;j++){
+			for (int k = 0;k<NUM_VALUES;k++){
+				free(m_SDLabels[i][j][k]);
+			}
+		}
+	}
 }
 
 // Called when another command which requires one or more of the same

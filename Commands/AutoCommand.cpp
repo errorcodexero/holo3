@@ -77,7 +77,6 @@ AutoCommand::AutoCommand() :
 	AddSequential(m_fourthMove);
 	AddSequential(m_fifthMove);
 	AddSequential(m_sixthMove);
-    InitDefaultValues();
 	
 	//SmartDashboard::PutNumber(characters, tempValue);
 	
@@ -107,39 +106,40 @@ void AutoCommand::Initialize()
     AutoProgram moveValues;
     
     m_autoModeKnob = GetKnob();
-    double*** localValues = Robot::oi()->GetCurrentValues(m_autoModeKnob);
+    double tempValues[6][4];
+    for (int i = 0;i<6;i++){
+		for (int j = 0;j<4;j++){
+			tempValues[i][j] = Robot::oi()->GetCurrentValueAt(m_autoModeKnob, i, j);
+			printf("%f\t", tempValues[i][j]);
+		}
+		printf("\n");
+	}
     switch(m_autoModeKnob) {
 		case PRIGHT_FRIGHT:
 			PrintDebug("PRIGHT_FRIGHT");
 			for (int i = 0;i<6;i++){
 				for (int j = 0;j<4;j++){
-					printf("%f\t", localValues[m_autoModeKnob][i][j]);
+					printf("%f\t", tempValues[i][j]);
 				}
+				moveValues.move[i] = TimedDriveVariables(
+						tempValues[i][0],
+						tempValues[i][1],
+						tempValues[i][2],
+						tempValues[i][3]
+				);
 				printf("\n");
-			}
-			//double temp[4];
+			}   
 			/*
-			for (int i = 0;i<6;i++){
-				for (int j = 0;j<4;j++){
-					temp[j] = SmartDashboard::GetNumber(m_SDLabels[PRIGHT_FRIGHT - 1][i][j]);
-				}
-				moveValues.move[i] = TimedDriveVariables(temp[0],temp[1],temp[2],temp[3]);
-				printf("Values have been read!\n");
-			} 
-			*/   
-			
-		    moveValues.move[0] = TimedDriveVariables(
-		    	/*
-		    	SmartDashboard::GetNumber(m_SDLabels[0][0][0]),
-		    	SmartDashboard::GetNumber(m_SDLabels[0][0][1]),
-				SmartDashboard::GetNumber(m_SDLabels[0][0][2]),
-				SmartDashboard::GetNumber(m_SDLabels[0][0][3])); */0.8,0.0,0.1,1.3);
+			SmartDashboard::GetNumber(m_SDLabels[0][0][0]),
+			SmartDashboard::GetNumber(m_SDLabels[0][0][1]),
+			SmartDashboard::GetNumber(m_SDLabels[0][0][2]),
+			SmartDashboard::GetNumber(m_SDLabels[0][0][3])); 0.8,0.0,0.1,1.3);
 			moveValues.move[1] = TimedDriveVariables(0.0,0.0,0.0,0.5);
 			moveValues.move[2] = TimedDriveVariables(0.0,0.8,0.05,1.5);
 			moveValues.move[3] = TimedDriveVariables(0.0,0.0,0.0,0.0);
 			moveValues.move[4] = TimedDriveVariables(0.0,0.0,0.0,0.0);
 			moveValues.move[5] = TimedDriveVariables(0.0,0.0,0.0,0.0);
-			
+			*/
 			/*
 			m_firstMove->Set(0.8,0.0,0.1,1.3);
 			m_secondMove->Set(0,0,0,0.5);
@@ -148,6 +148,12 @@ void AutoCommand::Initialize()
 			m_fifthMove->Set(0.0,0.0,0.0,0.0);
 			m_sixthMove->Set(0.0,0.0,0.0,0.0);
 			*/
+			SetTimedDrive(m_firstMove, moveValues.move[0]);
+			SetTimedDrive(m_secondMove, moveValues.move[1]);
+			SetTimedDrive(m_thirdMove, moveValues.move[2]);
+			SetTimedDrive(m_fourthMove, moveValues.move[3]);
+			SetTimedDrive(m_fifthMove, moveValues.move[4]);
+			SetTimedDrive(m_sixthMove, moveValues.move[5]);
 			break;
 		case PRIGHT_FMID:
 			PrintDebug("PRIGHT_FMID");
