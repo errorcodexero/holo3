@@ -18,11 +18,13 @@
 // Operator Interface
 #include "OI.h"
 
-const char *KEY_SPEED_SHORT = "ShooterSpeedShort";
-const char *KEY_SPEED_MID_2 = "ShooterSpeedMid2";
-const char *KEY_SPEED_MID_3 = "ShooterSpeedMid3";
-const char *KEY_SPEED_LONG_2 = "ShooterSpeedLong2";
-const char *KEY_SPEED_LONG_3 = "ShooterSpeedLong3";
+// constant strings used for preferences file entries
+const char KEY_SPEED_SHORT[]  = "ShooterSpeedShort";
+const char KEY_SPEED_MID_2[]  = "ShooterSpeedMid2";
+const char KEY_SPEED_MID_3[]  = "ShooterSpeedMid3";
+const char KEY_SPEED_LONG_2[] = "ShooterSpeedLong2";
+const char KEY_SPEED_LONG_3[] = "ShooterSpeedLong3";
+
 
 Robot::Robot()
 {
