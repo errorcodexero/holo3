@@ -352,7 +352,7 @@ void AutoCommand::Initialize()
     GetDashboardSettings();
     DriveStep *pStep = &m_drivePattern[m_pattern].step[0];
     for (int i = 0; i < MAX_AUTO_STEPS; i++) {
-	m_step[i]->Set( pStep->x, pStep->y, pStep->s, pStep->t );
+	m_step[i]->Set( pStep->x, pStep->y, pStep->t, pStep->s );
 	++pStep;
     }
 }
