@@ -108,7 +108,7 @@ private:
     DSDigitalInput* m_pLaunch;
     DSDigitalInput* m_pLearn;
 
-    DSDigitalOutput* m_pReadyLED;
+    //DSDigitalOutput* m_pReadyLED;
 
   
     // aiming
@@ -160,10 +160,10 @@ public:
     int GetTarget() { return m_pShooterTarget->GetDigital(3) + 1; }
     int GetAuto() { return m_pAutoSelect->GetDigital(10); }
     double GetSpeedAdjust() { return m_pSpeedAdjust->GetAnalog(); }
-    void SetReadyLED( bool value ) { m_pReadyLED->Set(value); }
     bool GetLaunch() { return m_pLaunch->Get(); }
     bool GetOverride() { return m_pShooterOverride->Get(); }
     bool GetLearn() { return m_pLearn->Get(); }
+    void SetReadyLED( bool value ) { m_pEIO->SetLEDs(value ? 0xff : 0x00); }
     
 }; 
 #endif

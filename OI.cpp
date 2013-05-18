@@ -34,40 +34,40 @@ OI::OI()
 
     m_pSpeedAdjust        = new DSAnalogInput(m_pEIO, 3);
     m_pShooterTilt        = new DSAnalogInput(m_pEIO, 4);
-    m_pAutoSelect         = new DSAnalogInput(m_pEIO, 5);
+    m_pAutoSelect         = new DSAnalogInput(m_pEIO, 1);
     m_pShooterTarget      = new DSAnalogInput(m_pEIO, 6);
 
     // digital inputs
     m_pClimber            = new DSDigitalInput(m_pEIO, 1,
 				    DriverStationEnhancedIO::kInputPullUp,
-				    true);
+				    false);
 
     // digital input 2 not connected/not used
     m_pLightsOn           = new DSDigitalInput(m_pEIO, 2,
 				    DriverStationEnhancedIO::kInputPullUp,
-				    true);	// active-high toggle
+				    false);	// active-low toggle
 
     m_pDriverSelect       = new DSDigitalInput(m_pEIO, 3,
 				    DriverStationEnhancedIO::kInputPullUp,
-				    true);	// active-high toggle
+				    false);	// active-low toggle
 
-    m_pShooterOverride    = new DSDigitalInput(m_pEIO, 4,
+    m_pShooterOverride    = new DSDigitalInput(m_pEIO, 13,
 				    DriverStationEnhancedIO::kInputPullUp,
 				    false);	// active-low pushbutton
 
     m_pShooterOn          = new DSDigitalInput(m_pEIO, 5,
 				    DriverStationEnhancedIO::kInputPullUp,
-				    true);	// active-high toggle
+				    false);	// active-low toggle
 
-    m_pLaunch             = new DSDigitalInput(m_pEIO, 6,
-				    DriverStationEnhancedIO::kInputPullDown,
-				    true);	// active-high pushbutton
-
-    m_pLearn              = new DSDigitalInput(m_pEIO, 7,
+    m_pLaunch             = new DSDigitalInput(m_pEIO, 16,
 				    DriverStationEnhancedIO::kInputPullUp,
 				    false);	// active-low pushbutton
 
-    m_pReadyLED           = new DSDigitalOutput(m_pEIO, 16);
+    m_pLearn              = new DSDigitalInput(m_pEIO, 12,
+				    DriverStationEnhancedIO::kInputPullUp,
+				    false);	// active-low pushbutton
+
+    //m_pReadyLED           = new DSDigitalOutput(m_pEIO, 16);
 }
 
 OI::~OI()
@@ -93,7 +93,7 @@ OI::~OI()
     delete m_pShooterOverride;
     delete m_pShooterOn;
     delete m_pLaunch;
-    delete m_pReadyLED;
+    //delete m_pReadyLED;
 
     // initialized in Initialize()
     if (m_pNudgeLeft) delete m_pNudgeLeft;
