@@ -9,6 +9,8 @@ class OI;
 #include <WPILib.h>
 #include "Robot.h"
 
+#define PRACTICE_OI
+
 class DSAnalogInput {
 private:
     DriverStationEnhancedIO *m_pEIO;
@@ -108,7 +110,10 @@ private:
     DSDigitalInput* m_pLaunch;
     DSDigitalInput* m_pLearn;
 
-    //DSDigitalOutput* m_pReadyLED;
+#ifdef PRACTICE_OI
+#else // COMPETITION_OI
+    DSDigitalOutput* m_pReadyLED;
+#endif
 
   
     // aiming
@@ -163,7 +168,11 @@ public:
     bool GetLaunch() { return m_pLaunch->Get(); }
     bool GetOverride() { return m_pShooterOverride->Get(); }
     bool GetLearn() { return m_pLearn->Get(); }
+#ifdef PRACTICE_OI
     void SetReadyLED( bool value ) { m_pEIO->SetLEDs(value ? 0xff : 0x00); }
+#else // COMPETITION_OI
+    void SetReadyLED( bool value ) { m_pReadyLED->Set(value); }
+#endif
     
 }; 
 #endif
