@@ -1,37 +1,36 @@
 <xml version="1.0">
 <dashboard>
-	<widget field="AUTO PATTERN" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="740" y="20"/>
-		<width>140</width>
-		<property name="Editable" value="false"/>
-		<property name="Background" value="204.204.255.255"/>
+	<widget field="AUTO PATTERN" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="784" y="379"/>
+		<width>93</width>
+		<property name="Background" value="255.255.153.255"/>
 	</widget>
 	<widget field="scheduler" type="Scheduler" class="edu.wpi.first.smartdashboard.gui.elements.Scheduler">
-		<location x="460" y="360"/>
+		<location x="496" y="434"/>
 	</widget>
 	<widget field="Shooter Tolerance (%)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="4" y="400"/>
+		<location x="4" y="420"/>
 		<property name="Background" value="255.255.153.255"/>
 	</widget>
 	<widget field="Shooter Stable Time" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="18" y="420"/>
+		<location x="18" y="440"/>
 		<property name="Background" value="255.255.153.255"/>
 	</widget>
 	<widget field="Shooter P" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="227" y="400"/>
+		<location x="227" y="420"/>
 		<height>20</height>
 		<property name="Background" value="255.255.153.255"/>
 	</widget>
 	<widget field="Shooter Injection Time" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="6" y="440"/>
+		<location x="6" y="460"/>
 		<property name="Background" value="255.255.153.255"/>
 	</widget>
 	<widget field="Shooter I" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="229" y="420"/>
+		<location x="229" y="440"/>
 		<property name="Background" value="255.255.153.255"/>
 	</widget>
 	<widget field="Shooter D" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="226" y="440"/>
+		<location x="226" y="460"/>
 		<property name="Background" value="255.255.153.255"/>
 	</widget>
 	<widget field="Shooter RPM" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.SimpleDial">
@@ -46,7 +45,7 @@
 		<location x="539" y="66"/>
 	</widget>
 	<widget field="Reset Robot" type="Command" class="edu.wpi.first.smartdashboard.gui.elements.Command">
-		<location x="22" y="7"/>
+		<location x="22" y="0"/>
 	</widget>
 	<widget field="position time" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="374" y="60"/>
@@ -149,26 +148,82 @@
 		<location x="26" y="227"/>
 	</widget>
 	<widget field="STEP 0 X" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="692" y="60"/>
-		<property name="Background" value="204.255.255.255"/>
+		<location x="692" y="20"/>
 	</widget>
 	<widget field="STEP 0 Y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="692" y="80"/>
-		<property name="Background" value="204.255.255.255"/>
+		<location x="692" y="40"/>
 	</widget>
 	<widget field="STEP 0 S" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="692" y="100"/>
-		<property name="Background" value="204.255.255.255"/>
+		<location x="692" y="60"/>
 	</widget>
 	<widget field="STEP 0 T" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="692" y="120"/>
-		<height>20</height>
-		<property name="Background" value="204.255.255.255"/>
+		<location x="692" y="80"/>
 	</widget>
 	<widget field="STEP 1 X" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="692" y="160"/>
-		<property name="Background" value="204.255.255.255"/>
+		<location x="692" y="120"/>
 	</widget>
 	<widget field="STEP 1 Y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="692" y="140"/>
+	</widget>
+	<widget field="STEP 1 S" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="692" y="160"/>
+	</widget>
+	<widget field="STEP 1 T" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="692" y="180"/>
-		<property name="Background" value="204.255.
+	</widget>
+	<widget field="STEP 2 X" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="692" y="220"/>
+	</widget>
+	<widget field="STEP 2 Y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="692" y="240"/>
+	</widget>
+	<widget field="STEP 2 S" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="692" y="260"/>
+	</widget>
+	<widget field="STEP 2 T" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="692" y="280"/>
+	</widget>
+	<widget field="STEP 3 X" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="852" y="20"/>
+	</widget>
+	<widget field="STEP 3 Y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="852" y="40"/>
+	</widget>
+	<widget field="STEP 3 S" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="852" y="60"/>
+	</widget>
+	<widget field="STEP 3 T" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="852" y="80"/>
+	</widget>
+	<widget field="STEP 4 X" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="852" y="120"/>
+	</widget>
+	<widget field="STEP 4 Y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="852" y="140"/>
+	</widget>
+	<widget field="STEP 4 S" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="852" y="160"/>
+		<height>20</height>
+	</widget>
+	<widget field="STEP 4 T" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="852" y="180"/>
+	</widget>
+	<widget field="STEP 5 X" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="852" y="220"/>
+	</widget>
+	<widget field="STEP 5 Y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="852" y="240"/>
+	</widget>
+	<widget field="STEP 5 S" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="852" y="260"/>
+	</widget>
+	<widget field="STEP 5 T" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="852" y="280"/>
+	</widget>
+	<widget field="AUTO SAVE" type="Command" class="edu.wpi.first.smartdashboard.gui.elements.Command">
+		<location x="760" y="320"/>
+	</widget>
+</dashboard>
+<live-window>
+</live-window>
+</xml>
