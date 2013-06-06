@@ -22,6 +22,15 @@ class AutoCommand;
 class OI;
 
 ////////////////////////////////////////////////////////////////////
+// Digital Inputs:
+// 1 - pneumatics pressure switch
+//     (polarity handled by Compressor class)
+
+#define	DIGITAL_PRESSURE_SWITCH		1
+
+// 2-8 - not used
+
+////////////////////////////////////////////////////////////////////
 // Analog Inputs:
 // 1 - turn rate gyro
 //     + output is clockwise rotation
@@ -31,6 +40,12 @@ class OI;
 // 2-7 - not used
 
 // 8 - battery (from analog bumper)
+
+////////////////////////////////////////////////////////////////////
+// Relay (Spike) Outputs:
+// 1 - compressor
+
+#define	RELAY_COMPRESSOR		1
 
 ////////////////////////////////////////////////////////////////////
 // PWM Outputs:
@@ -84,7 +99,7 @@ private:
     // subsystems
     DriveBase* m_driveBase;
     BlinkyLight* m_blinkyLight;
-    
+
 public:
     // commands
     AutoCommand* m_autonomousCommand;

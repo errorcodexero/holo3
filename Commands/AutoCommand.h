@@ -7,22 +7,26 @@
 #include <Commands/Command.h>
 #include <Commands/CommandGroup.h>
 
-#define PRIGHT_FRIGHT 1
-#define PRIGHT_FMID   2
-#define PRIGHT_FLEFT  3
-#define PMID_FRIGHT   4
-#define PMID_FMID     5
-#define PMID_FLEFT    6
-#define PLEFT_FRIGHT  7
-#define PLEFT_FMID    8
-#define PLEFT_FLEFT   9
-
 // This command group is started whenever the robot enters autonomous mode
 // and canceled when the robot enters any other mode.
 
 class BlinkyBreathe;
 
 class TimedDrive;
+
+#define	MAX_AUTO_SEQ 10		// autonomous mode sequences
+#define MAX_AUTO_STEPS 6	// max steps in each sequence
+
+struct DriveStep {
+    double x;
+    double y;
+    double t;
+    double s;
+};
+
+struct DrivePattern {
+    DriveStep step[MAX_AUTO_STEPS];
+};
 
 class AutoCommand: public CommandGroup {
 public:	
@@ -33,18 +37,52 @@ public:
     virtual bool IsFinished();
     virtual void End();
     virtual void Interrupted();
+    void SetDrivePattern( int pattern );
+    void GetDashboardSettings();
+    void PutDashboardSettings();
+    void GetAutoPreferences();
+    void SaveAutoPreferences();
 
 private:
     BlinkyBreathe *m_blinky;
-	
-    TimedDrive *m_firstMove;
-    TimedDrive *m_secondMove;
-    TimedDrive *m_thirdMove;
-    TimedDrive *m_fourthMove;
-    TimedDrive *m_fifthMove;
-    TimedDrive *m_sixthMove;
+#ifdef AUTO_TURN_TO_TARGET
+#endif
+    TimedDrive *m_step[6];
 
-    int m_autoModeKnob;
+    int m_pattern;  // which autonomous mode pattern to run
+    struct DrivePattern m_drivePattern[MAX_AUTO_SEQ];
+
+    class AutoSelect *m_autoSelectCmd;
+    class AutoSave *m_autoSaveCmd;
+};
+
+// These two commands run in the background
+// to monitor and act on SmartDashboard updates to the drive pattern
+
+class AutoSelect : public Command {
+private:
+    AutoCommand *m_auto;
+public:
+    AutoSelect( AutoCommand *cmd );
+    virtual ~AutoSelect();
+    virtual void Initialize();
+    virtual void Execute();
+    virtual bool IsFinished();
+    virtual void End();
+    virtual void Interrupted();
+};
+
+class AutoSave : public Command {
+private:
+    AutoCommand *m_auto;
+public:
+    AutoSave( AutoCommand *cmd );
+    virtual ~AutoSave();
+    virtual void Initialize();
+    virtual void Execute();
+    virtual bool IsFinished();
+    virtual void End();
+    virtual void Interrupted();
 };
 
 #endif

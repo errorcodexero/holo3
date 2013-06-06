@@ -32,6 +32,9 @@ void Robot::RobotInit()
     m_oi = new OI();
 
     // subsystems
+
+    m_compressor = new Compressor( DIGITAL_PRESSURE_SWITCH, RELAY_COMPRESSOR );
+
     m_driveBase = new DriveBase( PWM_DRIVE_LEFT, PWM_DRIVE_RIGHT,
     				 PWM_DRIVE_REAR, ANALOG_GYRO );
     m_blinkyLight = new BlinkyLight( PWM_BLINKY );

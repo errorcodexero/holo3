@@ -35,7 +35,7 @@ OI::OI()
 				    DriverStationEnhancedIO::kInputPullUp,
 				    true);	// active-high toggle
 
-    m_pLearn        = new DSDigitalInput(m_pEIO, 7,
+    m_pLearn              = new DSDigitalInput(m_pEIO, 7,
 				    DriverStationEnhancedIO::kInputPullUp,
 				    false);	// active-low pushbutton
 
