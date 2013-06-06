@@ -69,10 +69,10 @@ OI::~OI()
 void OI::Initialize()
 {
     // Link controls to commands
-    m_pNudgeLeft = new TimedDrive( 0.0, 0.0, -.35, 0.20 );
+    m_pNudgeLeft = new TimedDrive( 0.0, 0.0, -.20, 0.20 );
     m_pGamepadLeftBumper->WhenPressed(m_pNudgeLeft);
 
-    m_pNudgeRight = new TimedDrive( 0.0, 0.0, .35, 0.20 );
+    m_pNudgeRight = new TimedDrive( 0.0, 0.0, .20, 0.20 );
     m_pGamepadRightBumper->WhenPressed(m_pNudgeRight);
 
     m_pRotateFwd = new Rotate(1);

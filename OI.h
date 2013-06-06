@@ -129,6 +129,7 @@ public:
     float GetThrottle() { return m_pStick->GetRawAxis( 3 ); } 
     float GetTwist() { return m_pStick->GetRawAxis( 4 ); } 
     int GetAuto() { return m_pAutoSelect->GetDigital(10); }
+    bool GetOverride() { return m_pShooterOverride->Get(); }
     bool GetLearn() { return m_pLearn->Get(); }
 }; 
 #endif
