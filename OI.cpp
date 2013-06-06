@@ -14,11 +14,6 @@ OI::OI()
     m_pLCD = DriverStationLCD::GetInstance();
 
     m_pStick = new Joystick(1);
-    // gamepad axis 1 -> left stick X
-    // gamepad axis 2 -> left stick Y
-    // gamepad axis 3 -> Z/throttle buttons
-    // gamepad axis 4 -> right stick X
-    // gamepad axis 5 -> right stick Y
     m_pGamepadButtonA     = new JoystickButton(m_pStick, 1);
     m_pGamepadButtonB     = new JoystickButton(m_pStick, 2);
     m_pGamepadButtonX     = new JoystickButton(m_pStick, 3);
@@ -27,6 +22,23 @@ OI::OI()
     m_pGamepadRightBumper = new JoystickButton(m_pStick, 6);
     m_pGamepadBack        = new JoystickButton(m_pStick, 7);
     m_pGamepadStart       = new JoystickButton(m_pStick, 8);
+    m_pAutoSelect         = new DSAnalogInput(m_pEIO, 5);
+    m_pShooterTarget      = new DSAnalogInput(m_pEIO, 6);
+    // digital inputs
+
+    // digital input 2 not connected/not used
+    m_pLightsOn           = new DSDigitalInput(m_pEIO, 2,
+				    DriverStationEnhancedIO::kInputPullUp,
+				    true);	// active-high toggle
+
+    m_pDriverSelect       = new DSDigitalInput(m_pEIO, 3,
+				    DriverStationEnhancedIO::kInputPullUp,
+				    true);	// active-high toggle
+
+    m_pLearn        = new DSDigitalInput(m_pEIO, 7,
+				    DriverStationEnhancedIO::kInputPullUp,
+				    false);	// active-low pushbutton
+
 }
 
 OI::~OI()
@@ -41,6 +53,10 @@ OI::~OI()
     delete m_pGamepadRightBumper;
     delete m_pGamepadBack;
     delete m_pGamepadStart;
+    delete m_pAutoSelect;
+    delete m_pDriverSelect;
+    delete m_pLearn;
+
 
     // initialized in Initialize()
     if (m_pNudgeLeft) delete m_pNudgeLeft;

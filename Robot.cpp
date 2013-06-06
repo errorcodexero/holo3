@@ -42,6 +42,10 @@ void Robot::RobotInit()
     // link operator controls to commands
     m_oi->Initialize();
 
+
+    // Now that everything else is set up, start the compressor
+    m_compressor->Start();
+
     SmartDashboard::PutData("scheduler", Scheduler::GetInstance());
     printf("Scheduler Init\n");
 }

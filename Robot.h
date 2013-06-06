@@ -52,6 +52,8 @@ class OI;
 
 ////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////
+
 class Robot : public IterativeRobot {
 private:
     // Robot is a singleton object, so the constructor is private.
@@ -74,6 +76,8 @@ private:
     //   then the OI,
     //   then any other commands
 
+    // global sensors
+    Compressor* m_compressor;
     // OI
     OI* m_oi;
 
