@@ -110,6 +110,7 @@ private:
 
     DSDigitalOutput* m_pReadyLED;
 
+  
     // aiming
     class TimedDrive* m_pNudgeLeft;
     class TimedDrive* m_pNudgeRight;
@@ -131,5 +132,6 @@ public:
     int GetAuto() { return m_pAutoSelect->GetDigital(10); }
     bool GetOverride() { return m_pShooterOverride->Get(); }
     bool GetLearn() { return m_pLearn->Get(); }
+    
 }; 
 #endif
