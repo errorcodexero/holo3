@@ -22,23 +22,47 @@ OI::OI()
     m_pGamepadRightBumper = new JoystickButton(m_pStick, 6);
     m_pGamepadBack        = new JoystickButton(m_pStick, 7);
     m_pGamepadStart       = new JoystickButton(m_pStick, 8);
+#ifdef PRACTICE_OI
+    m_pAutoSelect         = new DSAnalogInput(m_pEIO, 1);
+#else // COMPETITION_OI
     m_pAutoSelect         = new DSAnalogInput(m_pEIO, 5);
+#endif
     m_pShooterTarget      = new DSAnalogInput(m_pEIO, 6);
     // digital inputs
 
     // digital input 2 not connected/not used
+#ifdef PRACTICE_OI
+    m_pLightsOn           = new DSDigitalInput(m_pEIO, 2,
+				    DriverStationEnhancedIO::kInputPullUp,
+				    false);	// active-low toggle
+#else // COMPETITION_OI
     m_pLightsOn           = new DSDigitalInput(m_pEIO, 2,
 				    DriverStationEnhancedIO::kInputPullUp,
 				    true);	// active-high toggle
+#endif
 
+#ifdef PRACTICE_OI
+    m_pDriverSelect       = new DSDigitalInput(m_pEIO, 3,
+				    DriverStationEnhancedIO::kInputPullUp,
+				    false);	// active-low toggle
+#else // COMPETITION_OI
     m_pDriverSelect       = new DSDigitalInput(m_pEIO, 3,
 				    DriverStationEnhancedIO::kInputPullUp,
 				    true);	// active-high toggle
+#endif
 
+
+
+
+#ifdef PRACTICE_OI
+    m_pLearn              = new DSDigitalInput(m_pEIO, 12,
+				    DriverStationEnhancedIO::kInputPullUp,
+				    false);	// active-low pushbutton
+#else // COMPETITION_OI
     m_pLearn              = new DSDigitalInput(m_pEIO, 7,
 				    DriverStationEnhancedIO::kInputPullUp,
 				    false);	// active-low pushbutton
-
+#endif
 }
 
 OI::~OI()
@@ -54,6 +78,7 @@ OI::~OI()
     delete m_pGamepadBack;
     delete m_pGamepadStart;
     delete m_pAutoSelect;
+    delete m_pLightsOn;
     delete m_pDriverSelect;
     delete m_pLearn;
 

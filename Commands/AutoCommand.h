@@ -20,8 +20,8 @@ class TimedDrive;
 struct DriveStep {
     double x;
     double y;
-    double t;
-    double s;
+    double twist;
+    double secs;
 };
 
 struct DrivePattern {

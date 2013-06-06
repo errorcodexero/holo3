@@ -9,6 +9,8 @@ class OI;
 #include <WPILib.h>
 #include "Robot.h"
 
+// #define PRACTICE_OI
+
 class DSAnalogInput {
 private:
     DriverStationEnhancedIO *m_pEIO;
@@ -108,9 +110,7 @@ private:
     DSDigitalInput* m_pLaunch;
     DSDigitalInput* m_pLearn;
 
-    DSDigitalOutput* m_pReadyLED;
-
-  
+ 
     // aiming
     class TimedDrive* m_pNudgeLeft;
     class TimedDrive* m_pNudgeRight;
