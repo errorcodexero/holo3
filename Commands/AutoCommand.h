@@ -45,8 +45,6 @@ public:
 
 private:
     BlinkyBreathe *m_blinky;
-#ifdef AUTO_TURN_TO_TARGET
-#endif
     TimedDrive *m_step[6];
 
     int m_pattern;  // which autonomous mode pattern to run

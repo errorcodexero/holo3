@@ -97,20 +97,12 @@ private:
     JoystickButton* m_pGamepadBack;
     JoystickButton* m_pGamepadStart;
 
-    DSAnalogInput* m_pSpeedAdjust;
-    DSAnalogInput* m_pShooterTarget;
-    DSAnalogInput* m_pShooterTilt;
     DSAnalogInput* m_pAutoSelect;
 
-    DSDigitalInput* m_pClimber;
     DSDigitalInput* m_pLightsOn;
     DSDigitalInput* m_pDriverSelect;
-    DSDigitalInput* m_pShooterOverride;
-    DSDigitalInput* m_pShooterOn;
-    DSDigitalInput* m_pLaunch;
     DSDigitalInput* m_pLearn;
 
- 
     // aiming
     class TimedDrive* m_pNudgeLeft;
     class TimedDrive* m_pNudgeRight;
@@ -130,7 +122,6 @@ public:
     float GetThrottle() { return m_pStick->GetRawAxis( 3 ); } 
     float GetTwist() { return m_pStick->GetRawAxis( 4 ); } 
     int GetAuto() { return m_pAutoSelect->GetDigital(10); }
-    bool GetOverride() { return m_pShooterOverride->Get(); }
     bool GetLearn() { return m_pLearn->Get(); }
     
 }; 

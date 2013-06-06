@@ -325,9 +325,6 @@ void AutoCommand::Initialize()
 {
     printf("AutoCommand::Initialize\n");
     
-    // shooter configuration:
-    // hard-coded for shooting at 3-point goal from mid-field
-    
     // configure TimedDrive steps to run the selected pattern
     // as currently displayed on the SmartDashboard
     GetDashboardSettings();

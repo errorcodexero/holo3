@@ -27,7 +27,6 @@ OI::OI()
 #else // COMPETITION_OI
     m_pAutoSelect         = new DSAnalogInput(m_pEIO, 5);
 #endif
-    m_pShooterTarget      = new DSAnalogInput(m_pEIO, 6);
     // digital inputs
 
     // digital input 2 not connected/not used
@@ -50,9 +49,6 @@ OI::OI()
 				    DriverStationEnhancedIO::kInputPullUp,
 				    true);	// active-high toggle
 #endif
-
-
-
 
 #ifdef PRACTICE_OI
     m_pLearn              = new DSDigitalInput(m_pEIO, 12,
@@ -81,7 +77,6 @@ OI::~OI()
     delete m_pLightsOn;
     delete m_pDriverSelect;
     delete m_pLearn;
-
 
     // initialized in Initialize()
     if (m_pNudgeLeft) delete m_pNudgeLeft;
