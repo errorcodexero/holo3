@@ -1,14 +1,17 @@
 # -*- mode:Makefile -*-
 
-## Note: env var WIND_BASE is needed by the compiler
-export WIND_BASE:="/home/tnagler/proj/frc/WindRiver/vxworks-6.3"
-
-SILENT    = @
+# -*- mode:Makefile -*-
 
 WIND_DIR  = /home/tnagler/proj/frc/WindRiver
 WIND_BASE = $(WIND_DIR)/vxworks-6.3
+
+## Note: env var WIND_BASE is needed by the compiler
+export WIND_BASE
+
 #PI_LIB_A = $(WIND_BASE)/target/lib/WPILib.a
 WPI_LIB_A = /home/tnagler/2014/code/team/fourteentwentyfive.wpilib/WPILib.a
+
+SILENT    = @
 
 DEFINES    =
 DEFINES   += -DCPU=PPC603
