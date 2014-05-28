@@ -7,7 +7,7 @@
 Climber::Climber( int extendChannel )
     : Subsystem("Climber")
 {
-    m_pExtender = new Solenoid(extendChannel);
+    m_pExtender = new DoubleSolenoid(extendChannel, extendChannel+1);
     LiveWindow::GetInstance()->
       AddActuator("Climber", "Extended", m_pExtender);
     m_defaultCommand = NULL;
@@ -33,7 +33,7 @@ void Climber::InitDefaultCommand()
 
 void Climber::SetExtended( bool position )
 {
-    m_pExtender->Set(position);
+    m_pExtender->Set(position ? DoubleSolenoid::kForward : DoubleSolenoid::kReverse );
 }
 
 bool Climber::GetExtended()

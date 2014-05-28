@@ -3,7 +3,6 @@
 	<name>Holo3</name>
 	<comment></comment>
 	<projects>
-		<project>WPILib</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

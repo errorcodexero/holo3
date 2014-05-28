@@ -74,14 +74,14 @@ class OI;
 #define SOLENOID_SHOOTER_LOAD		5
 #define SOLENOID_SHOOTER_SHOOT		6
 
-// 7   - climber
+// 7,8 - climber
 //     true = extend
 //     false = retract
-//     retracts when robot is disabled
+// (originally a single solenoid with spring return
+// so it retracts when the robot is disabled)
 
 #define	SOLENOID_CLIMBER_EXTEND		7
-
-// 8   - not used
+#define SOLENOID_CLIMBER_RETRACT	8
 
 ////////////////////////////////////////////////////////////////////
 // PWM Outputs:

@@ -31,7 +31,7 @@ public:
     }
 
     int GetDigital( int numPositions ) {
-	return (int)(GetAnalog() * numPositions);
+	return (int)(GetAnalog() * (numPositions - 1) + 0.5);
     }
 };
 

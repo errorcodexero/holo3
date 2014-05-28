@@ -25,7 +25,6 @@ public:
     Position GetPosition(void);
     void Start();
     void Stop();
-    std::string GetSmartDashboardType() { return "3PS"; };
 
 private:
     Position m_goal;

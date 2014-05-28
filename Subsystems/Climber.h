@@ -19,7 +19,7 @@ public:
     bool GetExtended();
 
 private:
-    Solenoid *m_pExtender;
+    DoubleSolenoid *m_pExtender;
     Command *m_defaultCommand;
 };
 
