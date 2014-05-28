@@ -95,6 +95,10 @@ Shooter::TargetDistance Shooter::GetAngle()
  */
 void Shooter::SetAngle(TargetDistance target)
 {
+    if (target != m_distance) {
+	printf("Shooter::SetAngle was %d now %d\n",
+		(int) m_distance, (int) target);
+    }
     m_distance = target;
 
     // map TargetDistance to TripleSolenoid::Position

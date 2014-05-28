@@ -31,7 +31,13 @@ void ShootManual::Execute()
     Shooter::TargetDistance distance;
     double speed;
 
-    switch (Robot::oi()->GetTilt()) {
+    static int oldTilt = -1;
+    int tilt = Robot::oi()->GetTilt();
+    if (tilt != oldTilt) {
+	printf("ShootManual::Execute tilt was %d now %d\n", oldTilt, tilt);
+	oldTilt = tilt;
+    }
+    switch (tilt) {
     case 0:
 	distance = Shooter::kShort;
 	speed = Robot::theRobot().m_speed_short;

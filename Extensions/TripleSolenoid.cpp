@@ -46,7 +46,7 @@ TripleSolenoid::Position TripleSolenoid::GetPosition()
 void TripleSolenoid::SetPosition( Position position )
 {
     if (m_goal != position) {
-	// printf("TripleSolenoid::SetPosition %d\n", (int)m_goal);
+	printf("TripleSolenoid::SetPosition %d\n", (int)m_goal);
 	m_pNotifier->Stop();
 	m_goal = position;
 	Start();
@@ -55,7 +55,7 @@ void TripleSolenoid::SetPosition( Position position )
 
 void TripleSolenoid::Start()
 {
-//  printf("TripleSolenoid::Start\n");
+    printf("TripleSolenoid::Start\n");
     if (Move()) {
         // printf("TripleSolenoid::Start: we are moving\n");
 	m_pNotifier->StartPeriodic( kPollInterval );
@@ -64,7 +64,7 @@ void TripleSolenoid::Start()
 
 void TripleSolenoid::Stop()
 {
-    // printf("TripleSolenoid::Stop\n");
+    printf("TripleSolenoid::Stop\n");
     m_pNotifier->Stop();
     Set(DoubleSolenoid::kOff);
 }
@@ -82,7 +82,7 @@ void TripleSolenoid::Run()
     SmartDashboard::PutNumber("position time", (double)m_howLong);
     Update();
     if ((m_howLong * kPollInterval >= kTravelTime) || !Move()) {
-	// printf("TripleSolenoid::Run done!\n");
+	printf("TripleSolenoid::Run Timeout!\n");
 	Stop();
     }
 }
@@ -90,6 +90,17 @@ void TripleSolenoid::Run()
 // update current position
 void TripleSolenoid::Update()
 {
+    static const char* positionName[] = {
+	"Unknown",
+	"Retracted",
+	"PartlyRetracted",
+	"Center",
+	"PartlyExtended",
+	"Extended",
+    };
+
+    Position before = m_position;
+
     bool sw = ! m_switch->Get();
     SmartDashboard::PutBoolean("position center", sw);
     if (sw) {
@@ -109,7 +120,10 @@ void TripleSolenoid::Update()
 	else if (m_position == kCenter)
 	    m_position = kPartlyRetracted;
     }
-//  printf("TripleSolenoid::Update sw=%d pos=%d\n", (int)sw, (int)m_position);
+    if (m_position != before) {
+	printf("TripleSolenoid::Update sw=%d, pos was %s now %s\n", 
+		sw, positionName[(int)before], positionName[(int)m_position]);
+    }
 }
 
 // determine how to move toward goal
